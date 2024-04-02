@@ -32,6 +32,12 @@ public class User {
 		this.email = email;
 	}
 
+
+	public User(String username, String password) {
+		this.username = username;
+		this.password = password;
+	}
+
 	
 	public int getUser_id() {
 		return user_id;

@@ -1,4 +1,3 @@
-/*
 package es.deusto.spq.server;
 
 import javax.jdo.PersistenceManager;
@@ -123,4 +122,3 @@ public class Resource {
 		return Response.ok("Hello world!").build();
 	}
 }
-*/
