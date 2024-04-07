@@ -12,7 +12,38 @@ const Register = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Aquí puedes enviar los datos del formulario al backend para el registro del usuario
+        
+        const user = {
+            username,
+            password,
+            name,
+            surname,
+            phone_number: phoneNumber,
+            email,
+        };
+    
+        fetch('/user/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(user),
+        })
+        .then(response => {
+            if (response.ok) {
+                // Redirect the user to home page (i guess our home page shouldn't be the home screen, 
+                // so we could just make it redirect to some blank page.
+                window.location.href = "/";
+                // TODO: Manage JWT tokens or other authentication we need to decide
+                console.log("User registered successfully");
+            } else {
+                // Handle server-side validation errors or other issues
+                response.json().then(data => console.log(data));
+            }
+        })
+        .catch((error) => {
+            console.error('Registration error:', error);
+        });
     };
 
     return (
