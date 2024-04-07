@@ -18,3 +18,7 @@ buildNumber.properties
 # Other
 .vscode
 *.log
+
+lodgify/target/*
+lodgify/lodgify-frontend/lodgify-frontend/node_modules
+lodgify/node_modules

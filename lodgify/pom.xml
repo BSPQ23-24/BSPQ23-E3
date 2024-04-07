@@ -67,7 +67,6 @@
 			<artifactId>log4j-core</artifactId>
 			<version>2.23.1</version>
 		</dependency>
-
 		<dependency>
             <groupId>org.glassfish.jersey.containers</groupId>
             <artifactId>jersey-container-servlet-core</artifactId>
@@ -80,6 +79,19 @@
             <groupId>org.glassfish.jersey.media</groupId>
             <artifactId>jersey-media-json-jackson</artifactId>
         </dependency>
+		<!-- https://mvnrepository.com/artifact/org.flywaydb/flyway-maven-plugin -->
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-maven-plugin</artifactId>
+			<version>10.10.0</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.flywaydb/flyway-mysql -->
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-mysql</artifactId>
+			<version>10.10.0</version>
+		</dependency>
+		
 	</dependencies>
 
 	<build>
@@ -95,6 +107,16 @@
 		</resources>
 
 		<plugins>
+			<plugin>
+				<groupId>org.flywaydb</groupId>
+				<artifactId>flyway-maven-plugin</artifactId>
+				<version>10.10.0</version>
+				<configuration>
+					<url>jdbc:mysql://localhost:3306/lodgifydb</url>
+					<user>spq</user>
+					<password>spq</password>
+				</configuration>
+			</plugin>
 			<plugin>
 				<artifactId>maven-clean-plugin</artifactId>
 				<version>3.2.0</version>
@@ -147,16 +169,91 @@
 				<artifactId>jetty-maven-plugin</artifactId>
 				<version>9.4.46.v20220331</version>
             </plugin>
+			<plugin>
+    			<groupId>org.codehaus.mojo</groupId>
+    			<artifactId>exec-maven-plugin</artifactId>
+    			<version>1.6.0</version>
+    			<configuration>
+        			<mainClass>es.deusto.spq.client.LodgifyClient</mainClass>
+					    <arguments>
+        					<argument>${server.hostname}</argument>
+        					<argument>${server.port}</argument>
+    					</arguments>
+    			</configuration>
+			</plugin>
+	
+			<plugin>
+    			<groupId>org.codehaus.mojo</groupId>
+    			<artifactId>exec-maven-plugin</artifactId>
+    			<version>1.6.0</version>
+    			<executions>
+        			<execution>
+            			<id>npm install</id>
+            			<goals>
+                			<goal>exec</goal>
+            			</goals>
+            			<phase>generate-sources</phase>
+            			<configuration>
+                			<workingDirectory>lodgify-frontend/lodgify-frontend</workingDirectory>
+                			<executable>npm</executable>
+                			<arguments>
+                    			<argument>install</argument>
+                			</arguments>
+            			</configuration>
+        			</execution>
+        			<execution>
+            			<id>npm run build</id>
+            			<goals>
+                			<goal>exec</goal>
+           				</goals>
+            			<phase>generate-sources</phase>
+            			<configuration>
+                			<workingDirectory>lodgify-frontend/lodgify-frontend</workingDirectory>
+                			<executable>npm</executable>
+                			<arguments>
+                    			<argument>run</argument>
+                    			<argument>build</argument>
+                			</arguments>
+            			</configuration>
+        			</execution>
+    			</executions>
+			</plugin>
 
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<version>1.2.1</version>
-
-				<configuration>
-					<mainClass>org.datanucleus.samples.jdo.tutorial.Main</mainClass>
-				</configuration>
+    			<groupId>org.eclipse.jetty</groupId>
+    			<artifactId>jetty-maven-plugin</artifactId>
+    			<version>9.4.46.v20220331</version>
+    			<configuration>
+        			<httpConnector>
+            			<port>${server.port}</port>
+        			</httpConnector>
+    			</configuration>
 			</plugin>
+
+			<plugin>
+    			<groupId>org.apache.maven.plugins</groupId>
+    			<artifactId>maven-resources-plugin</artifactId>
+    			<version>3.2.0</version>
+    			<executions>
+        			<execution>
+            			<id>copy-frontend-build</id>
+            			<phase>compile</phase>
+            			<goals>
+                			<goal>copy-resources</goal>
+            			</goals>
+            			<configuration>
+                			<outputDirectory>${basedir}/src/main/webapp</outputDirectory>
+                			<resources>
+                    			<resource>
+                        			<directory>${basedir}/lodgify-frontend/lodgify-frontend/dist</directory>
+                        			<filtering>false</filtering>
+                    			</resource>
+                			</resources>
+            			</configuration>
+        			</execution>
+    			</executions>
+			</plugin>
+
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<configuration>
@@ -194,7 +291,7 @@
                             </execution>
                         </executions>
                         <configuration>
-                            <mainClass>es.deusto.spq.client.ExampleClient</mainClass>
+                            <mainClass>es.deusto.spq.client.LodgifyClient</mainClass>
 							<arguments>
 								<argument>${server.hostname}</argument>
 								<argument>${server.port}</argument>

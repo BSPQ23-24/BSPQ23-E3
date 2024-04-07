@@ -10,7 +10,6 @@ import java.util.HashSet;
 @PersistenceCapable
 public class User {
 	@PrimaryKey
-	private int user_id;
 	private String username;
 	private String password;
 	private String name;
@@ -22,8 +21,7 @@ public class User {
 	@Join
 	Set<Message> messages = new HashSet<>();
 	
-	public User(int user_id, String username, String password, String name, String surname, int phone_number, String email) {
-		this.user_id = user_id;
+	public User(String username, String password, String name, String surname, int phone_number, String email) {
 		this.username = username;
 		this.password = password;
 		this.name = name;
@@ -32,16 +30,10 @@ public class User {
 		this.email = email;
 	}
 
-	
-	public int getUser_id() {
-		return user_id;
+	public User(String username, String password) {
+		this.username = username;
+		this.password = password;
 	}
-
-
-	public void setUser_id(int user_id) {
-		this.user_id = user_id;
-	}
-
 
 	public String getUsername() {
 		return this.username;
@@ -103,6 +95,6 @@ public class User {
 
 
 	public String toString() {
-        return "User: id --> " + this.user_id + "username --> " + this.username + ", password -->  " + this.password;
+        return "Username --> " + this.username + ", password -->  " + this.password;
     }
 }
