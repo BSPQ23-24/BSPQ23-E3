@@ -9,12 +9,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import es.deusto.spq.pojo.DirectMessage;
-import es.deusto.spq.pojo.MessageData;
-import es.deusto.spq.pojo.UserData;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import es.deusto.spq.server.jdo.User;
 
 public class LodgifyClient {
 
@@ -23,23 +20,26 @@ public class LodgifyClient {
 	private static final String USER = "BSPQ23E3";
 	private static final String PASSWORD = "BSPQ23E3";
 
-
 	private Client client;
 	private WebTarget webTarget;
 
 	public LodgifyClient(String hostname, String port) {
 		client = ClientBuilder.newClient();
-		webTarget = client.target(String.format("http://%s:%s/rest/resource", hostname, port));
+		webTarget = client.target(String.format("http://%s:%s/rest", hostname, port));
+		Response response = webTarget.request(MediaType.TEXT_PLAIN).get();
+    	if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+        	System.out.println("Conexión exitosa: " + response.readEntity(String.class));
+    	} else {
+       		System.out.println("Fallo en la conexión, código de estado: " + response.getStatus());
+    }
 	}
 
-	public void registerUser(String login, String password) {
-		WebTarget registerUserWebTarget = webTarget.path("register");
+	public void registerUser(String username, String password, String name, String surname, int phone_number, String email) {
+		WebTarget registerUserWebTarget = webTarget.path("user/register");
 		Invocation.Builder invocationBuilder = registerUserWebTarget.request(MediaType.APPLICATION_JSON);
 		
-		UserData userData = new UserData();
-		userData.setLogin(login);
-		userData.setPassword(password);
-		Response response = invocationBuilder.post(Entity.entity(userData, MediaType.APPLICATION_JSON));
+		User user = new User(username, password, name, surname, phone_number, email);
+		Response response = invocationBuilder.post(Entity.entity(user, MediaType.APPLICATION_JSON));
 		if (response.getStatus() != Status.OK.getStatusCode()) {
 			logger.error("Error connecting with the server. Code: {}", response.getStatus());
 		} else {
@@ -47,6 +47,7 @@ public class LodgifyClient {
 		}
 	}
 
+	/*
 	public void sayMessage(String login, String password, String message) {
 		WebTarget sayHelloWebTarget = webTarget.path("sayMessage");
 		Invocation.Builder invocationBuilder = sayHelloWebTarget.request(MediaType.APPLICATION_JSON);
@@ -70,6 +71,7 @@ public class LodgifyClient {
 			logger.info("* Message coming from the server: '{}'", responseMessage);
 		}
 	}
+	*/
 
 	public static void main(String[] args) {
 		if (args.length != 2) {
@@ -81,7 +83,6 @@ public class LodgifyClient {
 		String port = args[1];
 
 		LodgifyClient exampleClient = new LodgifyClient(hostname, port);
-		exampleClient.registerUser(USER, PASSWORD);
-		exampleClient.sayMessage(USER, PASSWORD, "This is a test!...");
+		exampleClient.registerUser(USER, PASSWORD, "user", "user", 999999999, "user@mail.es");
 	}
 }
