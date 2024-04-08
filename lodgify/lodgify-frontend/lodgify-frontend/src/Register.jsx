@@ -8,9 +8,9 @@ const Register = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
-    const [phoneNumber, setPhoneNumber] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState(0);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         
         const user = {
@@ -18,32 +18,27 @@ const Register = () => {
             password,
             name,
             surname,
-            phone_number: phoneNumber,
+            phone_number: parseInt(phoneNumber, 10),
             email,
         };
-    
-        fetch('/user/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(user),
-        })
-        .then(response => {
+
+        try {
+            const response = await fetch('http://localhost:8080/rest/user/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(user),
+            });
+
             if (response.ok) {
-                // Redirect the user to home page (i guess our home page shouldn't be the home screen, 
-                // so we could just make it redirect to some blank page.
-                window.location.href = "/";
-                // TODO: Manage JWT tokens or other authentication we need to decide
-                console.log("User registered successfully");
+                console.log("User registered succesfully!");
             } else {
-                // Handle server-side validation errors or other issues
-                response.json().then(data => console.log(data));
+                console.error("Failed to register user");
             }
-        })
-        .catch((error) => {
-            console.error('Registration error:', error);
-        });
+        } catch (error) {
+            console.error("Error:", error);
+        }
     };
 
     return (
@@ -104,7 +99,7 @@ const Register = () => {
                             placeholder="Phone number*"
                             className="mb-2 p-2 rounded-md border"
                             value={phoneNumber}
-                            onChange={(e) => setPhoneNumber(e.target.value)}
+                            onChange={(e) => setPhoneNumber(e.target.value === '' ? '' : Number(e.target.value))}
                         />
                     </div>
                     <div className="flex mt-4 justify-center">

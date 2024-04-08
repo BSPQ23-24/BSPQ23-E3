@@ -91,7 +91,9 @@ public class User {
 		this.email = email;
 	}
 
-	public Set<Message> getMessages() {return this.messages;}
+	public Set<Message> getMessages() {
+		return this.messages;
+	}
 
 
 	public String toString() {
