@@ -33,10 +33,6 @@ public class User {
 	public User(String username, String password) {
 		this.username = username;
 		this.password = password;
-
-	public User(String username, String password) {
-		this.username = username;
-		this.password = password;
 	}
 
 	public String getUsername() {
@@ -95,7 +91,9 @@ public class User {
 		this.email = email;
 	}
 
-	public Set<Message> getMessages() {return this.messages;}
+	public Set<Message> getMessages() {
+		return this.messages;
+	}
 
 
 	public String toString() {

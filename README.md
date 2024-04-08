@@ -13,10 +13,6 @@ Type your root user password and then
 
       source sql/create-db.sql
 
-To make the migrations to the local database, use command
-
-      mvn clean flyway:migrate
-
 To launch the server run the command
 
     mvn jetty:run
