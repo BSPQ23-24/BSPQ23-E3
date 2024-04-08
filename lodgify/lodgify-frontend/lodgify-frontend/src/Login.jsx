@@ -43,9 +43,14 @@ const Login = () => {
         setShowRegister(true);
     };
 
+    // Función para volver al formulario de inicio de sesión
+    const showLoginForm = () => {
+        setShowRegister(false);
+    };
+
     // Si showRegister es true, renderiza el componente Register
     if (showRegister) {
-        return <Register />;
+        return <Register showLoginForm={showLoginForm} />;
     }
 
     return (

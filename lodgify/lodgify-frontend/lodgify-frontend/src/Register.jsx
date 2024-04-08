@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import logo from './assets/lodgify.png';
 
-const Register = () => {
+const Register = ({ showLoginForm }) => { // Recibe la función showLoginForm como prop
     const [name, setName] = useState('');
     const [surname, setSurname] = useState('');
     const [username, setUsername] = useState('');
@@ -32,13 +32,19 @@ const Register = () => {
             });
 
             if (response.ok) {
-                console.log("User registered succesfully!");
+                console.log("User registered successfully!");
             } else {
                 console.error("Failed to register user");
             }
         } catch (error) {
             console.error("Error:", error);
         }
+    };
+
+    // Función para manejar el clic en el enlace "Back"
+    const handleBack = (e) => {
+        e.preventDefault(); // Evita que se siga el enlace
+        showLoginForm(); // Llama a la función showLoginForm pasada como prop
     };
 
     return (
@@ -108,9 +114,14 @@ const Register = () => {
                         </button>
                     </div>
                 </form>
+                <div className="flex mt-4">
+                    {/* Llama a la función handleBack al hacer clic */}
+                    <p><a href="#" className="font-bold text-blue-900" onClick={handleBack}>Back</a></p>
+                </div>
             </div>
-        </div >
+        </div>
     );
 };
+
 
 export default Register;
