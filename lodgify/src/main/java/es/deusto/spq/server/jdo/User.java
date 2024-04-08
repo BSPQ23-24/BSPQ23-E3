@@ -17,10 +17,6 @@ public class User {
 	private int phone_number;
 	private String email;	
 
-	@Persistent(mappedBy="user", dependentElement="true")
-	@Join
-	Set<Message> messages = new HashSet<>();
-	
 	public User(String username, String password, String name, String surname, int phone_number, String email) {
 		this.username = username;
 		this.password = password;
@@ -90,11 +86,6 @@ public class User {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
-	public Set<Message> getMessages() {
-		return this.messages;
-	}
-
 
 	public String toString() {
         return "Username --> " + this.username + ", password -->  " + this.password;

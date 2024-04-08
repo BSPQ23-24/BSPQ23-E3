@@ -74,4 +74,39 @@ public class UserService {
             }
     	}
     }    
+	@POST
+    @Path("/login")
+    public Response loginUser(User user) {
+        try
+        {	
+            tx.begin();
+            logger.info("Checking whether the user already exits or not: '{}'", user.getUsername());
+    		User user1 = null;
+    		try {
+    			user1 = pm.getObjectById(User.class, user.getUsername());
+    		} catch (javax.jdo.JDOObjectNotFoundException jonfe) {
+    			logger.info("Exception launched: {}", jonfe.getMessage());
+    		}
+    		logger.info("User: {}", user);
+    		if (user1 != null) {
+    			logger.info("Submitted password: {}", user.getPassword());
+    			logger.info("DB password: {}", user1.getPassword());
+				if(user.getPassword() == user1.getPassword()){
+					return Response.ok().build();
+				}
+				else{
+					return Response.status(404).build();
+				}
+    		} else {
+    			return Response.status(404).build();
+    		}
+        }
+        finally
+        {
+            if (tx.isActive())
+            {
+                tx.rollback();
+            }
+    	}
+    }    
 }
