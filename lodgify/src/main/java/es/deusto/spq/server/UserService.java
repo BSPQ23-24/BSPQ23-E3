@@ -74,6 +74,8 @@ public class UserService {
             }
     	}
     }    
+
+
 	@POST
     @Path("/login")
     public Response loginUser(User user) {
@@ -91,14 +93,14 @@ public class UserService {
     		if (user1 != null) {
     			logger.info("Submitted password: {}", user.getPassword());
     			logger.info("DB password: {}", user1.getPassword());
-				if(user.getPassword() == user1.getPassword()){
+				if(user.getPassword().equals(user1.getPassword())){
 					return Response.ok().build();
 				}
 				else{
-					return Response.status(404).build();
+					return Response.status(401).build();
 				}
     		} else {
-    			return Response.status(404).build();
+    			return Response.status(401).build();
     		}
         }
         finally

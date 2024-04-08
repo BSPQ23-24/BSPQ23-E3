@@ -1,10 +1,13 @@
 // Login.jsx
 import React, { useState } from 'react';
 import logo from './assets/lodgify.png';
+import Register from './Register'; // Importa el componente Register
 
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const [showRegister, setShowRegister] = useState(false); // Nuevo estado para mostrar el componente Register
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -25,13 +28,30 @@ const Login = () => {
 
             if (response.ok) {
                 console.log("User logged in successfully!");
+                // SWITCH TO HOME PAGE; HANDLE COOKIES, JWT TOKENS
             } else {
+                // DISPLAY AN ERROR
                 console.error("Failed to log in user");
             }
         } catch (error) {
             console.error("Error fetching response from backend API:", error);
         }
     };
+
+    // Función para mostrar el componente Register
+    const showRegisterForm = () => {
+        setShowRegister(true);
+    };
+
+    // Función para volver al formulario de inicio de sesión
+    const showLoginForm = () => {
+        setShowRegister(false);
+    };
+    
+    // Si showRegister es true, renderiza el componente Register
+    if (showRegister) {
+        return <Register showLoginForm={showLoginForm} />;
+    }
 
     return (
         <div className="flex flex-col items-center justify-center h-screen">
@@ -40,6 +60,7 @@ const Login = () => {
                     <img src={logo} alt="Logo" className='h-10 md:h-48' />
                 </div>
                 <form onSubmit={handleSubmit}>
+                    {error && <div className="text-red-500 mb-2">{error}</div>}
                     <div className="flex justify-center mt-4">
                         <input
                             type="text"
@@ -65,10 +86,11 @@ const Login = () => {
                     </div>
                 </form>
                 <div className="flex mt-4">
-                    <p>Do you still not have an account? <a href="/register" className="font-bold text-blue-900">Register now!</a></p> {/* Ensure this link correctly redirects to your registration page, possibly using React Router's Link component if applicable. */}
+                    {/* Llama a la función showRegisterForm al hacer clic */}
+                    <p>Do you still not have an account? <a href="#" className="font-bold text-blue-900" onClick={showRegisterForm}>Register now!</a></p>
                 </div>
             </div>
-        </div >
+        </div>
     );
 };
 
