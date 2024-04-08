@@ -8,11 +8,37 @@ const Register = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
-    const [phoneNumber, setPhoneNumber] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState(0);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Aquí puedes enviar los datos del formulario al backend para el registro del usuario
+        
+        const user = {
+            username,
+            password,
+            name,
+            surname,
+            phone_number: parseInt(phoneNumber, 10),
+            email,
+        };
+
+        try {
+            const response = await fetch('http://localhost:8080/rest/user/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(user),
+            });
+
+            if (response.ok) {
+                console.log("User registered succesfully!");
+            } else {
+                console.error("Failed to register user");
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
     };
 
     return (
@@ -73,7 +99,7 @@ const Register = () => {
                             placeholder="Phone number*"
                             className="mb-2 p-2 rounded-md border"
                             value={phoneNumber}
-                            onChange={(e) => setPhoneNumber(e.target.value)}
+                            onChange={(e) => setPhoneNumber(e.target.value === '' ? '' : Number(e.target.value))}
                         />
                     </div>
                     <div className="flex mt-4 justify-center">

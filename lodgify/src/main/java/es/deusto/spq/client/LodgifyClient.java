@@ -30,7 +30,7 @@ public class LodgifyClient {
     	if (response.getStatus() == Response.Status.OK.getStatusCode()) {
         	System.out.println("Conexión exitosa: " + response.readEntity(String.class));
     	} else {
-       		System.out.println("Fallo en la conexión, código de estado: " + response.getStatus());
+       		System.out.println("Fallo en la conexión, código de estado: " + response.getStatus() + webTarget);
     }
 	}
 
@@ -43,7 +43,7 @@ public class LodgifyClient {
 		if (response.getStatus() != Status.OK.getStatusCode()) {
 			logger.error("Error connecting with the server. Code: {}", response.getStatus());
 		} else {
-			logger.info("User correctly registered");
+			logger.info("User correctly registered, the user name is {}", username);
 		}
 	}
 

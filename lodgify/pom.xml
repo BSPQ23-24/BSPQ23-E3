@@ -91,6 +91,12 @@
 			<artifactId>flyway-mysql</artifactId>
 			<version>10.10.0</version>
 		</dependency>
+		<dependency>
+    		<groupId>com.h2database</groupId>
+    		<artifactId>h2</artifactId>
+    		<version>1.4.200</version> <!-- Asegúrate de usar la última versión disponible -->
+		</dependency>
+
 		
 	</dependencies>
 
