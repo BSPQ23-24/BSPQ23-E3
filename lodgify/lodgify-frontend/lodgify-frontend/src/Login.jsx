@@ -8,6 +8,7 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [showRegister, setShowRegister] = useState(false); // Nuevo estado para mostrar el componente Register
+    const [redirectToHome, setRedirectToHome] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -28,7 +29,7 @@ const Login = () => {
 
             if (response.ok) {
                 console.log("User logged in successfully!");
-                // SWITCH TO HOME PAGE; HANDLE COOKIES, JWT TOKENS
+                setRedirectToHome(true); // SWITCH TO HOME PAGE; HANDLE COOKIES, JWT TOKENS
             } else {
                 // DISPLAY AN ERROR
                 console.error("Failed to log in user");
@@ -51,6 +52,10 @@ const Login = () => {
     // Si showRegister es true, renderiza el componente Register
     if (showRegister) {
         return <Register showLoginForm={showLoginForm} />;
+    }
+
+    if (redirectToHome) {
+        return <Redirect to="/#/#" />;
     }
 
     return (

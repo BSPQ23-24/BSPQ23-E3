@@ -9,6 +9,7 @@ const Register = ({ showLoginForm }) => { // Recibe la función showLoginForm co
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
     const [phoneNumber, setPhoneNumber] = useState(0);
+    const [redirectToHome, setRedirectToHome] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -33,6 +34,7 @@ const Register = ({ showLoginForm }) => { // Recibe la función showLoginForm co
 
             if (response.ok) {
                 console.log("User registered successfully!");
+                setRedirectToHome(true);
             } else {
                 console.error("Failed to register user");
             }
@@ -46,6 +48,10 @@ const Register = ({ showLoginForm }) => { // Recibe la función showLoginForm co
         e.preventDefault(); // Evita que se siga el enlace
         showLoginForm(); // Llama a la función showLoginForm pasada como prop
     };
+
+    if (redirectToHome) {
+        return <Redirect to="/#" />;
+    }
 
     return (
         <div className="flex flex-col items-center justify-center h-screen">
