@@ -34,7 +34,7 @@ public class LodgifyClient {
     }
 	}
 
-	public void registerUser(String username, String password, String name, String surname, int phone_number, String email) {
+	public void registerUser(String username, String password, String name, String surname, String phone_number, String email) {
 		WebTarget registerUserWebTarget = webTarget.path("user/register");
 		Invocation.Builder invocationBuilder = registerUserWebTarget.request(MediaType.APPLICATION_JSON);
 		
@@ -83,6 +83,6 @@ public class LodgifyClient {
 		String port = args[1];
 
 		LodgifyClient exampleClient = new LodgifyClient(hostname, port);
-		exampleClient.registerUser(USER, PASSWORD, "user", "user", 999999999, "user@mail.es");
+		exampleClient.registerUser(USER, PASSWORD, "user", "user", "999999999", "user@mail.es");
 	}
 }

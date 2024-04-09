@@ -50,16 +50,32 @@ public class UserService {
     		try {
     			user1 = pm.getObjectById(User.class, user.getUsername());
     		} catch (javax.jdo.JDOObjectNotFoundException jonfe) {
-    			logger.info("Exception launched: {}", jonfe.getMessage());
+				logger.info("User ", user.getUsername(), " not found!");
+    			//logger.info("Exception launched: {}", jonfe.getMessage());
     		}
     		logger.info("User: {}", user);
-    		if (user1 != null) {
-    			logger.info("Setting password user: {}", user);
-    			user1.setPassword(user.getPassword());
-    			logger.info("Password set user: {}", user);
-    		} else {
+			if(user1 != null) {
+				logger.info("User already exists!");
+				return Response.status(400).entity("User already exists!").build();
+			}
+    		if (user1 == null) {
     			logger.info("Creating user: {}", user);
-    			user1 = new User(user.getUsername(), user.getPassword(), user.getName(), user.getSurname(), user.getPhone_number(), user.getEmail());
+				logger.info("Creating username: {}", user.getUsername());
+				logger.info("Creating name: {}", user.getName());
+				if(!user.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")){
+					logger.info("Email not valid!");
+					return Response.status(400).entity("Not valid email!").build();
+				}
+				else if(user.getPhone_number().length() != 9){
+					logger.info("Phone number must have 9 digits!");
+					return Response.status(400).entity("Not valid phone number!").build();
+				}	
+				else if(user.getName().equals("") || user.getSurname().equals("") || user.getUsername().equals("") || user.getPassword().equals("")){
+					logger.info("Not all the data filled!");
+					return Response.status(400).entity("Fill all the data!").build();
+				}
+
+				user1 = new User(user.getUsername(), user.getPassword(), user.getName(), user.getSurname(), user.getPhone_number(), user.getEmail());
     			pm.makePersistent(user);					 
     			logger.info("User created: {}", user);
     		}

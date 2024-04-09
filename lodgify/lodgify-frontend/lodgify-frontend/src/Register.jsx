@@ -9,7 +9,8 @@ const Register = ({ showLoginForm }) => { // Recibe la función showLoginForm co
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
     const [phoneNumber, setPhoneNumber] = useState(0);
-    const [redirectToHome, setRedirectToHome] = useState(false);
+    const [error, setError] = useState('');
+    const [warning, setWarning] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -31,10 +32,29 @@ const Register = ({ showLoginForm }) => { // Recibe la función showLoginForm co
                 },
                 body: JSON.stringify(user),
             });
-
+            const responseBody = await response.text();
             if (response.ok) {
+                setError("")
+                setName("")
+                setSurname("")
+                setUsername("")
+                setPassword("")
+                setEmail("")
+                setPhoneNumber("")
+                setWarning("User registered successfully!")
                 console.log("User registered successfully!");
-                setRedirectToHome(true);
+            } else if (responseBody == "User already exists!"){
+                console.error("Failed to register user because the user already exists");
+                setError("User already exists!")
+            } else if (responseBody == "Fill all the data!"){
+                console.error("Failed to register user because all the data has not been filled")
+                setError("Fill all the data!")
+            } else if (responseBody == "Not valid phone number!"){
+                console.error("Failed to register user because the phone number must have 9 digits")
+                setError("Not valid phone number!")
+            } else if (responseBody == "Not valid email!"){
+                console.error("Failed to register user because of email");
+                setError("Not valid email!")
             } else {
                 console.error("Failed to register user");
             }
@@ -48,10 +68,6 @@ const Register = ({ showLoginForm }) => { // Recibe la función showLoginForm co
         e.preventDefault(); // Evita que se siga el enlace
         showLoginForm(); // Llama a la función showLoginForm pasada como prop
     };
-
-    if (redirectToHome) {
-        return <Redirect to="/#" />;
-    }
 
     return (
         <div className="flex flex-col items-center justify-center h-screen">
@@ -114,6 +130,8 @@ const Register = ({ showLoginForm }) => { // Recibe la función showLoginForm co
                             onChange={(e) => setPhoneNumber(e.target.value === '' ? '' : Number(e.target.value))}
                         />
                     </div>
+                    {error && <div className="text-red-500 mb-2">{error}</div>}
+                    {warning && <div className="text-green-500 mb-2">{warning}</div>}
                     <div className="flex mt-4 justify-center">
                         <button type="submit" className="bg-blue-950 hover:bg-blue-950 text-white py-2 px-4 rounded-md">
                             Register
@@ -122,7 +140,7 @@ const Register = ({ showLoginForm }) => { // Recibe la función showLoginForm co
                 </form>
                 <div className="flex mt-4">
                     {/* Llama a la función handleBack al hacer clic */}
-                    <p><a href="#" className="font-bold text-blue-900" onClick={handleBack}>Back</a></p>
+                    <p><a href="#" className="font-bold text-blue-950 justify-center text-center" onClick={handleBack}>{'<'}Back</a></p>
                 </div>
             </div>
         </div>

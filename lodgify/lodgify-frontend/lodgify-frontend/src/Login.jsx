@@ -2,13 +2,14 @@
 import React, { useState } from 'react';
 import logo from './assets/lodgify.png';
 import Register from './Register'; // Importa el componente Register
+import Home from './home';
 
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const [showRegister, setShowRegister] = useState(false); // Nuevo estado para mostrar el componente Register
-    const [redirectToHome, setRedirectToHome] = useState(false);
+    const [showRegister, setShowRegister] = useState(false);
+    const [showHome, setShowHome] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -29,10 +30,12 @@ const Login = () => {
 
             if (response.ok) {
                 console.log("User logged in successfully!");
-                setRedirectToHome(true); // SWITCH TO HOME PAGE; HANDLE COOKIES, JWT TOKENS
+                showHomeComp();
+                // SWITCH TO HOME PAGE; HANDLE COOKIES, JWT TOKENS
             } else {
                 // DISPLAY AN ERROR
                 console.error("Failed to log in user");
+                setError('Invalid username or password!')
             }
         } catch (error) {
             console.error("Error fetching response from backend API:", error);
@@ -44,18 +47,23 @@ const Login = () => {
         setShowRegister(true);
     };
 
+    // Función para mostrar el componente Home
+    const showHomeComp = () => {
+        setShowHome(true);
+    };
+
     // Función para volver al formulario de inicio de sesión
     const showLoginForm = () => {
         setShowRegister(false);
     };
+
+    if(showHome) {
+        return <Home showHomeComp={showHomeComp} />;
+    }
     
     // Si showRegister es true, renderiza el componente Register
     if (showRegister) {
         return <Register showLoginForm={showLoginForm} />;
-    }
-
-    if (redirectToHome) {
-        return <Redirect to="/#/#" />;
     }
 
     return (
@@ -65,7 +73,6 @@ const Login = () => {
                     <img src={logo} alt="Logo" className='h-10 md:h-48' />
                 </div>
                 <form onSubmit={handleSubmit}>
-                    {error && <div className="text-red-500 mb-2">{error}</div>}
                     <div className="flex justify-center mt-4">
                         <input
                             type="text"
@@ -84,6 +91,7 @@ const Login = () => {
                             onChange={(e) => setPassword(e.target.value)}
                         />
                     </div>
+                    {error && <div className="text-red-500 mb-2">{error}</div>}
                     <div className="flex mt-4 justify-center">
                         <button type="submit" className="bg-blue-950 hover:bg-blue-500 text-white py-2 px-4 rounded-md">
                             Log in

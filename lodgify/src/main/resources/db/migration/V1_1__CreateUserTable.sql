@@ -5,7 +5,7 @@ CREATE TABLE user (
     username VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
-    phone_number INT(9), -- Assuming international numbers might be included; adjust length as needed
+    phone_number VARCHAR(9) NOT NULL UNIQUE, -- Assuming international numbers might be included; adjust length as needed
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
