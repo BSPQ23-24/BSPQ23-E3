@@ -62,7 +62,11 @@ public class UserService {
     			logger.info("Creating user: {}", user);
 				logger.info("Creating username: {}", user.getUsername());
 				logger.info("Creating name: {}", user.getName());
-				if(!user.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")){
+				if(user.getName().equals("") || user.getSurname().equals("") || user.getUsername().equals("") || user.getPassword().equals("")){
+					logger.info("Not all the data filled!");
+					return Response.status(400).entity("Fill all the data!").build();
+				}
+				else if(!user.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")){
 					logger.info("Email not valid!");
 					return Response.status(400).entity("Not valid email!").build();
 				}
@@ -70,10 +74,6 @@ public class UserService {
 					logger.info("Phone number must have 9 digits!");
 					return Response.status(400).entity("Not valid phone number!").build();
 				}	
-				else if(user.getName().equals("") || user.getSurname().equals("") || user.getUsername().equals("") || user.getPassword().equals("")){
-					logger.info("Not all the data filled!");
-					return Response.status(400).entity("Fill all the data!").build();
-				}
 
 				user1 = new User(user.getUsername(), user.getPassword(), user.getName(), user.getSurname(), user.getPhone_number(), user.getEmail());
     			pm.makePersistent(user);					 

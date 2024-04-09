@@ -8,7 +8,7 @@ const Register = ({ showLoginForm }) => { // Recibe la función showLoginForm co
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
-    const [phoneNumber, setPhoneNumber] = useState(0);
+    const [phoneNumber, setPhoneNumber] = useState('');
     const [error, setError] = useState('');
     const [warning, setWarning] = useState('');
 
@@ -41,7 +41,8 @@ const Register = ({ showLoginForm }) => { // Recibe la función showLoginForm co
                 setPassword("")
                 setEmail("")
                 setPhoneNumber("")
-                setWarning("User registered successfully!")
+                setWarning("User registered successfully!");
+                showLoginForm();
                 console.log("User registered successfully!");
             } else if (responseBody == "User already exists!"){
                 console.error("Failed to register user because the user already exists");
@@ -123,7 +124,7 @@ const Register = ({ showLoginForm }) => { // Recibe la función showLoginForm co
                     </div>
                     <div className="flex mt-4 justify-center">
                         <input
-                            type="number"
+                            type="text"
                             placeholder="Phone number*"
                             className="mb-2 p-2 rounded-md border"
                             value={phoneNumber}
