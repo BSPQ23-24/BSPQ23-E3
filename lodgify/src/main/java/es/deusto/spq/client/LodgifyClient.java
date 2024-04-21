@@ -34,11 +34,11 @@ public class LodgifyClient {
     }
 	}
 
-	public void registerUser(String username, String password, String name, String surname, int phone_number, String email) {
+	public void registerUser(String username, String password, String name, String surname, String phone_number, String email, String user_type, String id_card, int bank_account, int social_SN, String address) {
 		WebTarget registerUserWebTarget = webTarget.path("user/register");
 		Invocation.Builder invocationBuilder = registerUserWebTarget.request(MediaType.APPLICATION_JSON);
 		
-		User user = new User(username, password, name, surname, phone_number, email);
+		User user = new User(username, password, name, surname, phone_number, email, user_type, id_card, bank_account, social_SN, address);
 		Response response = invocationBuilder.post(Entity.entity(user, MediaType.APPLICATION_JSON));
 		if (response.getStatus() != Status.OK.getStatusCode()) {
 			logger.error("Error connecting with the server. Code: {}", response.getStatus());
@@ -83,6 +83,6 @@ public class LodgifyClient {
 		String port = args[1];
 
 		LodgifyClient exampleClient = new LodgifyClient(hostname, port);
-		exampleClient.registerUser(USER, PASSWORD, "user", "user", 999999999, "user@mail.es");
+		exampleClient.registerUser(USER, PASSWORD, "user", "user", "999999999", "user@mail.es", "User", "", 0, 0, "");
 	}
 }
