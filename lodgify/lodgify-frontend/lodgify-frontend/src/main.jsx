@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import Login from './Login.jsx'
 import Register from './Register.jsx'
+import Home from './Home.jsx'
 
 import './index.css'
 

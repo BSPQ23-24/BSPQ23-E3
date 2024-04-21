@@ -3,12 +3,17 @@ import React, { useState } from 'react';
 import logo from './assets/lodgify.png';
 
 const Register = ({ showLoginForm }) => { // Recibe la función showLoginForm como prop
+    const [userType, setUserType] = useState('User');
     const [name, setName] = useState('');
     const [surname, setSurname] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
+    const [idCard, setIdCard] = useState('');
+    const [bankAccount, setBankAccount] = useState(0);
+    const [socialSN, setSocialSN] = useState(0);
+    const [address, setAddress] = useState('');
     const [error, setError] = useState('');
     const [warning, setWarning] = useState('');
 
@@ -20,8 +25,13 @@ const Register = ({ showLoginForm }) => { // Recibe la función showLoginForm co
             password,
             name,
             surname,
-            phone_number: parseInt(phoneNumber, 10),
+            phone_number: phoneNumber,
             email,
+            user_type: userType,
+            id_card: idCard,
+            bank_account: bankAccount,
+            social_SN: socialSN,
+            address,
         };
 
         try {
@@ -41,8 +51,12 @@ const Register = ({ showLoginForm }) => { // Recibe la función showLoginForm co
                 setPassword("")
                 setEmail("")
                 setPhoneNumber("")
-                setWarning("User registered successfully!");
-                showLoginForm();
+                setUserType('User');
+                setIdCard('');
+                setBankAccount('');
+                setSocialSN('');
+                setAddress('');
+                setWarning("User registered successfully!")
                 console.log("User registered successfully!");
             } else if (responseBody == "User already exists!"){
                 console.error("Failed to register user because the user already exists");
@@ -57,7 +71,7 @@ const Register = ({ showLoginForm }) => { // Recibe la función showLoginForm co
                 console.error("Failed to register user because of email");
                 setError("Not valid email!")
             } else {
-                console.error("Failed to register user");
+                console.error(responseBody);
             }
         } catch (error) {
             console.error("Error:", error);
@@ -71,12 +85,21 @@ const Register = ({ showLoginForm }) => { // Recibe la función showLoginForm co
     };
 
     return (
-        <div className="flex flex-col items-center justify-center h-screen">
+        <div className="flex flex-col items-center justify-center h-screen mt-10 mb-10">
             <div className="bg-white p-8 rounded-lg shadow-md text-center">
                 <div className='flex justify-center mb-6'>
                     <img src={logo} alt="Logo" className='h-10 md:h-48' />
                 </div>
                 <form onSubmit={handleSubmit}>
+                    <div className="flex mt-4 justify-center">
+                        <select className="mb-2 p-2 rounded-md border"
+                            value={userType}
+                            onChange={(e) => setUserType(e.target.value)}
+                        >
+                            <option value="User">Traveller</option>
+                            <option value="Host">Host</option>
+                        </select>
+                    </div>
                     <div className="flex mt-4 justify-center">
                         <input
                             type="text"
@@ -124,13 +147,53 @@ const Register = ({ showLoginForm }) => { // Recibe la función showLoginForm co
                     </div>
                     <div className="flex mt-4 justify-center">
                         <input
-                            type="text"
+                            type="number"
                             placeholder="Phone number*"
                             className="mb-2 p-2 rounded-md border"
                             value={phoneNumber}
-                            onChange={(e) => setPhoneNumber(e.target.value === '' ? '' : Number(e.target.value))}
+                            onChange={(e) => setPhoneNumber(e.target.value)}
                         />
                     </div>
+                    {userType === "Host" && (
+                        <>
+                            <div className="flex mt-4 justify-center">
+                                <input
+                                    type="text"
+                                    placeholder="ID Card*"
+                                    className="mb-2 p-2 rounded-md border"
+                                    value={idCard}
+                                    onChange={(e) => setIdCard(e.target.value)}
+                                />
+                            </div>
+                            <div className="flex mt-4 justify-center">
+                                <input
+                                    type="text"
+                                    placeholder="Bank account*"
+                                    className="mb-2 p-2 rounded-md border"
+                                    value={bankAccount}
+                                    onChange={(e) => setBankAccount(e.target.value)}
+                                />
+                            </div>
+                            <div className="flex mt-4 justify-center">
+                                <input
+                                    type="text"
+                                    placeholder="Social SN*"
+                                    className="mb-2 p-2 rounded-md border"
+                                    value={socialSN}
+                                    onChange={(e) => setSocialSN(e.target.value)}
+                                />
+                            </div>
+                            <div className="flex mt-4 justify-center">
+                                <input
+                                    type="text"
+                                    placeholder="Address*"
+                                    className="mb-2 p-2 rounded-md border"
+                                    value={address}
+                                    onChange={(e) => setAddress(e.target.value)}
+                                />
+                            </div>
+                        </>
+                    )}
                     {error && <div className="text-red-500 mb-2">{error}</div>}
                     {warning && <div className="text-green-500 mb-2">{warning}</div>}
                     <div className="flex mt-4 justify-center">
@@ -150,3 +213,4 @@ const Register = ({ showLoginForm }) => { // Recibe la función showLoginForm co
 
 
 export default Register;
+

@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import logo from './assets/lodgify.png';
 import Register from './Register'; // Importa el componente Register
-import Home from './home';
+import Home from './Home';
 
 const Login = () => {
     const [username, setUsername] = useState('');
@@ -27,7 +27,7 @@ const Login = () => {
                 },
                 body: JSON.stringify(credentials),
             });
-
+          
             if (response.ok) {
                 console.log("User logged in successfully!");
                 showHomeComp();
