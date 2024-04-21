@@ -1,6 +1,11 @@
 // Login.jsx
 import React, { useState } from 'react';
 import logo from './assets/lodgify.png';
+<<<<<<< Updated upstream
+=======
+import Register from './Register'; // Importa el componente Register
+import Home from './Home';
+>>>>>>> Stashed changes
 
 const Login = () => {
     const [username, setUsername] = useState('');
@@ -8,7 +13,39 @@ const Login = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+<<<<<<< Updated upstream
         // Aquí puedes enviar los datos del formulario al backend para iniciar sesión
+=======
+
+        const credentials = {
+            username,
+            password,
+        };
+
+        try {
+            const response = await fetch('http://localhost:8080/rest/user/login', { 
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(credentials),
+            });
+
+            console.log(response)
+            
+            if (response.ok) {
+                console.log("User logged in successfully!");
+                showHomeComp();
+                // SWITCH TO HOME PAGE; HANDLE COOKIES, JWT TOKENS
+            } else {
+                // DISPLAY AN ERROR
+                console.error("Failed to log in user");
+                setError('Invalid username or password!')
+            }
+        } catch (error) {
+            console.error("Error fetching response from backend API:", error);
+        }
+>>>>>>> Stashed changes
     };
 
     return (

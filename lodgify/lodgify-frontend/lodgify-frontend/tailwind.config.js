@@ -7,6 +7,9 @@ module.exports = {
     extend: {
       screens: {
         'betterhover': {'raw': '(hover: hover)'},
+      },
+      boxShadow: {
+        'top': '4px 4px 6px -1px rgba(0, 0, 0, 0.1)',
       }
     },
   },
