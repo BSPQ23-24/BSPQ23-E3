@@ -26,8 +26,8 @@ public class UserService {
 
 	protected static final Logger logger = LogManager.getLogger();
 
-	private PersistenceManager pm=null;
-	private Transaction tx=null;
+	private PersistenceManager pm = null;
+	private Transaction tx = null;
 
 	public UserService() {
 		PersistenceManagerFactory pmf = JDOHelper.getPersistenceManagerFactory("datanucleus.properties");
@@ -50,22 +50,6 @@ public class UserService {
             tx.begin();
             logger.info("Checking whether the user already exits or not: '{}'", user.getUsername());
     		User user1 = null;
-<<<<<<< Updated upstream
-    		try {
-    			user1 = pm.getObjectById(User.class, user.getUsername());
-    		} catch (javax.jdo.JDOObjectNotFoundException jonfe) {
-    			logger.info("Exception launched: {}", jonfe.getMessage());
-    		}
-    		logger.info("User: {}", user);
-    		if (user1 != null) {
-    			logger.info("Setting password user: {}", user);
-    			user1.setPassword(user.getPassword());
-    			logger.info("Password set user: {}", user);
-    		} else {
-    			logger.info("Creating user: {}", user);
-    			user1 = new User(user.getUsername(), user.getPassword(), user.getName(), user.getSurname(), user.getPhone_number(), user.getEmail());
-    			pm.makePersistent(user);					 
-=======
 			Residence residence = null;
 			Query<User> query = pm.newQuery(User.class, "username == :username");
 			try {
@@ -107,7 +91,6 @@ public class UserService {
     			pm.makePersistent(user);
 				pm.makePersistent(residence);
 				logger.info("Residence: {}", residence);					 
->>>>>>> Stashed changes
     			logger.info("User created: {}", user);
     		}
     		tx.commit();
@@ -119,8 +102,6 @@ public class UserService {
             {
                 tx.rollback();
             }
-<<<<<<< Updated upstream
-=======
 			pm.close();
     	}
     }    
@@ -167,7 +148,6 @@ public class UserService {
                 tx.rollback();
             }
 			pm.close();
->>>>>>> Stashed changes
     	}
     }    
 }

@@ -34,11 +34,7 @@ public class LodgifyClient {
     }
 	}
 
-<<<<<<< Updated upstream
-	public void registerUser(String username, String password, String name, String surname, int phone_number, String email) {
-=======
 	public void registerUser(String username, String password, String name, String surname, String phone_number, String email, String user_type, String id_card, int bank_account, int social_SN, String address) {
->>>>>>> Stashed changes
 		WebTarget registerUserWebTarget = webTarget.path("user/register");
 		Invocation.Builder invocationBuilder = registerUserWebTarget.request(MediaType.APPLICATION_JSON);
 		
@@ -87,10 +83,6 @@ public class LodgifyClient {
 		String port = args[1];
 
 		LodgifyClient exampleClient = new LodgifyClient(hostname, port);
-<<<<<<< Updated upstream
-		exampleClient.registerUser(USER, PASSWORD, "user", "user", 999999999, "user@mail.es");
-=======
 		exampleClient.registerUser(USER, PASSWORD, "user", "user", "999999999", "user@mail.es", "User", "", 0, 0, "");
->>>>>>> Stashed changes
 	}
 }

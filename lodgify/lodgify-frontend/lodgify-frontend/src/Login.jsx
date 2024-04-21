@@ -1,21 +1,18 @@
 // Login.jsx
 import React, { useState } from 'react';
 import logo from './assets/lodgify.png';
-<<<<<<< Updated upstream
-=======
 import Register from './Register'; // Importa el componente Register
 import Home from './Home';
->>>>>>> Stashed changes
 
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const [showRegister, setShowRegister] = useState(false);
+    const [showHome, setShowHome] = useState(false);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-<<<<<<< Updated upstream
-        // Aquí puedes enviar los datos del formulario al backend para iniciar sesión
-=======
 
         const credentials = {
             username,
@@ -45,8 +42,31 @@ const Login = () => {
         } catch (error) {
             console.error("Error fetching response from backend API:", error);
         }
->>>>>>> Stashed changes
     };
+
+    // Función para mostrar el componente Register
+    const showRegisterForm = () => {
+        setShowRegister(true);
+    };
+
+    // Función para mostrar el componente Home
+    const showHomeComp = () => {
+        setShowHome(true);
+    };
+
+    // Función para volver al formulario de inicio de sesión
+    const showLoginForm = () => {
+        setShowRegister(false);
+    };
+
+    if(showHome) {
+        return <Home showHomeComp={showHomeComp} />;
+    }
+    
+    // Si showRegister es true, renderiza el componente Register
+    if (showRegister) {
+        return <Register showLoginForm={showLoginForm} />;
+    }
 
     return (
         <div className="flex flex-col items-center justify-center h-screen">
@@ -73,6 +93,7 @@ const Login = () => {
                             onChange={(e) => setPassword(e.target.value)}
                         />
                     </div>
+                    {error && <div className="text-red-500 mb-2">{error}</div>}
                     <div className="flex mt-4 justify-center">
                         <button type="submit" className="bg-blue-950 hover:bg-blue-500 text-white py-2 px-4 rounded-md">
                             Log in
@@ -80,10 +101,11 @@ const Login = () => {
                     </div>
                 </form>
                 <div className="flex mt-4">
-                    <p>Do you still not have an account? <a href="" className="font-bold text-blue-900">Register now!</a></p>
+                    {/* Llama a la función showRegisterForm al hacer clic */}
+                    <p>Do you still not have an account? <a href="#" className="font-bold text-blue-900" onClick={showRegisterForm}>Register now!</a></p>
                 </div>
             </div>
-        </div >
+        </div>
     );
 };
 

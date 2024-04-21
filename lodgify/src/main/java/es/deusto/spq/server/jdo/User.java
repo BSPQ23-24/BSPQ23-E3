@@ -14,16 +14,6 @@ public class User {
 	private String password;
 	private String name;
 	private String surname;
-<<<<<<< Updated upstream
-	private int phone_number;
-	private String email;	
-
-	@Persistent(mappedBy="user", dependentElement="true")
-	@Join
-	Set<Message> messages = new HashSet<>();
-	
-	public User(String username, String password, String name, String surname, int phone_number, String email) {
-=======
 	private String phone_number;
 	private String email;
 	private String user_type;
@@ -33,7 +23,6 @@ public class User {
     private String address;	
 
 	public User(String username, String password, String name, String surname, String phone_number, String email, String user_type, String id_card, int bank_account, int social_SN, String address) {
->>>>>>> Stashed changes
 		this.username = username;
         this.password = password;
         this.name = name;
@@ -137,12 +126,12 @@ public class User {
 	}
 
 
-	public int getPhone_number() {
+	public String getPhone_number() {
 		return phone_number;
 	}
 
 
-	public void setPhone_number(int phone_number) {
+	public void setPhone_number(String phone_number) {
 		this.phone_number = phone_number;
 	}
 
@@ -155,11 +144,6 @@ public class User {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
-	public Set<Message> getMessages() {
-		return this.messages;
-	}
-
 
 	public String toString() {
         return "Username --> " + this.username + ", password -->  " + this.password;
