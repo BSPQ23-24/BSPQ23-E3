@@ -2,20 +2,13 @@
 import React, { useState } from 'react';
 import logo from './assets/lodgify.png';
 
-<<<<<<< Updated upstream
-const Register = () => {
-=======
 const Register = ({ showLoginForm }) => { // Recibe la función showLoginForm como prop
     const [userType, setUserType] = useState('User');
->>>>>>> Stashed changes
     const [name, setName] = useState('');
     const [surname, setSurname] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
-<<<<<<< Updated upstream
-    const [phoneNumber, setPhoneNumber] = useState(0);
-=======
     const [phoneNumber, setPhoneNumber] = useState('');
     const [idCard, setIdCard] = useState('');
     const [bankAccount, setBankAccount] = useState(0);
@@ -23,7 +16,6 @@ const Register = ({ showLoginForm }) => { // Recibe la función showLoginForm co
     const [address, setAddress] = useState('');
     const [error, setError] = useState('');
     const [warning, setWarning] = useState('');
->>>>>>> Stashed changes
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -50,11 +42,8 @@ const Register = ({ showLoginForm }) => { // Recibe la función showLoginForm co
                 },
                 body: JSON.stringify(user),
             });
-
+            const responseBody = await response.text();
             if (response.ok) {
-<<<<<<< Updated upstream
-                console.log("User registered succesfully!");
-=======
                 setError("")
                 setName("")
                 setSurname("")
@@ -81,13 +70,18 @@ const Register = ({ showLoginForm }) => { // Recibe la función showLoginForm co
             } else if (responseBody == "Not valid email!"){
                 console.error("Failed to register user because of email");
                 setError("Not valid email!")
->>>>>>> Stashed changes
             } else {
                 console.error(responseBody);
             }
         } catch (error) {
             console.error("Error:", error);
         }
+    };
+
+    // Función para manejar el clic en el enlace "Back"
+    const handleBack = (e) => {
+        e.preventDefault(); // Evita que se siga el enlace
+        showLoginForm(); // Llama a la función showLoginForm pasada como prop
     };
 
     return (
@@ -160,8 +154,6 @@ const Register = ({ showLoginForm }) => { // Recibe la función showLoginForm co
                             onChange={(e) => setPhoneNumber(e.target.value)}
                         />
                     </div>
-<<<<<<< Updated upstream
-=======
                     {userType === "Host" && (
                         <>
                             <div className="flex mt-4 justify-center">
@@ -204,16 +196,21 @@ const Register = ({ showLoginForm }) => { // Recibe la función showLoginForm co
                     )}
                     {error && <div className="text-red-500 mb-2">{error}</div>}
                     {warning && <div className="text-green-500 mb-2">{warning}</div>}
->>>>>>> Stashed changes
                     <div className="flex mt-4 justify-center">
                         <button type="submit" className="bg-blue-950 hover:bg-blue-950 text-white py-2 px-4 rounded-md">
                             Register
                         </button>
                     </div>
                 </form>
+                <div className="flex mt-4">
+                    {/* Llama a la función handleBack al hacer clic */}
+                    <p><a href="#" className="font-bold text-blue-950 justify-center text-center" onClick={handleBack}>{'<'}Back</a></p>
+                </div>
             </div>
-        </div >
+        </div>
     );
 };
 
+
 export default Register;
+

@@ -77,13 +77,6 @@ const HomePage = () => {
                         </div>
                     ))
                 }
-            </div>
-
-            <footer>
-                <p>&copy; 2024 Lodgify. All rights reserved.</p>
-            </footer>
-        </div>
-    );
 };
 
 export default HomePage;
