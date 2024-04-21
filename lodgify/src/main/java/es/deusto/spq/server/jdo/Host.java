@@ -10,7 +10,7 @@ public class Host extends User {
 	private int social_SN;
 	private String address;
 	
-	public Host(String username, String password, String name, String surname, int phone_number, String email, String id_card, int bank_account, int social_SN, String address) {
+	public Host(String username, String password, String name, String surname, String phone_number, String email, String id_card, int bank_account, int social_SN, String address) {
 		super(username, password, name, surname, phone_number, email);
 		this.id_card = id_card;
 		this.bank_account = bank_account;
