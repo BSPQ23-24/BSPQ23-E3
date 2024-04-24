@@ -26,10 +26,10 @@ const HomePage = () => {
                 <div className="flex justify-between items-center">
                     <img src={logo} alt="Lodgify" className="h-5 md:h-12 px-12" />
                     <ul className="flex">
-                        <li className="mr-4 px-12"><a href="#" style={{ color: 'rgb(4, 18, 26)'}} className="font-bold">HOME</a></li>
+                        <li><Link to="/home" style={{ color: 'rgb(4, 18, 26)'}} className="font-bold px-12">HOME</Link></li>
                         <li className="mr-4 px-12"><a href="#" style={{ color: 'rgb(4, 18, 26)'}} className="font-bold">LISTINGS</a></li>
                         <li className="mr-4 px-12"><a href="#" style={{ color: 'rgb(4, 18, 26)'}} className="font-bold">ABOUT US</a></li>
-                        <li><Link to="/profile" style={{ color: 'rgb(4, 18, 26)'}} className="font-bold px-12">My profile</Link></li>
+                        <li><Link to="/profile" style={{ color: 'rgb(4, 18, 26)'}} className="font-bold px-12">MY PROFILE</Link></li>
                     </ul>
                 </div>
             </nav>
@@ -67,7 +67,7 @@ const HomePage = () => {
 
             <div>
                 {residences.map((residence) => (
-                        <div key={residence.id} className="bg-gray-100 m-4 mb-8 p-8 rounded-lg mx-auto shadow-top items-center text-center w-4/5">
+                        <div key={residence.id} className="flex bg-gray-100 m-4 mb-8 p-8 rounded-lg mx-auto shadow-top items-center text-center w-4/5">
                             <img src={apartamento} alt="Apartamento" className='mx-auto h-10 md:h-48 w-96 p-4 rounded-3xl' />
                             <p className="p-4">Location: {residence.residence_address}</p>
                             <p className="p-4">Residence type: {residence.residence_type}</p>
