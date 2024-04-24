@@ -3,7 +3,6 @@ CREATE TABLE residence (
     residence_address VARCHAR(255) NOT NULL,
     residence_type VARCHAR(255) NOT NULL,
     n_rooms INT,
-    social_SN INT,
     price FLOAT,
     image_path VARCHAR(255),
     user_id INT,

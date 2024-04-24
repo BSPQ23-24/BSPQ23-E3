@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import logo from './assets/lodgify_logo.png';
 import apartamento from './assets/apartamento.jpg';
 
@@ -28,7 +29,7 @@ const HomePage = () => {
                         <li className="mr-4 px-12"><a href="#" style={{ color: 'rgb(4, 18, 26)'}} className="font-bold">HOME</a></li>
                         <li className="mr-4 px-12"><a href="#" style={{ color: 'rgb(4, 18, 26)'}} className="font-bold">LISTINGS</a></li>
                         <li className="mr-4 px-12"><a href="#" style={{ color: 'rgb(4, 18, 26)'}} className="font-bold">ABOUT US</a></li>
-                        <li><a href="#" style={{ color: 'rgb(4, 18, 26)'}} className="font-bold px-12">CONTACT</a></li>
+                        <li><Link to="/profile" style={{ color: 'rgb(4, 18, 26)'}} className="font-bold px-12">My profile</Link></li>
                     </ul>
                 </div>
             </nav>

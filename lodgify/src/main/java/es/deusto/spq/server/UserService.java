@@ -51,7 +51,6 @@ public class UserService {
             tx.begin();
             logger.info("Checking whether the user already exits or not: '{}'", user.getUsername());
       		user.setPassword(Hashing.Hash(user.getPassword()));
-			user.setUsername(Hashing.Hash(user.getUsername()));
     		User user1 = null;
 			Residence residence = null;
 			Query<User> query = pm.newQuery(User.class, "username == :username");
@@ -118,7 +117,6 @@ public class UserService {
             tx.begin();
             logger.info("Checking whether the user already exits or not: '{}'", user.getUsername());
     	    user.setPassword(Hashing.Hash(user.getPassword()));
-			user.setUsername(Hashing.Hash(user.getUsername()));
       		User user1 = null;
 			Query<User> query = pm.newQuery(User.class, "username == :username");
 			try {
@@ -128,16 +126,21 @@ public class UserService {
 					logger.info("User not found!");
 				} else {
 					user1 = users.get(0);
+					logger.info("Aquí es {}", user1);
 				}
 			} finally {
 				query.closeAll();
 			}
     		logger.info("User: {}", user);
     		if (user1 != null) {
+				logger.info("Tipo: {}", user1.getUser_type());
+				logger.info("User found: {}", user1.toString());
     			logger.info("Submitted password: {}", user.getPassword());
     			logger.info("DB password: {}", user1.getPassword());
 				if(user.getPassword().equals(user1.getPassword())){
-					return Response.ok(user1).build();
+					logger.info("El usuario es: {}", user1);
+					User userDef = new User(user1.getUsername(), user1.getPassword(), user1.getName(), user1.getSurname(), user1.getPhone_number(), user1.getEmail(), user1.getUser_type(), user1.getId_card(), user1.getBank_account(), user1.getSocial_SN(), user1.getAddress());
+					return Response.ok(userDef).build();
 				}
 				else{
 					return Response.status(401).build();
