@@ -34,7 +34,7 @@ public class LodgifyClient {
     }
 	}
 
-	public void registerUser(String username, String password, String name, String surname, String phone_number, String email, String user_type, String id_card, int bank_account, int social_SN, String address) {
+	public Response registerUser(String username, String password, String name, String surname, String phone_number, String email, String user_type, String id_card, int bank_account, int social_SN, String address) {
 		WebTarget registerUserWebTarget = webTarget.path("user/register");
 		Invocation.Builder invocationBuilder = registerUserWebTarget.request(MediaType.APPLICATION_JSON);
 		
@@ -45,6 +45,7 @@ public class LodgifyClient {
 		} else {
 			logger.info("User correctly registered, the user name is {}", username);
 		}
+		return response;
 	}
 
 	/*
