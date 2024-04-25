@@ -23,14 +23,14 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 public class ResidenceService {
 
-	protected static final Logger logger = LogManager.getLogger();
+    protected static final Logger logger = LogManager.getLogger();
 
-	private PersistenceManager pm=null;
+    private PersistenceManager pm=null;
 
-	public ResidenceService() {
-		PersistenceManagerFactory pmf = JDOHelper.getPersistenceManagerFactory("datanucleus.properties");
-		this.pm = pmf.getPersistenceManager();
-	}
+    public ResidenceService() {
+        PersistenceManagerFactory pmf = JDOHelper.getPersistenceManagerFactory("datanucleus.properties");
+        this.pm = pmf.getPersistenceManager();
+    }
 
     @GET
     @Path("/search")
@@ -58,3 +58,4 @@ public class ResidenceService {
         }
     }
 }
+

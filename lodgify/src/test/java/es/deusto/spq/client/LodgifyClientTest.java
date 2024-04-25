@@ -1,43 +1,76 @@
 package es.deusto.spq.client;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import org.junit.After;
+
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Answers;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import es.deusto.spq.server.jdo.User;
 
 public class LodgifyClientTest {
 
-    private LodgifyClient client;
+    @Mock
+    private Client client;
+
+    @Mock(answer=Answers.RETURNS_DEEP_STUBS)
+    private WebTarget webTarget;
+
+    @Mock(answer=Answers.RETURNS_DEEP_STUBS)
+    private Invocation.Builder invocationBuilder;
+
+    @Captor
+    private ArgumentCaptor<Entity<User>> userEntityCaptor;
+
+    private LodgifyClient lodgifyClient;
 
     @Before
     public void setUp() {
-        client = new LodgifyClient("localhost", "8080");
-    }
+        MockitoAnnotations.openMocks(this);
 
-    @After
-    public void tearDown() {
-        client = null;
+        when(client.target("http://localhost:8080/rest")).thenReturn(webTarget);
+        when(webTarget.request(MediaType.TEXT_PLAIN)).thenReturn(invocationBuilder);
+        Response response = Response.ok("Successful connection").build();
+        when(invocationBuilder.get()).thenReturn(response);
+
+        lodgifyClient = new LodgifyClient("localhost", "8080");
     }
 
     @Test
     public void testRegisterUser() {
-        String username = "testuser";
-        String password = "testpassword";
-        String name = "Test";
-        String surname = "User";
-        String phone_number = "123456789";
-        String email = "testuser@gmail.com";
-        String user_type = "User";
-        String id_card = "11111111M";
-        int bank_account = 2;
-        int social_SN = 2;
-        String address = "111";
+        when(webTarget.path("user/register")).thenReturn(webTarget);
+        when(webTarget.request(MediaType.APPLICATION_JSON)).thenReturn(invocationBuilder);
 
-        // Realizamos la llamada al método que queremos probar
-        Response response = client.registerUser(username, password, name, surname, phone_number, email, user_type, id_card, bank_account, social_SN, address);
+        Response response = Response.ok().build();
+        when(invocationBuilder.post(any(Entity.class))).thenReturn(response);
 
-        // Verificamos que la respuesta es OK (código 200)
-        assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+        Response registerResponse = lodgifyClient.registerUser("test-login", "passwd", "test-name", "test-surname", "999999999", "test@example.com", "User", "123456789A", 123456789, 0, "test address");
+        
+        assertEquals(Response.Status.OK.getStatusCode(), registerResponse.getStatus());
+    }
+
+
+    @Test
+    public void testRegisterUserWithError() {
+        when(webTarget.path("user/register")).thenReturn(webTarget);
+        when(webTarget.request(MediaType.APPLICATION_JSON)).thenReturn(invocationBuilder);
+
+        Response response = Response.serverError().build();
+        when(invocationBuilder.post(any(Entity.class))).thenReturn(response);
+        Response registerResponse = lodgifyClient.registerUser("test-login", "passwd", "test-name", "test-surname", "999999999", "test@example.com", "User", "123456789A", 123456789, 0, "test address");
+        assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), registerResponse.getStatus());
     }
 }

@@ -1,60 +1,143 @@
 package es.deusto.spq.server.jdo;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Before;
 import org.junit.Test;
-import es.deusto.spq.server.jdo.User;
 
 public class UserTest {
-
+    
     private User user;
 
     @Before
     public void setUp() {
-        user = new User("testUser", "password123", "John", "Doe", "123456789", "john@example.com", "normal", "ABC123", 123456789, 987654321, "123 Main St");
+        user = new User("example", "password", "User1", "User1", "123456789", "user1@example.com", "user", "123456789A", 123456789, 123456789, "Av Universidades 9");
     }
 
     @Test
-    public void testGettersAndSetters() {
-        assertEquals("testUser", user.getUsername());
-        assertEquals("password123", user.getPassword());
-        assertEquals("John", user.getName());
-        assertEquals("Doe", user.getSurname());
+    public void testGetUsername() {
+        assertEquals("example", user.getUsername());
+    }
+
+    @Test
+    public void testSetUsername() {
+        user.setUsername("new-username");
+        assertEquals("new-username", user.getUsername());
+    }
+
+    @Test
+    public void testGetPassword() {
+        assertEquals("password", user.getPassword());
+    }
+
+    @Test
+    public void testSetPassword() {
+        user.setPassword("newpasswd");
+        assertEquals("newpasswd", user.getPassword());
+    }
+
+    @Test
+    public void testGetName() {
+        assertEquals("User1", user.getName());
+    }
+
+    @Test
+    public void testSetName() {
+        user.setName("User2");
+        assertEquals("User2", user.getName());
+    }
+
+    @Test
+    public void testGetSurname() {
+        assertEquals("User1", user.getSurname());
+    }
+
+    @Test
+    public void testSetSurname() {
+        user.setSurname("User2");
+        assertEquals("User2", user.getSurname());
+    }
+
+    @Test
+    public void testGetPhone_number() {
         assertEquals("123456789", user.getPhone_number());
-        assertEquals("john@example.com", user.getEmail());
-        assertEquals("normal", user.getUser_type());
-        assertEquals("ABC123", user.getId_card());
-        assertEquals(123456789, user.getBank_account());
-        assertEquals(987654321, user.getSocial_SN());
-        assertEquals("123 Main St", user.getAddress());
+    }
 
-        user.setUsername("newUser");
-        user.setPassword("newPassword");
-        user.setName("Jane");
-        user.setSurname("Smith");
+    @Test
+    public void testSetPhone_number() {
         user.setPhone_number("987654321");
-        user.setEmail("jane@example.com");
-        user.setUser_type("admin");
-        user.setId_card("XYZ789");
-        user.setBank_account(987654321);
-        user.setSocial_SN(123456789);
-        user.setAddress("456 Oak St");
-
-        assertEquals("newUser", user.getUsername());
-        assertEquals("newPassword", user.getPassword());
-        assertEquals("Jane", user.getName());
-        assertEquals("Smith", user.getSurname());
         assertEquals("987654321", user.getPhone_number());
-        assertEquals("jane@example.com", user.getEmail());
-        assertEquals("admin", user.getUser_type());
-        assertEquals("XYZ789", user.getId_card());
+    }
+
+    @Test
+    public void testGetEmail() {
+        assertEquals("user1@example.com", user.getEmail());
+    }
+
+    @Test
+    public void testSetEmail() {
+        user.setEmail("user2@example.com");
+        assertEquals("user2@example.com", user.getEmail());
+    }
+
+    @Test
+    public void testGetUserType() {
+        assertEquals("user", user.getUser_type());
+    }
+
+    @Test
+    public void testSetUserType() {
+        user.setUser_type("host");
+        assertEquals("host", user.getUser_type());
+    }
+
+    @Test
+    public void testGetIdCard() {
+        assertEquals("123456789A", user.getId_card());
+    }
+
+    @Test
+    public void testSetIdCard() {
+        user.setId_card("987654321Y");
+        assertEquals("987654321Y", user.getId_card());
+    }
+
+    @Test
+    public void testGetBankAccount() {
+        assertEquals(123456789, user.getBank_account());
+    }
+
+    @Test
+    public void testSetBankAccount() {
+        user.setBank_account(987654321);
         assertEquals(987654321, user.getBank_account());
+    }
+
+    @Test
+    public void testGetSocialSN() {
         assertEquals(123456789, user.getSocial_SN());
-        assertEquals("456 Oak St", user.getAddress());
+    }
+
+    @Test
+    public void testSetSocialSN() {
+        user.setSocial_SN(987654321);
+        assertEquals(987654321, user.getSocial_SN());
+    }
+
+    @Test
+    public void testGetAddress() {
+        assertEquals("Av Universidades 9", user.getAddress());
+    }
+
+    @Test
+    public void testSetAddress() {
+        user.setAddress("Av Universidades 23");
+        assertEquals("Av Universidades 23", user.getAddress());
     }
 
     @Test
     public void testToString() {
-        assertEquals("Username --> testUser, password -->  password123", user.toString());
+        String expected = "Username --> example, password -->  password";
+        assertEquals(expected, user.toString());
     }
 }
