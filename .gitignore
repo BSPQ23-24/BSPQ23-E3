@@ -22,3 +22,5 @@ buildNumber.properties
 lodgify/target/*
 lodgify/lodgify-frontend/lodgify-frontend/node_modules
 lodgify/node_modules
+lodgify/lodgify-frontend/lodgify-frontend/dist
+lodgify/src/main/webapp/assets/
