@@ -7,24 +7,25 @@ import javax.jdo.annotations.PrimaryKey;
 
 @PersistenceCapable
 public class Residence {
-	@PrimaryKey
+    @PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     private Long id;
-	private String residence_address;
+    private String residence_address;
     private String residence_type;
     private int n_rooms;
     private float price;
     private String image;
     private int user_id;
 
-	public Residence(String residence_address, String residence_type, int n_rooms, float price, String image, int user_id) {
-		this.residence_address = residence_address;
+    public Residence(String residence_address, String residence_type, int n_rooms, float price, String image,
+            int user_id) {
+        this.residence_address = residence_address;
         this.residence_type = residence_type;
         this.n_rooms = n_rooms;
         this.price = price;
         this.image = image;
         this.user_id = user_id;
-	}
+    }
 
     public Long getId() {
         return id;

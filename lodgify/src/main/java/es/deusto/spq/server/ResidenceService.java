@@ -23,14 +23,14 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 public class ResidenceService {
 
-	protected static final Logger logger = LogManager.getLogger();
+    protected static final Logger logger = LogManager.getLogger();
 
-	private PersistenceManager pm=null;
+    private PersistenceManager pm = null;
 
-	public ResidenceService() {
-		PersistenceManagerFactory pmf = JDOHelper.getPersistenceManagerFactory("datanucleus.properties");
-		this.pm = pmf.getPersistenceManager();
-	}
+    public ResidenceService() {
+        PersistenceManagerFactory pmf = JDOHelper.getPersistenceManagerFactory("datanucleus.properties");
+        this.pm = pmf.getPersistenceManager();
+    }
 
     @GET
     @Path("/search")
@@ -46,13 +46,15 @@ public class ResidenceService {
             @SuppressWarnings("unchecked")
             List<Residence> residences = (List<Residence>) query.execute(address);
             if (residences.isEmpty()) {
-                return Response.status(Response.Status.NOT_FOUND).entity("No residences found at the specified address.").build();
+                return Response.status(Response.Status.NOT_FOUND)
+                        .entity("No residences found at the specified address.").build();
             }
             logger.info(residences);
             return Response.ok(residences).build();
         } catch (Exception e) {
             e.printStackTrace();
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("An error occurred while fetching the data.").build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("An error occurred while fetching the data.").build();
         } finally {
             pm.close();
         }
