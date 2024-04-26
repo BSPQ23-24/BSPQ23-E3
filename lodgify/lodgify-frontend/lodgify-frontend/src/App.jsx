@@ -5,6 +5,7 @@ import Register from './Register.jsx';
 import Home from './Home.jsx';
 import ResidenceRegistration from './ResidenceRegistration.jsx';
 import Profile from './Profile.jsx';
+import PasswordRecoveryPage from './PasswordRecovery.jsx';
 
 const App = () => {
     return (
@@ -15,6 +16,7 @@ const App = () => {
                 <Route path="/home" element={<Home />} />
                 <Route path="/registerResidence" element={<ResidenceRegistration />} />
                 <Route path="/Profile" element={<Profile />} />
+                <Route path="/passwordRecovery" element={<PasswordRecoveryPage />} />
             </Routes>
         </Router>
     );

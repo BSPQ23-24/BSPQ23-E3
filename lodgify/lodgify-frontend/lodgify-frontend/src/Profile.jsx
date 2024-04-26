@@ -199,6 +199,9 @@ const Profile = () => {
                     </div>
                 </form>
             </div>
+            <div className="mt-4">
+                <Link to="/passwordRecovery" className="text-blue-500 hover:text-blue-800">Forgot your password? Click here to recover it.</Link>
+            </div>
             <h1 className = "font-bold text-3xl mt-8 mb-8">Your residences</h1>
                 {residences.map((residence) => (
                             <div key={residence.id} className="flex bg-gray-100 m-4 mb-8 p-8 rounded-lg mx-auto shadow-top items-center text-center mx-auto w-4/5">
