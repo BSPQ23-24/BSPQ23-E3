@@ -5,27 +5,25 @@ import javax.jdo.annotations.PersistenceCapable;
 
 @PersistenceCapable
 public class Host extends User {
-	
-	private String id_card;
 	private int bank_account;
 	private int social_SN;
 	private String address;
-	
-	public Host(String username, String password, String name, String surname, String phone_number, String email, String id_card, int bank_account, int social_SN, String address) {
+
+	public Host(String username, String password, String name, String surname, String phone_number, String email,
+			int bank_account, int social_SN, String address) {
 		super(username, password, name, surname, phone_number, email);
-		this.id_card = id_card;
 		this.bank_account = bank_account;
 		this.social_SN = social_SN;
 		this.address = address;
 	}
 
-	public String getId_card() {
-		return id_card;
-	}
+	// public String getId_card() {
+	// return id_card;
+	// }
 
-	public void setId_card(String id_card) {
-		this.id_card = id_card;
-	}
+	// public void setId_card(String id_card) {
+	// this.id_card = id_card;
+	// }
 
 	public int getBank_account() {
 		return bank_account;
@@ -52,7 +50,7 @@ public class Host extends User {
 	}
 
 	public String toString() {
-        return "Host: id --> " + this.id_card;
-    }
+		return "Host: username --> " + this.username;
+	}
 }
 */

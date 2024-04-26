@@ -209,4 +209,3 @@ const Register = ({ showLoginForm }) => { // Recibe la función showLoginForm co
 
 
 export default Register;
-
