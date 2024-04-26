@@ -5,8 +5,10 @@ import es.deusto.spq.server.jdo.Residence;
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
+import javax.jdo.Transaction;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.jdo.Query;
 import javax.ws.rs.Produces;
@@ -23,14 +25,66 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 public class ResidenceService {
 
-    protected static final Logger logger = LogManager.getLogger();
+	protected static final Logger logger = LogManager.getLogger();
 
-    private PersistenceManager pm = null;
+	private PersistenceManager pm = null;
+	private Transaction tx = null;
 
-    public ResidenceService() {
-        PersistenceManagerFactory pmf = JDOHelper.getPersistenceManagerFactory("datanucleus.properties");
-        this.pm = pmf.getPersistenceManager();
-    }
+	public ResidenceService() {
+		PersistenceManagerFactory pmf = JDOHelper.getPersistenceManagerFactory("datanucleus.properties");
+		this.pm = pmf.getPersistenceManager();
+        this.tx = pm.currentTransaction();
+	}
+
+    @POST
+    @Path("/register")
+    public Response registerUser(Residence residence) {
+        try
+        {	
+            tx.begin();
+            logger.info("Checking whether the user already exits or not: '{}'", residence.getId());
+    		Residence residence1 = null;
+			Query<Residence> query = pm.newQuery(Residence.class, "id == :id");
+			try {
+				@SuppressWarnings("unchecked")
+				List<Residence> residences = (List<Residence>) query.execute(residence.getId());
+				if (residences.isEmpty()) {
+					logger.info("Residence not found!");
+				} else {
+					residence1 = residences.get(0);
+				}
+			} finally {
+				query.closeAll();
+			}
+
+    		logger.info("Residence: {}", residence);
+			if(residence1 != null) {
+				logger.info("Residence already exists!");
+				return Response.status(400).entity("Residence already exists!").build();
+			}
+    		if (residence1 == null) {
+    			logger.info("Creating residence: {}", residence);
+				if(residence.getResidence_address().equals("") || residence.getResidence_type().equals("") || residence.getPrice() == 0 || residence.getN_rooms() == 0){
+					logger.info("Not all the data filled!");
+					return Response.status(400).entity("Fill all the data!").build();
+				}
+				
+				residence1 = new Residence(residence.getResidence_address(), residence.getResidence_type(), residence.getN_rooms(), residence.getPrice(), "../../../../../../assets/apartamento.jpg", residence.getUser_username());
+				pm.makePersistent(residence1);
+				logger.info("Residence: {}", residence1);					 
+    		}
+    		tx.commit();
+    		return Response.ok().build();
+        }
+        finally
+        {
+            if (tx.isActive())
+            {
+                tx.rollback();
+            }
+			pm.close();
+    	}
+    }    
 
     @GET
     @Path("/search")
@@ -46,15 +100,39 @@ public class ResidenceService {
             @SuppressWarnings("unchecked")
             List<Residence> residences = (List<Residence>) query.execute(address);
             if (residences.isEmpty()) {
-                return Response.status(Response.Status.NOT_FOUND)
-                        .entity("No residences found at the specified address.").build();
+                return Response.status(Response.Status.NOT_FOUND).entity("No residences found at the specified address.").build();
             }
             logger.info(residences);
             return Response.ok(residences).build();
         } catch (Exception e) {
             e.printStackTrace();
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("An error occurred while fetching the data.").build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("An error occurred while fetching the data.").build();
+        } finally {
+            pm.close();
+        }
+    }
+
+    @GET
+    @Path("/searchID")
+    public Response searchResidencesID(@QueryParam("user_id") String user_id) {
+
+        if (user_id == null || user_id.trim().isEmpty()) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("User ID query parameter is required").build();
+        }
+        Query<Residence> query = pm.newQuery(Residence.class);
+        query.setFilter("user_username == :user_id");
+        try {
+            logger.info(user_id);
+            @SuppressWarnings("unchecked")
+            List<Residence> residences = (List<Residence>) query.execute(user_id);
+            if (residences.isEmpty()) {
+                return Response.status(Response.Status.NOT_FOUND).entity("No residences found for the specified user ID.").build();
+            }
+            logger.info(residences);
+            return Response.ok(residences).build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("An error occurred while fetching the data.").build();
         } finally {
             pm.close();
         }

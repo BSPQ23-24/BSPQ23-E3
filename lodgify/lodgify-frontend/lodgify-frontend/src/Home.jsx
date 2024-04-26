@@ -19,6 +19,18 @@ const HomePage = () => {
             console.error('Error:', error);
         }
     };
+
+    const handleSearchBooking = async () => {
+        try {
+            const response = await fetch(`http://localhost:8080/rest/residence/book`)
+            if (!response.ok) {
+                throw new Error(response);
+            }
+            const data = await response.json();
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
     
     return (
         <div className="flex flex-col items-center">
@@ -29,6 +41,7 @@ const HomePage = () => {
                         <li><Link to="/home" style={{ color: 'rgb(4, 18, 26)'}} className="font-bold px-12">HOME</Link></li>
                         <li className="mr-4 px-12"><a href="#" style={{ color: 'rgb(4, 18, 26)'}} className="font-bold">LISTINGS</a></li>
                         <li className="mr-4 px-12"><a href="#" style={{ color: 'rgb(4, 18, 26)'}} className="font-bold">ABOUT US</a></li>
+                        <li><Link to="/registerResidence" style={{ color: 'rgb(4, 18, 26)'}} className="font-bold px-12">REGISTER RESIDENCE</Link></li>
                         <li><Link to="/profile" style={{ color: 'rgb(4, 18, 26)'}} className="font-bold px-12">MY PROFILE</Link></li>
                     </ul>
                 </div>
@@ -58,7 +71,7 @@ const HomePage = () => {
                         />
                     </div>
                 </form>
-                <div className="flex mt-4 W-4/5 justify-center">
+                <div className="flex mt-4 mx-auto w-4/5 justify-center">
                     <button onClick={handleSearch} className="bg-blue-950 hover:bg-blue-500 text-white py-2 px-4 rounded-xl">
                         Search
                     </button>
@@ -72,8 +85,8 @@ const HomePage = () => {
                             <p className="p-4">Location: {residence.residence_address}</p>
                             <p className="p-4">Residence type: {residence.residence_type}</p>
                             <p className="p-4">Price: {residence.price}€</p>
-                            <button className="bg-blue-950 hover:bg-blue-500 text-white py-2 px-4 rounded-xl pt-2">
-                                Know more
+                            <button onClick={handleSearchBooking} className="bg-blue-950 hover:bg-blue-500 text-white m-4 py-2 px-4 rounded-xl pt-2">
+                                Book
                             </button>
                         </div>
                     ))
