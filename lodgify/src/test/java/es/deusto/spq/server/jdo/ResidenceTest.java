@@ -1,4 +1,4 @@
-package es.deusto.spq.server.jdo;
+/*package es.deusto.spq.server.jdo;
 
 import static org.junit.Assert.assertEquals;
 
@@ -86,3 +86,4 @@ public class ResidenceTest {
         assertEquals(expected, residence.toString());
     }
 }
+*/

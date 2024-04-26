@@ -27,56 +27,51 @@ public class LodgifyClient {
 		client = ClientBuilder.newClient();
 		webTarget = client.target(String.format("http://%s:%s/rest", hostname, port));
 		Response response = webTarget.request(MediaType.TEXT_PLAIN).get();
-		if (response.getStatus() == Response.Status.OK.getStatusCode()) {
-			System.out.println("Conexión exitosa: " + response.readEntity(String.class));
-		} else {
-			System.out.println("Fallo en la conexión, código de estado: " + response.getStatus() + webTarget);
-		}
+    	if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+        	System.out.println("Conexión exitosa: " + response.readEntity(String.class));
+    	} else {
+       		System.out.println("Fallo en la conexión, código de estado: " + response.getStatus() + webTarget);
+    }
 	}
 
-	public Response registerUser(String username, String password, String name, String surname, String phone_number,
-			String email, String user_type, String id_card, int bank_account, int social_SN, String address) {
+	public void registerUser(String username, String password, String name, String surname, String phone_number, String email, String user_type, String id_card, int bank_account, int social_SN, String address) {
 		WebTarget registerUserWebTarget = webTarget.path("user/register");
 		Invocation.Builder invocationBuilder = registerUserWebTarget.request(MediaType.APPLICATION_JSON);
-
-		User user = new User(username, password, name, surname, phone_number, email);
+		
+		User user = new User(username, password, name, surname, phone_number, email, user_type, id_card, bank_account, social_SN, address);
 		Response response = invocationBuilder.post(Entity.entity(user, MediaType.APPLICATION_JSON));
 		if (response.getStatus() != Status.OK.getStatusCode()) {
 			logger.error("Error connecting with the server. Code: {}", response.getStatus());
 		} else {
 			logger.info("User correctly registered, the user name is {}", username);
 		}
-		return response;
 	}
 
 	/*
-	 * public void sayMessage(String login, String password, String message) {
-	 * WebTarget sayHelloWebTarget = webTarget.path("sayMessage");
-	 * Invocation.Builder invocationBuilder =
-	 * sayHelloWebTarget.request(MediaType.APPLICATION_JSON);
-	 * 
-	 * DirectMessage directMessage = new DirectMessage();
-	 * UserData userData = new UserData();
-	 * userData.setLogin(login);
-	 * userData.setPassword(password);
-	 * 
-	 * directMessage.setUserData(userData);
-	 * 
-	 * MessageData messageData = new MessageData();
-	 * messageData.setMessage(message);
-	 * directMessage.setMessageData(messageData);
-	 * 
-	 * Response response = invocationBuilder.post(Entity.entity(directMessage,
-	 * MediaType.APPLICATION_JSON));
-	 * if (response.getStatus() != Status.OK.getStatusCode()) {
-	 * logger.error("Error connecting with the server. Code: {}",response.getStatus(
-	 * ));
-	 * } else {
-	 * String responseMessage = response.readEntity(String.class);
-	 * logger.info("* Message coming from the server: '{}'", responseMessage);
-	 * }
-	 * }
-	 */
+	public void sayMessage(String login, String password, String message) {
+		WebTarget sayHelloWebTarget = webTarget.path("sayMessage");
+		Invocation.Builder invocationBuilder = sayHelloWebTarget.request(MediaType.APPLICATION_JSON);
+
+		DirectMessage directMessage = new DirectMessage();
+		UserData userData = new UserData();
+		userData.setLogin(login);
+		userData.setPassword(password);
+
+		directMessage.setUserData(userData);
+
+		MessageData messageData = new MessageData();
+		messageData.setMessage(message);
+		directMessage.setMessageData(messageData);
+
+		Response response = invocationBuilder.post(Entity.entity(directMessage, MediaType.APPLICATION_JSON));
+		if (response.getStatus() != Status.OK.getStatusCode()) {
+			logger.error("Error connecting with the server. Code: {}",response.getStatus());
+		} else {
+			String responseMessage = response.readEntity(String.class);
+			logger.info("* Message coming from the server: '{}'", responseMessage);
+		}
+	}
+	*/
 
 	public static void main(String[] args) {
 		if (args.length != 2) {

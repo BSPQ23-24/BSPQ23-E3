@@ -1,4 +1,4 @@
-package es.deusto.spq.server;
+/*package es.deusto.spq.server;
 
 import es.deusto.spq.server.helper.Hashing;
 import es.deusto.spq.server.jdo.User;
@@ -145,3 +145,4 @@ public class HostService {
         }
     }
 }
+*/
