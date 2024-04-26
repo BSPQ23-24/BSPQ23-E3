@@ -2,7 +2,6 @@ package es.deusto.spq.server;
 
 import es.deusto.spq.server.helper.Hashing;
 import es.deusto.spq.server.jdo.User;
-import es.deusto.spq.server.jdo.Residence;
 
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
@@ -51,9 +50,7 @@ public class UserService {
             tx.begin();
             logger.info("Checking whether the user already exits or not: '{}'", user.getUsername());
       		user.setPassword(Hashing.Hash(user.getPassword()));
-			user.setUsername(Hashing.Hash(user.getUsername()));
     		User user1 = null;
-			Residence residence = null;
 			Query<User> query = pm.newQuery(User.class, "username == :username");
 			try {
 				@SuppressWarnings("unchecked")
@@ -90,10 +87,7 @@ public class UserService {
 				}	
 				
 				user1 = new User(user.getUsername(), user.getPassword(), user.getName(), user.getSurname(), user.getPhone_number(), user.getEmail(), user.getUser_type(), user.getId_card(), user.getBank_account(), user.getSocial_SN(), user.getAddress());
-				residence = new Residence("Bilbao", "Apartment", 2, 120, "../../../../../../assets/apartamento.jpg", 1);
-    			pm.makePersistent(user);
-				pm.makePersistent(residence);
-				logger.info("Residence: {}", residence);					 
+    			pm.makePersistent(user);					 
     			logger.info("User created: {}", user);
     		}
     		tx.commit();
@@ -118,7 +112,6 @@ public class UserService {
             tx.begin();
             logger.info("Checking whether the user already exits or not: '{}'", user.getUsername());
     	    user.setPassword(Hashing.Hash(user.getPassword()));
-			user.setUsername(Hashing.Hash(user.getUsername()));
       		User user1 = null;
 			Query<User> query = pm.newQuery(User.class, "username == :username");
 			try {
@@ -128,16 +121,21 @@ public class UserService {
 					logger.info("User not found!");
 				} else {
 					user1 = users.get(0);
+					logger.info("Aquí es {}", user1);
 				}
 			} finally {
 				query.closeAll();
 			}
     		logger.info("User: {}", user);
     		if (user1 != null) {
+				logger.info("Tipo: {}", user1.getUser_type());
+				logger.info("User found: {}", user1.toString());
     			logger.info("Submitted password: {}", user.getPassword());
     			logger.info("DB password: {}", user1.getPassword());
 				if(user.getPassword().equals(user1.getPassword())){
-					return Response.ok(user1).build();
+					logger.info("El usuario es: {}", user1);
+					User userDef = new User(user1.getUsername(), user1.getPassword(), user1.getName(), user1.getSurname(), user1.getPhone_number(), user1.getEmail(), user1.getUser_type(), user1.getId_card(), user1.getBank_account(), user1.getSocial_SN(), user1.getAddress());
+					return Response.ok(userDef).build();
 				}
 				else{
 					return Response.status(401).build();
@@ -155,4 +153,51 @@ public class UserService {
 			pm.close();
     	}
     }    
+
+	@POST
+    @Path("/modify")
+    public Response modifyUser(User user) {
+        try
+        {	
+            tx.begin();
+            logger.info("Checking whether the user already exits or not: '{}'", user.getUsername());
+    		User user1 = null;
+			Query<User> query = pm.newQuery(User.class, "username == :username");
+			try {
+				@SuppressWarnings("unchecked")
+				List<User> users = (List<User>) query.execute(user.getUsername());
+				if (users.isEmpty()) {
+					logger.info("User not found!");
+				} else {
+					user1 = users.get(0);
+				}
+			} finally {
+				query.closeAll();
+			}
+
+    		logger.info("User: {}", user1);
+			if(user1 != null) {
+				user1.setName(user.getName());
+				user1.setSurname(user.getSurname());
+				user1.setEmail(user.getEmail());
+				user1.setPhone_number(user.getPhone_number());
+				user1.setId_card(user.getId_card());
+				user1.setBank_account(user.getBank_account());
+				user1.setSocial_SN(user.getSocial_SN());
+				user1.setAddress(user.getAddress());
+			}
+    		pm.makePersistent(user1);					 
+    		logger.info("User created: {}", user);
+			tx.commit();
+			return Response.ok().build();
+		}
+		finally
+		{
+			if (tx.isActive())
+			{
+				tx.rollback();
+			}
+			pm.close();
+		}
+	}    
 }

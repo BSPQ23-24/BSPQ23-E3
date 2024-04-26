@@ -1,3 +1,4 @@
+/*
 package es.deusto.spq.server.jdo;
 
 import javax.jdo.annotations.PersistenceCapable;
@@ -54,3 +55,4 @@ public class Host extends User {
         return "Host: id --> " + this.id_card;
     }
 }
+*/

@@ -1,6 +1,7 @@
 // Register.jsx
 import React, { useState } from 'react';
 import logo from './assets/lodgify.png';
+import { useNavigate } from 'react-router-dom';
 
 const Register = ({ showLoginForm }) => { // Recibe la función showLoginForm como prop
     const [userType, setUserType] = useState('User');
@@ -16,6 +17,7 @@ const Register = ({ showLoginForm }) => { // Recibe la función showLoginForm co
     const [address, setAddress] = useState('');
     const [error, setError] = useState('');
     const [warning, setWarning] = useState('');
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -76,12 +78,6 @@ const Register = ({ showLoginForm }) => { // Recibe la función showLoginForm co
         } catch (error) {
             console.error("Error:", error);
         }
-    };
-
-    // Función para manejar el clic en el enlace "Back"
-    const handleBack = (e) => {
-        e.preventDefault(); // Evita que se siga el enlace
-        showLoginForm(); // Llama a la función showLoginForm pasada como prop
     };
 
     return (
@@ -204,7 +200,7 @@ const Register = ({ showLoginForm }) => { // Recibe la función showLoginForm co
                 </form>
                 <div className="flex mt-4">
                     {/* Llama a la función handleBack al hacer clic */}
-                    <p><a href="#" className="font-bold text-blue-950 justify-center text-center" onClick={handleBack}>{'<'}Back</a></p>
+                    <button className="font-bold text-blue-950 justify-center text-center" onClick={() => navigate('/')}>{"<"}Back</button>
                 </div>
             </div>
         </div>
