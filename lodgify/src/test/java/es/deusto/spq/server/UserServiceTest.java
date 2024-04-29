@@ -64,7 +64,7 @@ public class UserServiceTest {
     @Test
     public void testRegisterUser() {
         // prepare mock Persistence Manager to return User
-        User user = new User("test-user", "passwd", "Test", "User", "123456789", "test@example.com");
+        User user = new User("test-user", "passwd", "Test", "User", "123456789", "test@example.com", "Host", "12345678A", 123456789, 123456789, "Test Address");
 
         // simulate that the object is not found in the database
         when(persistenceManager.getObjectById(any(), anyString())).thenReturn(null);
@@ -89,7 +89,7 @@ public class UserServiceTest {
     public void testRegisterUserAlreadyExists() {
         // prepare mock Persistence Manager to return existing User
         User existingUser = new User("existing-user", "passwd", "Existing", "User", "987654321",
-                "existing@example.com");
+                "existing@example.com", "Host", "12345678A", 123456789, 123456789, "Test Address");
         when(persistenceManager.getObjectById(User.class, existingUser.getUsername())).thenReturn(existingUser);
 
         // prepare mock transaction behaviour
@@ -105,7 +105,7 @@ public class UserServiceTest {
     @Test
     public void testRegisterUserIncompleteData() {
         // prepare mock Persistence Manager to return User
-        User user = new User("incomplete-user", "", "Incomplete", "User", "987654321", "incomplete@example.com");
+        User user = new User("incomplete-user", "", "Incomplete", "User", "987654321", "incomplete@example.com", "Host", "12345678A", 123456789, 123456789, "Test Address");
 
         // simulate that the object is not found in the database
         when(persistenceManager.getObjectById(any(), anyString())).thenReturn(null);
@@ -123,7 +123,7 @@ public class UserServiceTest {
     @Test
     public void testLoginUser() {
         // prepare mock Persistence Manager to return existing User
-        User existingUser = new User("test-user", "passwd", "Test", "User", "123456789", "test@example.com");
+        User existingUser = new User("test-user", "passwd", "Test", "User", "123456789", "test@example.com", "Host", "12345678A", 123456789, 123456789, "Test Address");
         when(persistenceManager.getObjectById(User.class, existingUser.getUsername())).thenReturn(existingUser);
 
         // prepare mock transaction behaviour
@@ -143,7 +143,7 @@ public class UserServiceTest {
     public void testLoginUserNotFound() {
         // prepare mock Persistence Manager to return existing User
         User existingUser = new User("nonexistent-user", "passwd", "Nonexistent", "User", "987654321",
-                "nonexistent@example.com");
+                "nonexistent@example.com", "Host", "12345678A", 123456789, 123456789, "Test Address");
         when(persistenceManager.getObjectById(User.class, existingUser.getUsername())).thenReturn(null);
 
         // prepare mock transaction behaviour
@@ -159,14 +159,14 @@ public class UserServiceTest {
     @Test
     public void testLoginUserInvalidPassword() {
         // prepare mock Persistence Manager to return existing User
-        User existingUser = new User("test-user", "passwd", "Test", "User", "123456789", "test@example.com");
+        User existingUser = new User("test-user", "passwd", "Test", "User", "123456789", "test@example.com", "Host", "12345678A", 123456789, 123456789, "Test Address");
         when(persistenceManager.getObjectById(User.class, existingUser.getUsername())).thenReturn(existingUser);
 
         // prepare mock transaction behaviour
         when(transaction.isActive()).thenReturn(true);
 
         // create a user with incorrect password
-        User userWithIncorrectPassword = new User(existingUser.getUsername(), "incorrect-password", "", "", "", "");
+        User userWithIncorrectPassword = new User(existingUser.getUsername(), "incorrect-password", "", "", "", "", "Host", "12345678A", 123456789, 123456789, "Test Address");
 
         // call tested method
         Response response = userService.loginUser(userWithIncorrectPassword);
@@ -174,5 +174,4 @@ public class UserServiceTest {
         // check expected response
         assertEquals(Response.Status.UNAUTHORIZED, response.getStatusInfo());
     }
-}
-*/
+}*/

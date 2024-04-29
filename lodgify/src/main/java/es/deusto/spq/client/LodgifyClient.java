@@ -12,6 +12,7 @@ import javax.ws.rs.core.Response.Status;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import es.deusto.spq.server.jdo.User;
+import es.deusto.spq.server.jdo.Booking;
 
 public class LodgifyClient {
 
@@ -44,6 +45,20 @@ public class LodgifyClient {
 			logger.error("Error connecting with the server. Code: {}", response.getStatus());
 		} else {
 			logger.info("User correctly registered, the user name is {}", username);
+		}
+	}
+
+	public void saveBooking(Long travelerId, Long hostId, Long residenceId, String startDate, String endDate) {
+		WebTarget saveBookingWebTarget = webTarget.path("booking/save");
+		Invocation.Builder invocationBuilder = saveBookingWebTarget.request(MediaType.APPLICATION_JSON);
+	
+		Booking booking = new Booking(travelerId, hostId, residenceId, startDate, endDate);
+		Response response = invocationBuilder.post(Entity.entity(booking, MediaType.APPLICATION_JSON));
+	
+		if (response.getStatus() != Status.OK.getStatusCode()) {
+			logger.error("Error saving booking. Code: {}", response.getStatus());
+		} else {
+			logger.info("Booking saved successfully");
 		}
 	}
 
@@ -84,5 +99,6 @@ public class LodgifyClient {
 
 		LodgifyClient exampleClient = new LodgifyClient(hostname, port);
 		exampleClient.registerUser(USER, PASSWORD, "user", "user", "999999999", "user@mail.es", "User", "", 0, 0, "");
+		exampleClient.saveBooking(1L, 1L, 1L, "hostname", "port");
 	}
 }

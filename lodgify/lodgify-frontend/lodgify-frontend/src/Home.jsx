@@ -85,9 +85,9 @@ const HomePage = () => {
                             <p className="p-4">Location: {residence.residence_address}</p>
                             <p className="p-4">Residence type: {residence.residence_type}</p>
                             <p className="p-4">Price: {residence.price}€</p>
-                            <button onClick={handleSearchBooking} className="bg-blue-950 hover:bg-blue-500 text-white m-4 py-2 px-4 rounded-xl pt-2">
+                            <Link to="/reservation" className="bg-blue-950 hover:bg-blue-500 text-white m-4 py-2 px-4 rounded-xl pt-2">
                                 Book
-                            </button>
+                            </Link>                       
                         </div>
                     ))
                 }
