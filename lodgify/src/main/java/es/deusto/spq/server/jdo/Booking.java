@@ -10,15 +10,15 @@ public class Booking {
     @PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     private Long id;
-    private Long travelerId;
-    private Long hostId;
+    private String travelerUsername;
+    private String hostUsername;
     private Long residenceId;
     private String startDate;
     private String endDate;
 
-    public Booking(Long travelerId, Long hostId, Long residenceId, String startDate, String endDate) {
-        this.travelerId = travelerId;
-        this.hostId = hostId;
+    public Booking(String travelerUsername, String hostUsername, Long residenceId, String startDate, String endDate) {
+        this.travelerUsername = travelerUsername;
+        this.hostUsername = hostUsername;
         this.residenceId = residenceId;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -32,20 +32,20 @@ public class Booking {
         this.id = id;
     }
 
-    public Long getTravelerId() {
-        return travelerId;
+    public String gettravelerUsername() {
+        return travelerUsername;
     }
 
-    public void setTravelerId(Long travelerId) {
-        this.travelerId = travelerId;
+    public void settravelerUsername(String travelerUsername) {
+        this.travelerUsername = travelerUsername;
     }
 
-    public Long getHostId() {
-        return hostId;
+    public String gethostUsername() {
+        return hostUsername;
     }
 
-    public void setHostId(Long hostId) {
-        this.hostId = hostId;
+    public void sethostUsername(String hostUsername) {
+        this.hostUsername = hostUsername;
     }
 
     public Long getResidenceId() {
@@ -76,8 +76,8 @@ public class Booking {
     public String toString() {
         return "Booking{" +
                 "id=" + id +
-                ", travelerId=" + travelerId +
-                ", hostId=" + hostId +
+                ", travelerUsername=" + travelerUsername +
+                ", hostUsername=" + hostUsername +
                 ", residenceId=" + residenceId +
                 ", startDate='" + startDate + '\'' +
                 ", endDate='" + endDate + '\'' +

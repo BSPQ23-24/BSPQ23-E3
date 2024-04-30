@@ -7,24 +7,25 @@ import javax.jdo.annotations.PrimaryKey;
 
 @PersistenceCapable
 public class Residence {
-	@PrimaryKey
+    @PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     private Long id;
-	private String residence_address;
+    private String residence_address;
     private String residence_type;
     private int n_rooms;
     private float price;
     private String image;
     private String user_username;
 
-	public Residence(String residence_address, String residence_type, int n_rooms, float price, String image, String user_username) {
-		this.residence_address = residence_address;
+    public Residence(String residence_address, String residence_type, int n_rooms, float price, String image,
+            String user_username) {
+        this.residence_address = residence_address;
         this.residence_type = residence_type;
         this.n_rooms = n_rooms;
         this.price = price;
         this.image = image;
         this.user_username = user_username;
-	}
+    }
 
     public Long getId() {
         return id;
@@ -85,7 +86,7 @@ public class Residence {
     @Override
     public String toString() {
         return "Residence [residence_address=" + residence_address + ", n_rooms=" + n_rooms + ", price=" + price
-                + ", user_id=" + user_username + "]";
+                + ", user_username=" + user_username + "]";
     }
 
 }

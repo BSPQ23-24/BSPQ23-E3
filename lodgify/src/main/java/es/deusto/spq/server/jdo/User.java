@@ -17,23 +17,24 @@ public class User {
 	private String phone_number;
 	private String email;
 	private String user_type;
-    private String id_card;
-    private int bank_account;
-    private int social_SN;
-    private String address;	
+	private String id_card;
+	private int bank_account;
+	private int social_SN;
+	private String address;
 
-	public User(String username, String password, String name, String surname, String phone_number, String email, String user_type, String id_card, int bank_account, int social_SN, String address) {
+	public User(String username, String password, String name, String surname, String phone_number, String email,
+			String user_type, String id_card, int bank_account, int social_SN, String address) {
 		this.username = username;
-        this.password = password;
-        this.name = name;
-        this.surname = surname;
-        this.phone_number = phone_number;
-        this.email = email;
-        this.user_type = user_type;
-        this.id_card = id_card;
-        this.bank_account = bank_account;
-        this.social_SN = social_SN;
-        this.address = address;
+		this.password = password;
+		this.name = name;
+		this.surname = surname;
+		this.phone_number = phone_number;
+		this.email = email;
+		this.user_type = user_type;
+		this.id_card = id_card;
+		this.bank_account = bank_account;
+		this.social_SN = social_SN;
+		this.address = address;
 	}
 
 	public Long getId() {
@@ -84,9 +85,10 @@ public class User {
 		this.address = address;
 	}
 
-	public User(String username, String password) {
+	public User(String username, String password, String user_type) {
 		this.username = username;
 		this.password = password;
+		this.user_type = user_type;
 	}
 
 	public String getUsername() {
@@ -96,56 +98,48 @@ public class User {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	
+
 	public String getPassword() {
 		return this.password;
 	}
-	
+
 	public void setPassword(String password) {
 		this.password = password;
 	}
 
-	 
 	public String getName() {
 		return name;
 	}
-
 
 	public void setName(String name) {
 		this.name = name;
 	}
 
-
 	public String getSurname() {
 		return surname;
 	}
-
 
 	public void setSurname(String surname) {
 		this.surname = surname;
 	}
 
-
 	public String getPhone_number() {
 		return phone_number;
 	}
-
 
 	public void setPhone_number(String phone_number) {
 		this.phone_number = phone_number;
 	}
 
-
 	public String getEmail() {
 		return email;
 	}
-
 
 	public void setEmail(String email) {
 		this.email = email;
 	}
 
 	public String toString() {
-        return "Username --> " + this.username + ", password -->  " + this.password;
-    }
+		return "Username --> " + this.username + ", password -->  " + this.password;
+	}
 }

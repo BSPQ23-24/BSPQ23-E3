@@ -6,7 +6,7 @@ import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Transaction;
-
+import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -33,6 +33,7 @@ public class BookingService {
 
     @POST
     @Path("/save")
+    @Consumes(MediaType.APPLICATION_JSON)
     public Response saveBooking(Booking booking) {
         try {
             tx.begin();
