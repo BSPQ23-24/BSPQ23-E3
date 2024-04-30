@@ -45,8 +45,7 @@ public class UserService {
     @POST
     @Path("/register")
     public Response registerUser(User user) {
-        try
-        {   
+        try {
             tx.begin();
             logger.info("Checking whether the user already exits or not: '{}'", user.getUsername());
             user.setPassword(Hashing.Hash(user.getPassword()));
@@ -65,7 +64,7 @@ public class UserService {
             }
 
             logger.info("User: {}", user);
-            if(user1 != null) {
+            if (user1 != null) {
                 logger.info("User already exists!");
                 return Response.status(400).entity("User already exists!").build();
             }
@@ -73,42 +72,38 @@ public class UserService {
                 logger.info("Creating user: {}", user);
                 logger.info("Creating username: {}", user.getUsername());
                 logger.info("Creating name: {}", user.getName());
-                if(user.getName().equals("") || user.getSurname().equals("") || user.getUsername().equals("") || user.getPassword().equals("")){
+                if (user.getName().equals("") || user.getSurname().equals("") || user.getUsername().equals("")
+                        || user.getPassword().equals("")) {
                     logger.info("Not all the data filled!");
                     return Response.status(400).entity("Fill all the data!").build();
-                }
-                else if(!user.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")){
+                } else if (!user.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
                     logger.info("Email not valid!");
                     return Response.status(400).entity("Not valid email!").build();
-                }
-                else if(user.getPhone_number().length() != 9){
+                } else if (user.getPhone_number().length() != 9) {
                     logger.info("Phone number must have 9 digits!");
                     return Response.status(400).entity("Not valid phone number!").build();
-                }   
-                
-                user1 = new User(user.getUsername(), user.getPassword(), user.getName(), user.getSurname(), user.getPhone_number(), user.getEmail(), user.getUser_type(), user.getId_card(), user.getBank_account(), user.getSocial_SN(), user.getAddress());
-                pm.makePersistent(user);                     
+                }
+
+                user1 = new User(user.getUsername(), user.getPassword(), user.getName(), user.getSurname(),
+                        user.getPhone_number(), user.getEmail(), user.getUser_type(), user.getId_card(),
+                        user.getBank_account(), user.getSocial_SN(), user.getAddress());
+                pm.makePersistent(user);
                 logger.info("User created: {}", user);
             }
             tx.commit();
             return Response.ok().build();
-        }
-        finally
-        {
-            if (tx.isActive())
-            {
+        } finally {
+            if (tx.isActive()) {
                 tx.rollback();
             }
             pm.close();
         }
-    }    
-
+    }
 
     @POST
     @Path("/login")
     public Response loginUser(User user) {
-        try
-        {   
+        try {
             tx.begin();
             logger.info("Checking whether the user already exits or not: '{}'", user.getUsername());
             user.setPassword(Hashing.Hash(user.getPassword()));
@@ -132,33 +127,31 @@ public class UserService {
                 logger.info("User found: {}", user1.toString());
                 logger.info("Submitted password: {}", user.getPassword());
                 logger.info("DB password: {}", user1.getPassword());
-                if(user.getPassword().equals(user1.getPassword())){
+                if (user.getPassword().equals(user1.getPassword())
+                        && user.getUser_type().equals(user1.getUser_type())) {
                     logger.info("El usuario es: {}", user1);
-                    User userDef = new User(user1.getUsername(), user1.getPassword(), user1.getName(), user1.getSurname(), user1.getPhone_number(), user1.getEmail(), user1.getUser_type(), user1.getId_card(), user1.getBank_account(), user1.getSocial_SN(), user1.getAddress());
+                    User userDef = new User(user1.getUsername(), user1.getPassword(), user1.getName(),
+                            user1.getSurname(), user1.getPhone_number(), user1.getEmail(), user1.getUser_type(),
+                            user1.getId_card(), user1.getBank_account(), user1.getSocial_SN(), user1.getAddress());
                     return Response.ok(userDef).build();
-                }
-                else{
+                } else {
                     return Response.status(401).build();
                 }
             } else {
                 return Response.status(401).build();
             }
-        }
-        finally
-        {
-            if (tx.isActive())
-            {
+        } finally {
+            if (tx.isActive()) {
                 tx.rollback();
             }
             pm.close();
         }
-    }    
+    }
 
     @POST
     @Path("/modify")
     public Response modifyUser(User user) {
-        try
-        {   
+        try {
             tx.begin();
             logger.info("Checking whether the user already exits or not: '{}'", user.getUsername());
             User user1 = null;
@@ -176,7 +169,7 @@ public class UserService {
             }
 
             logger.info("User: {}", user1);
-            if(user1 != null) {
+            if (user1 != null) {
                 user1.setName(user.getName());
                 user1.setSurname(user.getSurname());
                 user1.setEmail(user.getEmail());
@@ -186,20 +179,15 @@ public class UserService {
                 user1.setSocial_SN(user.getSocial_SN());
                 user1.setAddress(user.getAddress());
             }
-            pm.makePersistent(user1);                    
+            pm.makePersistent(user1);
             logger.info("User created: {}", user);
             tx.commit();
             return Response.ok().build();
-        }
-        finally
-        {
-            if (tx.isActive())
-            {
+        } finally {
+            if (tx.isActive()) {
                 tx.rollback();
             }
             pm.close();
         }
-    }    
+    }
 }
-
-

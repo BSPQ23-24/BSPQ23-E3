@@ -28,10 +28,10 @@ public class LodgifyClientTest {
     @Mock
     private Client client;
 
-    @Mock(answer=Answers.RETURNS_DEEP_STUBS)
+    @Mock(answer = Answers.RETURNS_DEEP_STUBS)
     private WebTarget webTarget;
 
-    @Mock(answer=Answers.RETURNS_DEEP_STUBS)
+    @Mock(answer = Answers.RETURNS_DEEP_STUBS)
     private Invocation.Builder invocationBuilder;
 
     @Captor
@@ -59,11 +59,11 @@ public class LodgifyClientTest {
         Response response = Response.ok().build();
         when(invocationBuilder.post(any(Entity.class))).thenReturn(response);
 
-        lodgifyClient.registerUser("test-login", "passwd", "test-name", "test-surname", "999999999", "test@example.com", "User", "123456789A", 123456789, 0, "test address");
+        lodgifyClient.registerUser("test-login", "passwd", "test-name", "test-surname", "999999999", "test@example.com",
+                "User", "123456789A", 123456789, 0, "test address");
 
         verify(invocationBuilder).post(any(Entity.class));
     }
-
 
     @Test
     public void testRegisterUserWithError() {
@@ -73,9 +73,9 @@ public class LodgifyClientTest {
         Response response = Response.serverError().build();
         when(invocationBuilder.post(any(Entity.class))).thenReturn(response);
 
-        lodgifyClient.registerUser("test-login", "passwd", "test-name", "test-surname", "999999999", "test@example.com", "User", "123456789A", 123456789, 0, "test address");
+        lodgifyClient.registerUser("test-login", "passwd", "test-name", "test-surname", "999999999", "test@example.com",
+                "User", "123456789A", 123456789, 0, "test address");
 
         verify(invocationBuilder).post(any(Entity.class));
     }
 }
-

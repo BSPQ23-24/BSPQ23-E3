@@ -18,7 +18,7 @@ public class MessageTest {
 
     @Test
     public void getUser() {
-        User user = new User("example", "password");
+        User user = new User("example", "password", "user");
         message.setUser(user);
         assertEquals(user, message.getUser());
     }

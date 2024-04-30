@@ -28,18 +28,20 @@ public class LodgifyClient {
 		client = ClientBuilder.newClient();
 		webTarget = client.target(String.format("http://%s:%s/rest", hostname, port));
 		Response response = webTarget.request(MediaType.TEXT_PLAIN).get();
-    	if (response.getStatus() == Response.Status.OK.getStatusCode()) {
-        	System.out.println("Conexión exitosa: " + response.readEntity(String.class));
-    	} else {
-       		System.out.println("Fallo en la conexión, código de estado: " + response.getStatus() + webTarget);
-    }
+		if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+			System.out.println("Conexión exitosa: " + response.readEntity(String.class));
+		} else {
+			System.out.println("Fallo en la conexión, código de estado: " + response.getStatus() + webTarget);
+		}
 	}
 
-	public void registerUser(String username, String password, String name, String surname, String phone_number, String email, String user_type, String id_card, int bank_account, int social_SN, String address) {
+	public void registerUser(String username, String password, String name, String surname, String phone_number,
+			String email, String user_type, String id_card, int bank_account, int social_SN, String address) {
 		WebTarget registerUserWebTarget = webTarget.path("user/register");
 		Invocation.Builder invocationBuilder = registerUserWebTarget.request(MediaType.APPLICATION_JSON);
-		
-		User user = new User(username, password, name, surname, phone_number, email, user_type, id_card, bank_account, social_SN, address);
+
+		User user = new User(username, password, name, surname, phone_number, email, user_type, id_card, bank_account,
+				social_SN, address);
 		Response response = invocationBuilder.post(Entity.entity(user, MediaType.APPLICATION_JSON));
 		if (response.getStatus() != Status.OK.getStatusCode()) {
 			logger.error("Error connecting with the server. Code: {}", response.getStatus());
@@ -48,13 +50,14 @@ public class LodgifyClient {
 		}
 	}
 
-	public void saveBooking(Long travelerId, Long hostId, Long residenceId, String startDate, String endDate) {
+	public void saveBooking(String travelerUsername, String hostUsername, Long residenceId, String startDate,
+			String endDate) {
 		WebTarget saveBookingWebTarget = webTarget.path("booking/save");
 		Invocation.Builder invocationBuilder = saveBookingWebTarget.request(MediaType.APPLICATION_JSON);
-	
-		Booking booking = new Booking(travelerId, hostId, residenceId, startDate, endDate);
+
+		Booking booking = new Booking(travelerUsername, hostUsername, residenceId, startDate, endDate);
 		Response response = invocationBuilder.post(Entity.entity(booking, MediaType.APPLICATION_JSON));
-	
+
 		if (response.getStatus() != Status.OK.getStatusCode()) {
 			logger.error("Error saving booking. Code: {}", response.getStatus());
 		} else {
@@ -63,30 +66,33 @@ public class LodgifyClient {
 	}
 
 	/*
-	public void sayMessage(String login, String password, String message) {
-		WebTarget sayHelloWebTarget = webTarget.path("sayMessage");
-		Invocation.Builder invocationBuilder = sayHelloWebTarget.request(MediaType.APPLICATION_JSON);
-
-		DirectMessage directMessage = new DirectMessage();
-		UserData userData = new UserData();
-		userData.setLogin(login);
-		userData.setPassword(password);
-
-		directMessage.setUserData(userData);
-
-		MessageData messageData = new MessageData();
-		messageData.setMessage(message);
-		directMessage.setMessageData(messageData);
-
-		Response response = invocationBuilder.post(Entity.entity(directMessage, MediaType.APPLICATION_JSON));
-		if (response.getStatus() != Status.OK.getStatusCode()) {
-			logger.error("Error connecting with the server. Code: {}",response.getStatus());
-		} else {
-			String responseMessage = response.readEntity(String.class);
-			logger.info("* Message coming from the server: '{}'", responseMessage);
-		}
-	}
-	*/
+	 * public void sayMessage(String login, String password, String message) {
+	 * WebTarget sayHelloWebTarget = webTarget.path("sayMessage");
+	 * Invocation.Builder invocationBuilder =
+	 * sayHelloWebTarget.request(MediaType.APPLICATION_JSON);
+	 * 
+	 * DirectMessage directMessage = new DirectMessage();
+	 * UserData userData = new UserData();
+	 * userData.setLogin(login);
+	 * userData.setPassword(password);
+	 * 
+	 * directMessage.setUserData(userData);
+	 * 
+	 * MessageData messageData = new MessageData();
+	 * messageData.setMessage(message);
+	 * directMessage.setMessageData(messageData);
+	 * 
+	 * Response response = invocationBuilder.post(Entity.entity(directMessage,
+	 * MediaType.APPLICATION_JSON));
+	 * if (response.getStatus() != Status.OK.getStatusCode()) {
+	 * logger.error("Error connecting with the server. Code: {}",response.getStatus(
+	 * ));
+	 * } else {
+	 * String responseMessage = response.readEntity(String.class);
+	 * logger.info("* Message coming from the server: '{}'", responseMessage);
+	 * }
+	 * }
+	 */
 
 	public static void main(String[] args) {
 		if (args.length != 2) {
@@ -99,6 +105,6 @@ public class LodgifyClient {
 
 		LodgifyClient exampleClient = new LodgifyClient(hostname, port);
 		exampleClient.registerUser(USER, PASSWORD, "user", "user", "999999999", "user@mail.es", "User", "", 0, 0, "");
-		exampleClient.saveBooking(1L, 1L, 1L, "hostname", "port");
+		exampleClient.saveBooking("New", "test", 1L, "hostname", "port");
 	}
 }
