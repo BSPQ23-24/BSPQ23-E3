@@ -1,4 +1,3 @@
-/*
 package es.deusto.spq.client;
 
 import static org.junit.Assert.assertEquals;
@@ -19,6 +18,8 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import static org.mockito.Mockito.verify;
 
 import es.deusto.spq.server.jdo.User;
 
@@ -58,9 +59,9 @@ public class LodgifyClientTest {
         Response response = Response.ok().build();
         when(invocationBuilder.post(any(Entity.class))).thenReturn(response);
 
-        Response registerResponse = lodgifyClient.registerUser("test-login", "passwd", "test-name", "test-surname", "999999999", "test@example.com", "User", "123456789A", 123456789, 0, "test address");
-        
-        assertEquals(Response.Status.OK.getStatusCode(), registerResponse.getStatus());
+        lodgifyClient.registerUser("test-login", "passwd", "test-name", "test-surname", "999999999", "test@example.com", "User", "123456789A", 123456789, 0, "test address");
+
+        verify(invocationBuilder).post(any(Entity.class));
     }
 
 
@@ -71,8 +72,10 @@ public class LodgifyClientTest {
 
         Response response = Response.serverError().build();
         when(invocationBuilder.post(any(Entity.class))).thenReturn(response);
-        Response registerResponse = lodgifyClient.registerUser("test-login", "passwd", "test-name", "test-surname", "999999999", "test@example.com", "User", "123456789A", 123456789, 0, "test address");
-        assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), registerResponse.getStatus());
+
+        lodgifyClient.registerUser("test-login", "passwd", "test-name", "test-surname", "999999999", "test@example.com", "User", "123456789A", 123456789, 0, "test address");
+
+        verify(invocationBuilder).post(any(Entity.class));
     }
 }
-*/
+
