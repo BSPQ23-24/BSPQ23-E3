@@ -1,0 +1,93 @@
+{
+    "login": {
+      "userType": {
+        "traveller": "Traveller",
+        "host": "Host"
+      },
+      "placeholders": {
+        "username": "Username",
+        "password": "Password"
+      },
+      "errorMessages": {
+        "invalidCredentials": "Invalid username or password!",
+        "serverError": "Login failed due to server error"
+      },
+      "buttons": {
+        "login": "Log in",
+        "registerNow": "Register now!"
+      },
+      "registerOption": "Do you still not have an account?"
+    },
+    "register": {
+      "title": "Register",
+      "userType": {
+        "traveller": "Traveller",
+        "host": "Host"
+      },
+      "buttonText": "Register",
+      "backButtonText": "< Back",
+      "errors": {
+        "userExists": "User already exists!",
+        "fillData": "Fill all the data!",
+        "invalidPhoneNumber": "Not valid phone number!",
+        "invalidEmail": "Not valid email!"
+      },
+      "successMessage": "User registered successfully!"
+    },
+    "placeholders": {
+      "name": "Name",
+      "surname": "Surname",
+      "username": "Username",
+      "password": "Password",
+      "email": "Email",
+      "phoneNumber": "Phone number",
+      "idCard": "ID Card",
+      "bankAccount": "Bank account",
+      "socialSN": "Social SN",
+      "address": "Address"
+    },
+    "profile": {
+        "title": "Modify your data",
+        "buttonText": "Change data",
+        "successMessage": "User data changed successfully!",
+        "forgotPassword": "Forgot your password? Click here to recover it.",
+        "yourResidences": "Your residences",
+        "location": "Location",
+        "residenceType": "Residence type",
+        "price": "Price"
+    },
+    "residenceRegistration": {
+      "title": "Residence Registration",
+      "welcome": "Hi ",
+      "hostMessage": "As you are a host, you can add residences!",
+      "guestMessage": "Sorry, you are not a host, so you can't add any residence!",
+      "placeholders": {
+        "residenceAddress": "Residence address*",
+        "residenceType": "Residence type*",
+        "numberOfRooms": "Nº rooms*",
+        "price": "Price*"
+      },
+      "registerButton": "Register residence",
+      "errors": {
+        "fillData": "Fill all the data!"
+      },
+      "successMessage": "Residence registered successfully!"
+    },
+    "home": {
+      "title": "FIND ACCOMMODATIONS USING THE FILTER!",
+      "homeNav": "HOME",
+      "residenceRegNav": "REGISTER RESIDENCE",
+      "profileNav": "MY PROFILE",
+      "placePlaceholder": "Place",
+      "arrivalDatePlaceholder": "Arrival date (DD/MM/YY)",
+      "departureDatePlaceholder": "Departure date (DD/MM/YY)",
+      "searchButton": "Search",
+      "locationLabel": "Location",
+      "residenceTypeLabel": "Residence type",
+      "priceLabel": "Price",
+      "bookButton": "Book"
+    },
+    "footer": {
+      "copyright": "© 2024 Lodgify. All rights reserved."
+    }
+}

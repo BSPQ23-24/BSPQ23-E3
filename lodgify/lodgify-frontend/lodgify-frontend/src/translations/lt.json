@@ -1,0 +1,94 @@
+{
+    "login": {
+        "userType": {
+          "traveller": "Keliautojas",
+          "host": "Šeimininkas"
+        },
+        "placeholders": {
+          "username": "Vartotojo vardas",
+          "password": "Slaptažodis"
+        },
+        "errorMessages": {
+          "invalidCredentials": "Neteisingas vartotojo vardas ar slaptažodis!",
+          "serverError": "Prisijungimo klaida dėl serverio klaidos"
+        },
+        "buttons": {
+          "login": "Prisijungti",
+          "registerNow": "Užsiregistruokite dabar!"
+        },
+        "registerOption": "Ar vis dar neturite paskyros?"
+    },
+    "register": {
+        "title": "Registracija",
+        "userType": {
+          "traveller": "Kelionės",
+          "host": "Šeimininkas"
+        },
+        "buttonText": "Registruotis",
+        "backButtonText": "< Grįžti",
+        "errors": {
+          "userExists": "Naudotojas jau egzistuoja!",
+          "fillData": "Užpildykite visus duomenis!",
+          "invalidPhoneNumber": "Netinkamas telefono numeris!",
+          "invalidEmail": "Netinkamas el. pašto adresas!"
+        },
+        "successMessage": "Naudotojas sėkmingai užregistruotas!"
+    },
+    "placeholders": {
+        "name": "Vardas",
+        "surname": "Pavardė",
+        "username": "Vartotojo vardas",
+        "password": "Slaptažodis",
+        "email": "El. paštas",
+        "phoneNumber": "Telefono numeris",
+        "idCard": "Asmens dokumento numeris",
+        "bankAccount": "Banko sąskaita",
+        "socialSN": "Socialinio tinklo numeris",
+        "address": "Adresas"
+      },
+    "profile": {
+        "title": "Keisti savo duomenis",
+        "welcome": "Sveiki ",
+        "buttonText": "Keisti duomenis",
+        "successMessage": "Naudotojo duomenys sėkmingai pakeisti!",
+        "forgotPassword": "Pamiršote slaptažodį? Spauskite čia, kad jį atkurtumėte.",
+        "yourResidences": "Jūsų gyvenamosios vietos",
+        "location": "Vieta",
+        "residenceType": "Būsto tipas",
+        "price": "Kaina"
+    },
+    "residenceRegistration": {
+        "title": "Būsto registracija",
+        "welcome": "Sveiki ",
+        "hostMessage": "Kadangi esate šeimininkas, galite pridėti būstus!",
+        "guestMessage": "Labas, Atsiprašome, nesate šeimininkas, todėl negalite pridėti jokių būstų!",
+        "placeholders": {
+          "residenceAddress": "Būsto adresas*",
+          "residenceType": "Būsto tipas*",
+          "numberOfRooms": "Kambarių skaičius*",
+          "price": "Kaina*"
+        },
+        "registerButton": "Registruoti būstą",
+        "errors": {
+          "fillData": "Užpildykite visus duomenis!"
+        },
+        "successMessage": "Būstas sėkmingai užregistruotas!"
+    },
+    "home": {
+        "title": "RASKITE NAKVYNĖS NAUDODAMI FILTRĄ!",
+        "homeNav": "PRADŽIA",
+        "residenceRegNav": "REGISTRUOTI APGYVENDINIMĄ",
+        "profileNav": "MANO PROFILIS",
+        "placePlaceholder": "Vieta",
+        "arrivalDatePlaceholder": "Atvykimo data (DD/MM/YY)",
+        "departureDatePlaceholder": "Išvykimo data (DD/MM/YY)",
+        "searchButton": "Ieškoti",
+        "locationLabel": "Vieta",
+        "residenceTypeLabel": "Apgyvendinimo tipas",
+        "priceLabel": "Kaina",
+        "bookButton": "Užsakyti"
+    },
+    "footer": {
+        "copyright": "© 2024 Lodgify. Visos teisės saugomos."
+    }
+}

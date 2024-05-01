@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useUser } from './contexts/UserContext.jsx';
+import { useLocale } from './contexts/LocaleContext.jsx';
 import logo from './assets/lodgify_logo.png';
 
 const ProfilePage = () => {
@@ -12,6 +13,13 @@ const ProfilePage = () => {
     const [user_id, setUser_id] = useState(0);
     const [error, setError] = useState('');
     const [warning, setWarning] = useState('');
+    const { locale, setLocale } = useLocale();
+  
+    const translations = {
+      en,
+      es,
+      lt
+    }[locale];
 
 
     const handleSubmit = async (e) => {

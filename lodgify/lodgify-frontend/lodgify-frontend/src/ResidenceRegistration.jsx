@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import en from './translations/en.json';
+import es from './translations/es.json';
+import lt from './translations/lt.json';
 import { useUser } from './contexts/UserContext.jsx';
+import { useLocale } from './contexts/LocaleContext.jsx';
 import logo from './assets/lodgify_logo.png';
 
 const ResidenceRegistration = () => {
@@ -12,7 +16,13 @@ const ResidenceRegistration = () => {
     const [user_id, setUser_id] = useState(user.username);
     const [error, setError] = useState('');
     const [warning, setWarning] = useState('');
-
+    const { locale, setLocale } = useLocale();
+  
+    const translations = {
+      en,
+      es,
+      lt
+    }[locale];
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -39,11 +49,11 @@ const ResidenceRegistration = () => {
                 setResidence_type("")
                 setN_rooms("")
                 setPrice("")
-                setWarning("Residence registered successfully!")
+                setWarning(translations.residenceRegistration.successMessage);
                 console.log("Residence registered successfully!");
             } else if (responseBody == "Fill all the data!"){
                 console.error("Failed to register user because all the data has not been filled")
-                setError("Fill all the data!")
+                setError(translations.residenceRegistration.errors.fillData);
             } else {
                 console.error(responseBody);
             }
@@ -55,28 +65,50 @@ const ResidenceRegistration = () => {
     return (
         <div className = "text-center">
             <nav className="bg-gray-50 p-4 shadow-md w-full">
-                <div className="flex justify-between items-center">
-                    <img src={logo} alt="Lodgify" className="h-5 md:h-12 px-12" />
-                    <ul className="flex">
-                        <li><Link to="/home" style={{ color: 'rgb(4, 18, 26)'}} className="font-bold px-12">HOME</Link></li>
-                        <li className="mr-4 px-12"><a href="#" style={{ color: 'rgb(4, 18, 26)'}} className="font-bold">LISTINGS</a></li>
-                        <li className="mr-4 px-12"><a href="#" style={{ color: 'rgb(4, 18, 26)'}} className="font-bold">ABOUT US</a></li>
-                        <li><Link to="/registerResidence" style={{ color: 'rgb(4, 18, 26)'}} className="font-bold px-12">REGISTER RESIDENCE</Link></li>
-                        <li><Link to="/profile" style={{ color: 'rgb(4, 18, 26)'}} className="font-bold px-12">MY PROFILE</Link></li>
-                    </ul>
-                </div>
+              <div className="flex justify-between items-center">
+                <img src={logo} alt="Lodgify" className="h-5 md:h-12 px-12" />
+                <ul className="flex">
+                  <li>
+                    <Link
+                      to="/home"
+                      style={{ color: "rgb(4, 18, 26)" }}
+                      className="font-bold px-12"
+                    >
+                      {translations.home.homeNav}
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/registerResidence"
+                      style={{ color: "rgb(4, 18, 26)" }}
+                      className="font-bold px-12"
+                    >
+                      {translations.home.residenceRegNav}
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/profile"
+                      style={{ color: "rgb(4, 18, 26)" }}
+                      className="font-bold px-12"
+                    >
+                      {translations.home.profileNav}
+                    </Link>
+                  </li>
+                </ul>
+              </div>
             </nav>
-            <h1 className = "font-bold text-3xl mt-8">Hi, {user ? user.name : 'Invitado'}!</h1>
+            <h1 className = "font-bold text-3xl mt-8">{translations.residenceRegistration.welcome}{user ? user.name : 'Invitado'}!</h1>
             {user ? (
                 user.user_type === 'Host' ?
                 <div>
-                    <p className = "font-semibold text-xl mt-8">As you are a host, you can add residences!</p> 
+                    <p className = "font-semibold text-xl mt-8">{translations.residenceRegistration.hostMessage}</p> 
                     <div className="bg-gray-100 m-8 mb-8 mx-auto p-8 rounded-lg shadow-top text-center w-2/5">
                         <form onSubmit={handleSubmit}>
                             <div className="flex mt-4 justify-center">
                                 <input
                                     type="text"
-                                    placeholder="Residence address*"
+                                    placeholder={translations.residenceRegistration.placeholders.residenceAddress}
                                     className="mb-2 p-2 rounded-md border"
                                     value={residence_address}
                                     onChange={(e) => setResidence_address(e.target.value)}
@@ -85,7 +117,7 @@ const ResidenceRegistration = () => {
                             <div className="flex mt-4 justify-center">
                                 <input
                                     type="text"
-                                    placeholder="Residence type*"
+                                    placeholder={translations.residenceRegistration.placeholders.residenceType}
                                     className="mb-2 p-2 rounded-md border"
                                     value={residence_type}
                                     onChange={(e) => setResidence_type(e.target.value)}
@@ -94,7 +126,7 @@ const ResidenceRegistration = () => {
                             <div className="flex mt-4 justify-center">
                                 <input
                                     type="number"
-                                    placeholder="Nº rooms*"
+                                    placeholder={translations.residenceRegistration.placeholders.numberOfRooms}
                                     className="mb-2 p-2 rounded-md border"
                                     value={n_rooms}
                                     onChange={(e) => setN_rooms(e.target.value)}
@@ -103,7 +135,7 @@ const ResidenceRegistration = () => {
                             <div className="flex mt-4 justify-center">
                                 <input
                                     type="number"
-                                    placeholder="Price*"
+                                    placeholder={translations.residenceRegistration.placeholders.price}
                                     className="mb-2 p-2 rounded-md border"
                                     value={price}
                                     onChange={(e) => setPrice(e.target.value)}
@@ -113,14 +145,14 @@ const ResidenceRegistration = () => {
                             {warning && <div className="text-green-500 mb-2">{warning}</div>}
                             <div className="flex mt-4 justify-center">
                                 <button type="submit" className="bg-blue-950 hover:bg-blue-950 text-white py-2 px-4 rounded-md">
-                                    Register residence
+                                    {translations.residenceRegistration.registerButton}
                                 </button>
                             </div>
                         </form>
                     </div>
                 </div>
                 :
-                <p className = "font-semibold text-xl mt-8">Sorry, you are not a host, so you can't add any residence!</p>
+                <p className = "font-semibold text-xl mt-8">{translations.residenceRegistration.guestMessage}</p>
             ) : null}
         </div>
     );

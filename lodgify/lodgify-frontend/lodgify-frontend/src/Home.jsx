@@ -1,11 +1,27 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import en from './translations/en.json';
+import es from './translations/es.json';
+import lt from './translations/lt.json';
 import logo from "./assets/lodgify_logo.png";
 import apartamento from "./assets/apartamento.jpg";
+import { useUser } from "./contexts/UserContext.jsx";
+import { useLocale } from './contexts/LocaleContext.jsx';
 
 const HomePage = () => {
+
   const [place, setPlace] = useState("");
   const [residences, setResidences] = useState([]);
+  const { user, setUser } = useUser();
+  const {locale, setLocale} = useLocale();
+
+  console.log(locale)
+
+  const translations = {
+    en,
+    es,
+    lt
+  }[locale];
 
   const handleSearch = async () => {
     try {
@@ -46,26 +62,8 @@ const HomePage = () => {
                 style={{ color: "rgb(4, 18, 26)" }}
                 className="font-bold px-12"
               >
-                HOME
+                {translations.home.homeNav}
               </Link>
-            </li>
-            <li className="mr-4 px-12">
-              <a
-                href="#"
-                style={{ color: "rgb(4, 18, 26)" }}
-                className="font-bold"
-              >
-                LISTINGS
-              </a>
-            </li>
-            <li className="mr-4 px-12">
-              <a
-                href="#"
-                style={{ color: "rgb(4, 18, 26)" }}
-                className="font-bold"
-              >
-                ABOUT US
-              </a>
             </li>
             <li>
               <Link
@@ -73,7 +71,7 @@ const HomePage = () => {
                 style={{ color: "rgb(4, 18, 26)" }}
                 className="font-bold px-12"
               >
-                REGISTER RESIDENCE
+                {translations.home.residenceRegNav}
               </Link>
             </li>
             <li>
@@ -82,7 +80,7 @@ const HomePage = () => {
                 style={{ color: "rgb(4, 18, 26)" }}
                 className="font-bold px-12"
               >
-                MY PROFILE
+                {translations.home.profileNav}
               </Link>
             </li>
           </ul>
@@ -90,7 +88,7 @@ const HomePage = () => {
       </nav>
       <div className="bg-gray-100 m-20 mb-8 p-8 rounded-lg shadow-top text-center w-4/5">
         <h1 className="font-bold text-xl">
-          ¡FIND ACCOMODATIONS USING THE FILTER!
+          {translations.home.title}
         </h1>
         <form onSubmit={handleSearch}>
           <div className="flex w-full justify-center">
@@ -98,19 +96,19 @@ const HomePage = () => {
               type="text"
               value={place}
               onChange={(e) => setPlace(e.target.value)}
-              placeholder="Place"
+              placeholder={translations.home.placePlaceholder}
               className="m-4 mt-8 p-2 w-72 rounded-md border"
             />
           </div>
           <div className="flex w-full justify-center">
             <input
               type="text"
-              placeholder="Arrival date (DD/MM/YY)"
+              placeholder={translations.home.arrivalDatePlaceholder}
               className="m-4 p-2 w-56 rounded-md border"
             />
             <input
               type="text"
-              placeholder="Departure date (DD/MM/YY)"
+              placeholder={translations.home.departureDatePlaceholder}
               className="m-4 p-2 w-56 rounded-md border"
             />
           </div>
@@ -120,7 +118,7 @@ const HomePage = () => {
             onClick={handleSearch}
             className="bg-blue-950 hover:bg-blue-500 text-white py-2 px-4 rounded-xl"
           >
-            Search
+            {translations.home.searchButton}
           </button>
         </div>
       </div>
@@ -136,16 +134,16 @@ const HomePage = () => {
               alt="Apartamento"
               className="mx-auto h-10 md:h-48 w-96 p-4 rounded-3xl"
             />
-            <p className="p-4">Location: {residence.residence_address}</p>
-            <p className="p-4">Residence type: {residence.residence_type}</p>
-            <p className="p-4">Price: {residence.price}€</p>
-            <Link to={`/reservation?residenceId=${residence.id}`}>Book</Link>
+            <p className="p-4">{translations.home.location}: {residence.residence_address}</p>
+            <p className="p-4">{translations.home.residenceTypeLabel}: {residence.residence_type}</p>
+            <p className="p-4">{translations.home.priceLabel}: {residence.price}€</p>
+            <Link to={`/reservation?residenceId=${residence.id}`}>{translations.home.bookButton}</Link>
           </div>
         ))}
       </div>
 
       <footer>
-        <p>&copy; 2024 Lodgify. All rights reserved.</p>
+        <p>&copy; {translations.footer.copyright}</p>
       </footer>
     </div>
   );

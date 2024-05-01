@@ -1,0 +1,93 @@
+{
+    "login": {
+      "userType": {
+        "traveller": "Viajero",
+        "host": "Anfitrión"
+      },
+      "placeholders": {
+        "username": "Nombre de usuario",
+        "password": "Contraseña"
+      },
+      "errorMessages": {
+        "invalidCredentials": "¡Nombre de usuario o contraseña no válidos!",
+        "serverError": "Error de inicio de sesión debido a un error del servidor"
+      },
+      "buttons": {
+        "login": "Iniciar sesión",
+        "registerNow": "¡Regístrate ahora!"
+      },
+      "registerOption": "¿Todavía no tienes cuenta?"
+    },
+    "register": {
+      "title": "Registro",
+      "userType": {
+        "traveller": "Viajero",
+        "host": "Anfitrión"
+      },
+      "buttonText": "Registrar",
+      "backButtonText": "< Volver",
+      "errors": {
+        "userExists": "¡El usuario ya existe!",
+        "fillData": "¡Complete todos los datos!",
+        "invalidPhoneNumber": "¡Número de teléfono no válido!",
+        "invalidEmail": "¡Correo electrónico no válido!"
+      },
+      "successMessage": "¡Usuario registrado correctamente!"
+    },
+    "placeholders": {
+      "name": "Nombre",
+      "surname": "Apellido",
+      "username": "Nombre de usuario",
+      "password": "Contraseña",
+      "email": "Correo electrónico",
+      "phoneNumber": "Número de teléfono",
+      "idCard": "Documento de identidad",
+      "bankAccount": "Cuenta bancaria",
+      "socialSN": "Red social",
+      "address": "Dirección"
+    },
+    "profile": {
+      "title": "Modificar tus datos",
+      "buttonText": "Cambiar datos",
+      "successMessage": "¡Datos de usuario cambiados con éxito!",
+      "forgotPassword": "¿Olvidaste tu contraseña? Haz clic aquí para recuperarla.",
+      "yourResidences": "Tus alojamientos",
+      "location": "Ubicación",
+      "residenceType": "Tipo de residencia",
+      "price": "Precio"
+    },
+    "residenceRegistration": {
+      "title": "Registro de residencia",
+      "welcome": "¡Hola ",
+      "hostMessage": "Como eres un anfitrión, ¡puedes añadir residencias!",
+      "guestMessage": "Lo siento, no eres un anfitrión, ¡así que no puedes añadir ninguna residencia!",
+      "placeholders": {
+        "residenceAddress": "Dirección de la residencia*",
+        "residenceType": "Tipo de residencia*",
+        "numberOfRooms": "Nº de habitaciones*",
+        "price": "Precio*"
+      },
+      "registerButton": "Registar residencia",
+      "errors": {
+        "fillData": "¡Complete todos los datos!"
+      },
+      "successMessage": "¡Residencia registrada con éxito!"
+    },
+    "home": {
+      "title": "¡ENCUENTRA ALOJAMIENTOS USANDO EL FILTRO!",
+      "homeNav": "INICIO",
+      "residenceRegNav": "REGISTRAR ALOJAMIENTO",
+      "profileNav": "MI PERFIL",
+      "placePlaceholder": "Lugar",
+      "arrivalDatePlaceholder": "Fecha de llegada (DD/MM/AA)",
+      "departureDatePlaceholder": "Fecha de salida (DD/MM/AA)",
+      "searchButton": "Buscar",
+      "locationLabel": "Ubicación",
+      "residenceTypeLabel": "Tipo de residencia",
+      "priceLabel": "Precio",
+      "bookButton": "Reservar"
+    },
+    "footer": {
+      "copyright": "© 2024 Lodgify. Todos los derechos reservados."
+    }
+  }

@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import en from './translations/en.json';
+import es from './translations/es.json';
+import lt from './translations/lt.json';
 import { useUser } from "./contexts/UserContext.jsx";
+import { useLocale } from './contexts/LocaleContext.jsx';
 import logo from "./assets/lodgify_logo.png";
 import apartamento from "./assets/apartamento.jpg";
 
@@ -21,6 +25,13 @@ const Profile = () => {
   const [address, setAddress] = useState(user.address);
   const [error, setError] = useState("");
   const [warning, setWarning] = useState("");
+  const {locale, setLocale} = useLocale();
+  
+  const translations = {
+    en,
+    es,
+    lt
+  }[locale];
 
   useEffect(() => {
     const handleSearch = async () => {
@@ -81,7 +92,7 @@ const Profile = () => {
         setBankAccount(bankAccount);
         setSocialSN(socialSN);
         setAddress(address);
-        setWarning("User data changed successfully!");
+        setWarning(translations.profile.successMessage);
         console.log("User data changed successfully!");
       } else {
         console.error(responseBody);
@@ -103,26 +114,8 @@ const Profile = () => {
                 style={{ color: "rgb(4, 18, 26)" }}
                 className="font-bold px-12"
               >
-                HOME
+                {translations.home.homeNav}
               </Link>
-            </li>
-            <li className="mr-4 px-12">
-              <a
-                href="#"
-                style={{ color: "rgb(4, 18, 26)" }}
-                className="font-bold"
-              >
-                LISTINGS
-              </a>
-            </li>
-            <li className="mr-4 px-12">
-              <a
-                href="#"
-                style={{ color: "rgb(4, 18, 26)" }}
-                className="font-bold"
-              >
-                ABOUT US
-              </a>
             </li>
             <li>
               <Link
@@ -130,7 +123,7 @@ const Profile = () => {
                 style={{ color: "rgb(4, 18, 26)" }}
                 className="font-bold px-12"
               >
-                REGISTER RESIDENCE
+                {translations.home.residenceRegNav}
               </Link>
             </li>
             <li>
@@ -139,17 +132,17 @@ const Profile = () => {
                 style={{ color: "rgb(4, 18, 26)" }}
                 className="font-bold px-12"
               >
-                MY PROFILE
+                {translations.home.profileNav}
               </Link>
             </li>
           </ul>
         </div>
       </nav>
-      <h1 className="font-bold text-3xl mt-8 mb-8">Modify your data</h1>
+      <h1 className="font-bold text-3xl mt-8 mb-8">{translations.profile.title}</h1>
       <div className="bg-gray-100 p-8 rounded-lg shadow-top text-center mx-auto w-2/5">
         <form onSubmit={handleSubmit}>
           <div className="mt-4 justify-center">
-            <p className="font-bold text-md pb-2">Name</p>
+            <p className="font-bold text-md pb-2">{translations.placeholders.name}</p>
             <input
               type="text"
               placeholder="Name*"
@@ -159,7 +152,7 @@ const Profile = () => {
             />
           </div>
           <div className="mt-4 justify-center">
-            <p className="font-bold text-md pb-2">Surname</p>
+            <p className="font-bold text-md pb-2">{translations.placeholders.surname}</p>
             <input
               type="text"
               placeholder="Surname*"
@@ -169,7 +162,7 @@ const Profile = () => {
             />
           </div>
           <div className="mt-4 justify-center">
-            <p className="font-bold text-md pb-2">Email</p>
+            <p className="font-bold text-md pb-2">{translations.placeholders.email}</p>
             <input
               type="text"
               placeholder="Email*"
@@ -179,7 +172,7 @@ const Profile = () => {
             />
           </div>
           <div className="mt-4 justify-center">
-            <p className="font-bold text-md pb-2">Phone number</p>
+            <p className="font-bold text-md pb-2">{translations.placeholders.phoneNumber}</p>
             <input
               type="number"
               placeholder="Phone number*"
@@ -191,7 +184,7 @@ const Profile = () => {
           {userType === "Host" && (
             <>
               <div className="mt-4 justify-center">
-                <p className="font-bold text-md pb-2">ID Card</p>
+                <p className="font-bold text-md pb-2">{translations.placeholders.idCard}</p>
                 <input
                   type="text"
                   placeholder="ID Card*"
@@ -201,7 +194,7 @@ const Profile = () => {
                 />
               </div>
               <div className="mt-4 justify-center">
-                <p className="font-bold text-md pb-2">Bank account</p>
+                <p className="font-bold text-md pb-2">{translations.placeholders.bankAccount}</p>
                 <input
                   type="text"
                   placeholder="Bank account*"
@@ -211,7 +204,7 @@ const Profile = () => {
                 />
               </div>
               <div className="mt-4 justify-center">
-                <p className="font-bold text-md pb-2">Social SN</p>
+                <p className="font-bold text-md pb-2">{translations.placeholders.socialSN}</p>
                 <input
                   type="text"
                   placeholder="Social SN*"
@@ -221,7 +214,7 @@ const Profile = () => {
                 />
               </div>
               <div className="mt-4 justify-center">
-                <p className="font-bold text-md pb-2">Address</p>
+                <p className="font-bold text-md pb-2">{translations.placeholders.address}</p>
                 <input
                   type="text"
                   placeholder="Address*"
@@ -240,7 +233,7 @@ const Profile = () => {
               type="submit"
               className="bg-blue-950 hover:bg-blue-950 text-white py-2 px-4 rounded-md"
             >
-              Change data
+              {translations.profile.buttonText}
             </button>
           </div>
         </form>
@@ -250,10 +243,10 @@ const Profile = () => {
           to="/passwordRecovery"
           className="text-blue-500 hover:text-blue-800"
         >
-          Forgot your password? Click here to recover it.
+          {translations.profile.forgorPassword}
         </Link>
       </div>
-      <h1 className="font-bold text-3xl mt-8 mb-8">Your residences</h1>
+      <h1 className="font-bold text-3xl mt-8 mb-8">{translations.profile.yourResidences}</h1>
       {residences.map((residence) => (
         <div
           key={residence.id}
@@ -264,9 +257,9 @@ const Profile = () => {
             alt="Apartamento"
             className="mx-auto h-10 md:h-48 w-96 p-4 rounded-3xl"
           />
-          <p className="p-4">Location: {residence.residence_address}</p>
-          <p className="p-4">Residence type: {residence.residence_type}</p>
-          <p className="p-4">Price: {residence.price}€</p>
+          <p className="p-4">{translations.profile.location}: {residence.residence_address}</p>
+          <p className="p-4">{translations.profile.residenceType}: {residence.residence_type}</p>
+          <p className="p-4">{translations.profile.price}: {residence.price}€</p>
         </div>
       ))}
     </div>

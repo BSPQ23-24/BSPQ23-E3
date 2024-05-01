@@ -1,7 +1,11 @@
 // Register.jsx
 import React, { useState } from 'react';
+import en from './translations/en.json';
+import es from './translations/es.json';
+import lt from './translations/lt.json';
 import logo from './assets/lodgify.png';
 import { useNavigate } from 'react-router-dom';
+import { useLocale } from './contexts/LocaleContext.jsx';
 
 const Register = ({ showLoginForm }) => { // Recibe la función showLoginForm como prop
     const [userType, setUserType] = useState('User');
@@ -18,6 +22,13 @@ const Register = ({ showLoginForm }) => { // Recibe la función showLoginForm co
     const [error, setError] = useState('');
     const [warning, setWarning] = useState('');
     const navigate = useNavigate();
+    const {locale, setLocale} = useLocale();
+
+    const translations = {
+      en,
+      es,
+      lt
+    }[locale];
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -58,20 +69,20 @@ const Register = ({ showLoginForm }) => { // Recibe la función showLoginForm co
                 setBankAccount('');
                 setSocialSN('');
                 setAddress('');
-                setWarning("User registered successfully!")
+                setWarning(translations.register.successMessage);
                 console.log("User registered successfully!");
             } else if (responseBody == "User already exists!"){
                 console.error("Failed to register user because the user already exists");
-                setError("User already exists!")
+                setError(translations.register.errors.userExists);
             } else if (responseBody == "Fill all the data!"){
                 console.error("Failed to register user because all the data has not been filled")
-                setError("Fill all the data!")
+                setError(translations.register.errors.fillData);
             } else if (responseBody == "Not valid phone number!"){
                 console.error("Failed to register user because the phone number must have 9 digits")
-                setError("Not valid phone number!")
+                setError(translations.register.errors.invalidPhoneNumber);
             } else if (responseBody == "Not valid email!"){
                 console.error("Failed to register user because of email");
-                setError("Not valid email!")
+                setError(translations.register.errors.invalidEmail);
             } else {
                 console.error(responseBody);
             }
@@ -92,14 +103,14 @@ const Register = ({ showLoginForm }) => { // Recibe la función showLoginForm co
                             value={userType}
                             onChange={(e) => setUserType(e.target.value)}
                         >
-                            <option value="User">Traveller</option>
-                            <option value="Host">Host</option>
+                            <option value="User">{translations.register.userType.traveller}</option>
+                            <option value="Host">{translations.register.userType.host}</option>
                         </select>
                     </div>
                     <div className="flex mt-4 justify-center">
                         <input
                             type="text"
-                            placeholder="Name*"
+                            placeholder={translations.placeholders.name + '*'}
                             className="mb-2 p-2 rounded-md border"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
@@ -108,7 +119,7 @@ const Register = ({ showLoginForm }) => { // Recibe la función showLoginForm co
                     <div className="flex mt-4 justify-center">
                         <input
                             type="text"
-                            placeholder="Surname*"
+                            placeholder={translations.placeholders.surname + '*'}
                             className="mb-2 p-2 rounded-md border"
                             value={surname}
                             onChange={(e) => setSurname(e.target.value)}
@@ -117,7 +128,7 @@ const Register = ({ showLoginForm }) => { // Recibe la función showLoginForm co
                     <div className="flex mt-4 justify-center">
                         <input
                             type="text"
-                            placeholder="Username*"
+                            placeholder={translations.placeholders.username + '*'}
                             className="mb-2 p-2 rounded-md border"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
@@ -126,7 +137,7 @@ const Register = ({ showLoginForm }) => { // Recibe la función showLoginForm co
                     <div className="flex mt-4 justify-center">
                         <input
                             type="password"
-                            placeholder="Password*"
+                            placeholder={translations.placeholders.password + '*'}
                             className="mb-2 p-2 rounded-md border"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
@@ -135,7 +146,7 @@ const Register = ({ showLoginForm }) => { // Recibe la función showLoginForm co
                     <div className="flex mt-4 justify-center">
                         <input
                             type="text"
-                            placeholder="Email*"
+                            placeholder={translations.placeholders.email + '*'}
                             className="mb-2 p-2 rounded-md border"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
@@ -144,7 +155,7 @@ const Register = ({ showLoginForm }) => { // Recibe la función showLoginForm co
                     <div className="flex mt-4 justify-center">
                         <input
                             type="number"
-                            placeholder="Phone number*"
+                            placeholder={translations.placeholders.phoneNumber + '*'}
                             className="mb-2 p-2 rounded-md border"
                             value={phoneNumber}
                             onChange={(e) => setPhoneNumber(e.target.value)}
@@ -155,7 +166,7 @@ const Register = ({ showLoginForm }) => { // Recibe la función showLoginForm co
                             <div className="flex mt-4 justify-center">
                                 <input
                                     type="text"
-                                    placeholder="ID Card*"
+                                    placeholder={translations.placeholders.idCard + '*'}
                                     className="mb-2 p-2 rounded-md border"
                                     value={idCard}
                                     onChange={(e) => setIdCard(e.target.value)}
@@ -164,7 +175,7 @@ const Register = ({ showLoginForm }) => { // Recibe la función showLoginForm co
                             <div className="flex mt-4 justify-center">
                                 <input
                                     type="text"
-                                    placeholder="Bank account*"
+                                    placeholder={translations.placeholders.bankAccount + '*'}
                                     className="mb-2 p-2 rounded-md border"
                                     value={bankAccount}
                                     onChange={(e) => setBankAccount(e.target.value)}
@@ -173,7 +184,7 @@ const Register = ({ showLoginForm }) => { // Recibe la función showLoginForm co
                             <div className="flex mt-4 justify-center">
                                 <input
                                     type="text"
-                                    placeholder="Social SN*"
+                                    placeholder={translations.placeholders.socialSN + '*'}
                                     className="mb-2 p-2 rounded-md border"
                                     value={socialSN}
                                     onChange={(e) => setSocialSN(e.target.value)}
@@ -182,7 +193,7 @@ const Register = ({ showLoginForm }) => { // Recibe la función showLoginForm co
                             <div className="flex mt-4 justify-center">
                                 <input
                                     type="text"
-                                    placeholder="Address*"
+                                    placeholder={translations.placeholders.address + '*'}
                                     className="mb-2 p-2 rounded-md border"
                                     value={address}
                                     onChange={(e) => setAddress(e.target.value)}
@@ -194,13 +205,13 @@ const Register = ({ showLoginForm }) => { // Recibe la función showLoginForm co
                     {warning && <div className="text-green-500 mb-2">{warning}</div>}
                     <div className="flex mt-4 justify-center">
                         <button type="submit" className="bg-blue-950 hover:bg-blue-950 text-white py-2 px-4 rounded-md">
-                            Register
+                        {translations.register.buttonText}
                         </button>
                     </div>
                 </form>
                 <div className="flex mt-4">
                     {/* Llama a la función handleBack al hacer clic */}
-                    <button className="font-bold text-blue-950 justify-center text-center" onClick={() => navigate('/')}>{"<"}Back</button>
+                    <button className="font-bold text-blue-950 justify-center text-center" onClick={() => navigate('/')}>{"<"}{translations.register.backButtonText}</button>
                 </div>
             </div>
         </div>
