@@ -5,8 +5,8 @@ CREATE TABLE residence (
     n_rooms INT,
     price FLOAT,
     image_path VARCHAR(255),
-    user_id VARCHAR(255),
-    FOREIGN KEY {user_id} REFERENCES user(username),
+    user_id INT,
+    FOREIGN KEY (user_id) REFERENCES user(id),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
