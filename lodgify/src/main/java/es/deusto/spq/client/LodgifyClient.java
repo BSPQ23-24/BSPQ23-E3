@@ -94,6 +94,14 @@ public class LodgifyClient {
 	 * }
 	 */
 
+	public void setClient(Client client) {
+		this.client = client;
+	}
+
+	public void setWebTarget(WebTarget webTarget) {
+		this.webTarget = webTarget;
+	}
+
 	public static void main(String[] args) {
 		if (args.length != 2) {
 			logger.info("Use: java Client.Client [host] [port]");

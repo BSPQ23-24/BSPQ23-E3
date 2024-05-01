@@ -1,11 +1,8 @@
 package es.deusto.spq.client;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import javax.ws.rs.client.Client;
-import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
@@ -13,69 +10,56 @@ import javax.ws.rs.core.Response;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Answers;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-
-import static org.mockito.Mockito.verify;
-
-import es.deusto.spq.server.jdo.User;
 
 public class LodgifyClientTest {
 
-    @Mock
-    private Client client;
-
-    @Mock(answer = Answers.RETURNS_DEEP_STUBS)
-    private WebTarget webTarget;
-
-    @Mock(answer = Answers.RETURNS_DEEP_STUBS)
-    private Invocation.Builder invocationBuilder;
-
-    @Captor
-    private ArgumentCaptor<Entity<User>> userEntityCaptor;
-
     private LodgifyClient lodgifyClient;
+    private Client client;
+    private WebTarget webTarget;
 
     @Before
     public void setUp() {
-        MockitoAnnotations.openMocks(this);
-
-        when(client.target("http://localhost:8080/rest")).thenReturn(webTarget);
-        when(webTarget.request(MediaType.TEXT_PLAIN)).thenReturn(invocationBuilder);
-        Response response = Response.ok("Successful connection").build();
-        when(invocationBuilder.get()).thenReturn(response);
-
+        client = mock(Client.class);
+        webTarget = mock(WebTarget.class);
         lodgifyClient = new LodgifyClient("localhost", "8080");
+        lodgifyClient.setClient(client);
+        lodgifyClient.setWebTarget(webTarget);
     }
 
     @Test
     public void testRegisterUser() {
-        when(webTarget.path("user/register")).thenReturn(webTarget);
-        when(webTarget.request(MediaType.APPLICATION_JSON)).thenReturn(invocationBuilder);
-
+        // Configuración del mock
+        WebTarget registerUserWebTarget = mock(WebTarget.class);
+        Invocation.Builder invocationBuilder = mock(Invocation.Builder.class);
+        when(webTarget.path("user/register")).thenReturn(registerUserWebTarget);
+        when(registerUserWebTarget.request(MediaType.APPLICATION_JSON)).thenReturn(invocationBuilder);
         Response response = Response.ok().build();
-        when(invocationBuilder.post(any(Entity.class))).thenReturn(response);
+        when(invocationBuilder.post(any())).thenReturn(response);
 
-        lodgifyClient.registerUser("test-login", "passwd", "test-name", "test-surname", "999999999", "test@example.com",
-                "User", "123456789A", 123456789, 0, "test address");
+        // Ejecución del método bajo prueba
+        lodgifyClient.registerUser("user", "password", "name", "surname", "999999999", "user@mail.es", "User", "", 0, 0,
+                "");
 
-        verify(invocationBuilder).post(any(Entity.class));
+        // Verificación de las interacciones con los mocks
+        verify(registerUserWebTarget, times(1)).request(MediaType.APPLICATION_JSON);
+        verify(invocationBuilder, times(1)).post(any());
     }
 
     @Test
-    public void testRegisterUserWithError() {
-        when(webTarget.path("user/register")).thenReturn(webTarget);
-        when(webTarget.request(MediaType.APPLICATION_JSON)).thenReturn(invocationBuilder);
+    public void testSaveBooking() {
+        // Configuración del mock
+        WebTarget saveBookingWebTarget = mock(WebTarget.class);
+        Invocation.Builder invocationBuilder = mock(Invocation.Builder.class);
+        when(webTarget.path("booking/save")).thenReturn(saveBookingWebTarget);
+        when(saveBookingWebTarget.request(MediaType.APPLICATION_JSON)).thenReturn(invocationBuilder);
+        Response response = Response.ok().build();
+        when(invocationBuilder.post(any())).thenReturn(response);
 
-        Response response = Response.serverError().build();
-        when(invocationBuilder.post(any(Entity.class))).thenReturn(response);
+        // Ejecución del método bajo prueba
+        lodgifyClient.saveBooking("travelerUsername", "hostUsername", 1L, "startDate", "endDate");
 
-        lodgifyClient.registerUser("test-login", "passwd", "test-name", "test-surname", "999999999", "test@example.com",
-                "User", "123456789A", 123456789, 0, "test address");
-
-        verify(invocationBuilder).post(any(Entity.class));
+        // Verificación de las interacciones con los mocks
+        verify(saveBookingWebTarget, times(1)).request(MediaType.APPLICATION_JSON);
+        verify(invocationBuilder, times(1)).post(any());
     }
 }

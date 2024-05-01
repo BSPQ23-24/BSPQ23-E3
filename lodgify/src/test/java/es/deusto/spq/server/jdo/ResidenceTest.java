@@ -1,4 +1,4 @@
-/*package es.deusto.spq.server.jdo;
+package es.deusto.spq.server.jdo;
 
 import static org.junit.Assert.assertEquals;
 
@@ -11,7 +11,7 @@ public class ResidenceTest {
 
     @Before
     public void setUp() {
-        residence = new Residence("Av Universidades 9", "House", 3, 200000.0f, "house.jpg", 1);
+        residence = new Residence("Av Universidades 9", "House", 3, 200000.0f, "house.jpg", "1");
     }
 
     @Test
@@ -71,19 +71,18 @@ public class ResidenceTest {
 
     @Test
     public void testGetUser_id() {
-        assertEquals(1, residence.getUser_id());
+        assertEquals("1", residence.getUser_username());
     }
 
     @Test
     public void testSetUser_id() {
-        residence.setUser_id(2);
-        assertEquals(2, residence.getUser_id());
+        residence.setUser_id("2");
+        assertEquals("2", residence.getUser_username());
     }
 
     @Test
     public void testToString() {
-        String expected = "Residence [residence_address=Av Universidades 9, n_rooms=3, price=200000.0, user_id=1]";
+        String expected = "Residence [residence_address=Av Universidades 9, n_rooms=3, price=200000.0, user_username=1]";
         assertEquals(expected, residence.toString());
     }
 }
-*/
