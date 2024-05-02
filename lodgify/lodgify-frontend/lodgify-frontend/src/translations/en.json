@@ -73,6 +73,7 @@
       },
       "successMessage": "Residence registered successfully!"
     },
+    "logout": "LOG OUT",
     "home": {
       "title": "FIND ACCOMMODATIONS USING THE FILTER!",
       "homeNav": "HOME",

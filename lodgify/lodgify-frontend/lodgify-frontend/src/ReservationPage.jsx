@@ -93,10 +93,36 @@ const ReservationPage = () => {
                 style={{ color: "rgb(4, 18, 26)" }}
                 className="font-bold px-12"
               >
-                HOME
+                {translations.home.homeNav}
               </Link>
             </li>
-            {/* Add other navigation links as needed */}
+            <li>
+              <Link
+                to="/registerResidence"
+                style={{ color: "rgb(4, 18, 26)" }}
+                className="font-bold px-12"
+              >
+                {translations.home.residenceRegNav}
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/profile"
+                style={{ color: "rgb(4, 18, 26)" }}
+                className="font-bold px-12"
+              >
+                {translations.home.profileNav}
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/"
+                style={{ color: "rgb(4, 18, 26)" }}
+                className="font-bold px-12"
+              >
+                {translations.logout}
+              </Link>
+            </li>
           </ul>
         </div>
       </nav>

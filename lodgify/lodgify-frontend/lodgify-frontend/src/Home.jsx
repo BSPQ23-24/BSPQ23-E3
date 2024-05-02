@@ -59,7 +59,7 @@ const HomePage = () => {
 
   return (
     <div className="flex flex-col items-center">
-      <nav className="bg-gray-50 p-4 shadow-md w-full">
+            <nav className="bg-gray-50 p-4 shadow-md w-full">
         <div className="flex justify-between items-center">
           <img src={logo} alt="Lodgify" className="h-5 md:h-12 px-12" />
           <ul className="flex">
@@ -88,6 +88,15 @@ const HomePage = () => {
                 className="font-bold px-12"
               >
                 {translations.home.profileNav}
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/"
+                style={{ color: "rgb(4, 18, 26)" }}
+                className="font-bold px-12"
+              >
+                {translations.logout}
               </Link>
             </li>
           </ul>

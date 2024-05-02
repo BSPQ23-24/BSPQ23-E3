@@ -73,6 +73,7 @@
       },
       "successMessage": "¡Residencia registrada con éxito!"
     },
+    "logout": "CERRAR SESIÓN",
     "home": {
       "title": "¡ENCUENTRA ALOJAMIENTOS USANDO EL FILTRO!",
       "homeNav": "INICIO",
