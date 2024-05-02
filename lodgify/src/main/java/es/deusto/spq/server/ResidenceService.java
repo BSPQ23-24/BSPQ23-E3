@@ -114,6 +114,40 @@ public class ResidenceService {
         }
     }
 
+    @POST
+    @Path("/delete")
+    public Response deleteResidence(@QueryParam("residence_id") Long residenceId) {
+        if (residenceId == null) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Residence ID query parameter is required").build();
+        }
+    
+        try {
+            tx.begin();
+            Query<Residence> query = pm.newQuery(Residence.class);
+            query.setFilter("id == :residence_id");
+        
+            @SuppressWarnings("unchecked")
+            List<Residence> residences = (List<Residence>) query.execute(residenceId);
+            if (residences.isEmpty()) {
+                return Response.status(Response.Status.NOT_FOUND).entity("Residence not found.").build();
+            }
+        
+            Residence residenceToDelete = residences.get(0);
+            pm.deletePersistent(residenceToDelete);
+            tx.commit();
+            return Response.ok().entity("Residence deleted successfully.").build();
+        
+        } catch (Exception e) {
+            if (tx.isActive()) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error deleting residence.").build();
+        } finally {
+            pm.close();
+        }
+    }
+
     @GET
     @Path("/searchByUserID")
     public Response searchResidencesID(@QueryParam("user_id") String user_id) {

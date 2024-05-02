@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import en from './translations/en.json';
 import es from './translations/es.json';
 import lt from './translations/lt.json';
@@ -11,9 +11,12 @@ import { useLocale } from './contexts/LocaleContext.jsx';
 const HomePage = () => {
 
   const [place, setPlace] = useState("");
+  const [start_date, setStartDate] = useState("");
+  const [end_date, setEndDate] = useState("");
   const [residences, setResidences] = useState([]);
   const { user, setUser } = useUser();
   const {locale, setLocale} = useLocale();
+  const navigate = useNavigate();
 
   console.log(locale)
 
@@ -26,7 +29,7 @@ const HomePage = () => {
   const handleSearch = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8080/rest/residence/search?address=${place}`
+        `http://localhost:8080/rest/residence/search?address=${place}&start_date=${start_date}&end_date=${end_date}`
       );
       if (!response.ok) {
         throw new Error(response);
@@ -36,6 +39,10 @@ const HomePage = () => {
     } catch (error) {
       console.error("Error:", error);
     }
+  };
+
+  const handleNavigation = (residence_id) => {
+    navigate(`/reservation?residenceId=${residence_id}`);
   };
 
   const handleSearchBooking = async () => {
@@ -100,18 +107,24 @@ const HomePage = () => {
               className="m-4 mt-8 p-2 w-72 rounded-md border"
             />
           </div>
+          {/*
           <div className="flex w-full justify-center">
             <input
               type="text"
+              value={start_date}
+              onChange={(e) => setStartDate(e.target.value)}
               placeholder={translations.home.arrivalDatePlaceholder}
               className="m-4 p-2 w-56 rounded-md border"
             />
             <input
               type="text"
+              value={end_date}
+              onChange={(e) => setEndDate(e.target.value)}
               placeholder={translations.home.departureDatePlaceholder}
               className="m-4 p-2 w-56 rounded-md border"
             />
           </div>
+          */}
         </form>
         <div className="flex mt-4 mx-auto w-4/5 justify-center">
           <button
@@ -134,10 +147,15 @@ const HomePage = () => {
               alt="Apartamento"
               className="mx-auto h-10 md:h-48 w-96 p-4 rounded-3xl"
             />
-            <p className="p-4">{translations.home.location}: {residence.residence_address}</p>
+            <p className="p-4">{translations.home.locationLabel}: {residence.residence_address}</p>
             <p className="p-4">{translations.home.residenceTypeLabel}: {residence.residence_type}</p>
             <p className="p-4">{translations.home.priceLabel}: {residence.price}€</p>
-            <Link to={`/reservation?residenceId=${residence.id}`}>{translations.home.bookButton}</Link>
+            <button
+              onClick={handleNavigation(residence.id)}
+              className="bg-blue-950 hover:bg-blue-500 text-white py-2 px-4 rounded-xl"
+            >
+              {translations.home.bookButton}
+            </button>
           </div>
         ))}
       </div>

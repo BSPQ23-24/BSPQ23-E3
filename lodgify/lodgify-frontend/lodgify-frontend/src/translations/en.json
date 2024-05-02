@@ -62,10 +62,10 @@
       "hostMessage": "As you are a host, you can add residences!",
       "guestMessage": "Sorry, you are not a host, so you can't add any residence!",
       "placeholders": {
-        "residenceAddress": "Residence address*",
-        "residenceType": "Residence type*",
-        "numberOfRooms": "Nº rooms*",
-        "price": "Price*"
+        "residenceAddress": "Residence address",
+        "residenceType": "Residence type",
+        "numberOfRooms": "Nº rooms",
+        "price": "Price"
       },
       "registerButton": "Register residence",
       "errors": {
