@@ -1,26 +1,25 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import en from './translations/en.json';
-import es from './translations/es.json';
-import lt from './translations/lt.json';
+import en from "./translations/en.json";
+import es from "./translations/es.json";
+import lt from "./translations/lt.json";
 import logo from "./assets/lodgify_logo.png";
 import apartamento from "./assets/apartamento.jpg";
 import { useUser } from "./contexts/UserContext.jsx";
-import { useLocale } from './contexts/LocaleContext.jsx';
+import { useLocale } from "./contexts/LocaleContext.jsx";
 
 const HomePage = () => {
-
   const [place, setPlace] = useState("");
   const [residences, setResidences] = useState([]);
   const { user, setUser } = useUser();
-  const {locale, setLocale} = useLocale();
+  const { locale, setLocale } = useLocale();
 
-  console.log(locale)
+  console.log(locale);
 
   const translations = {
     en,
     es,
-    lt
+    lt,
   }[locale];
 
   const handleSearch = async () => {
@@ -28,11 +27,16 @@ const HomePage = () => {
       const response = await fetch(
         `http://localhost:8080/rest/residence/search?address=${place}`
       );
-      if (!response.ok) {
+      if (response.status == 404) {
+        document.getElementById("noResidencesFound").innerText =
+          translations.home.noResidencesFound;
+      } else if (!response.ok) {
         throw new Error(response);
+      } else {
+        const data = await response.json();
+        setResidences(data);
+        document.getElementById("noResidencesFound").innerText = "";
       }
-      const data = await response.json();
-      setResidences(data);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -76,6 +80,15 @@ const HomePage = () => {
             </li>
             <li>
               <Link
+                to="/bookings"
+                style={{ color: "rgb(4, 18, 26)" }}
+                className="font-bold px-12"
+              >
+                {translations.home.myBookings}
+              </Link>
+            </li>
+            <li>
+              <Link
                 to="/profile"
                 style={{ color: "rgb(4, 18, 26)" }}
                 className="font-bold px-12"
@@ -87,9 +100,7 @@ const HomePage = () => {
         </div>
       </nav>
       <div className="bg-gray-100 m-20 mb-8 p-8 rounded-lg shadow-top text-center w-4/5">
-        <h1 className="font-bold text-xl">
-          {translations.home.title}
-        </h1>
+        <h1 className="font-bold text-xl">{translations.home.title}</h1>
         <form onSubmit={handleSearch}>
           <div className="flex w-full justify-center">
             <input
@@ -127,19 +138,31 @@ const HomePage = () => {
         {residences.map((residence) => (
           <div
             key={residence.id}
-            className="flex bg-gray-100 m-4 mb-8 p-8 rounded-lg mx-auto shadow-top items-center text-center w-4/5"
+            className="flex bg-gray-100 m-4 mb-8 p-8 rounded-lg mx-auto shadow-top items-center text-center w-5/5"
           >
             <img
               src={apartamento}
               alt="Apartamento"
               className="mx-auto h-10 md:h-48 w-96 p-4 rounded-3xl"
             />
-            <p className="p-4">{translations.home.location}: {residence.residence_address}</p>
-            <p className="p-4">{translations.home.residenceTypeLabel}: {residence.residence_type}</p>
-            <p className="p-4">{translations.home.priceLabel}: {residence.price}€</p>
-            <Link to={`/reservation?residenceId=${residence.id}`}>{translations.home.bookButton}</Link>
+            <p className="p-4">
+              {translations.home.locationLabel}: {residence.residence_address}
+            </p>
+            <p className="p-4">
+              {translations.home.residenceTypeLabel}: {residence.residence_type}
+            </p>
+            <p className="p-4">
+              {translations.home.priceLabel}: {residence.price}€
+            </p>
+            <Link to={`/reservation?residenceId=${residence.id}`}>
+              {translations.home.bookButton}
+            </Link>
           </div>
         ))}
+        <h1
+          id="noResidencesFound"
+          className="font-bold text-3xl mt-8 mb-8"
+        ></h1>
       </div>
 
       <footer>

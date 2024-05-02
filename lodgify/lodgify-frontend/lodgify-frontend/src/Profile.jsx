@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import en from './translations/en.json';
-import es from './translations/es.json';
-import lt from './translations/lt.json';
+import en from "./translations/en.json";
+import es from "./translations/es.json";
+import lt from "./translations/lt.json";
 import { useUser } from "./contexts/UserContext.jsx";
-import { useLocale } from './contexts/LocaleContext.jsx';
+import { useLocale } from "./contexts/LocaleContext.jsx";
 import logo from "./assets/lodgify_logo.png";
 import apartamento from "./assets/apartamento.jpg";
 
@@ -25,12 +25,12 @@ const Profile = () => {
   const [address, setAddress] = useState(user.address);
   const [error, setError] = useState("");
   const [warning, setWarning] = useState("");
-  const {locale, setLocale} = useLocale();
-  
+  const { locale, setLocale } = useLocale();
+
   const translations = {
     en,
     es,
-    lt
+    lt,
   }[locale];
 
   useEffect(() => {
@@ -41,12 +41,17 @@ const Profile = () => {
         const response = await fetch(
           `http://localhost:8080/rest/residence/searchByUserID?user_id=${user.username}`
         );
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
+        if (response.status == 404) {
+          document.getElementById("areThereResidencesHeader").innerText =
+            translations.profile.noResidences;
+        } else if (!response.ok) {
+          const data = await response.text();
+          throw new Error(data);
+        } else {
+          const data = await response.json();
+          console.log(data);
+          setResidences(data);
         }
-        const data = await response.json();
-        console.log(data);
-        setResidences(data);
       } catch (error) {
         console.error("Error:", error);
       }
@@ -55,6 +60,28 @@ const Profile = () => {
     console.log(user.id);
     handleSearch();
   }, [user.username]);
+
+  const removeResidence = async (residenceId) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/rest/residence/deleteResidence?residence_id=${residenceId}`,
+        {
+          method: "POST",
+        }
+      );
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data);
+      } else {
+        // Remove the div by filtering out the residence with the specific ID
+        setResidences((residences) =>
+          residences.filter((residence) => residence.id !== residenceId)
+        );
+      }
+    } catch (error) {
+      console.error("Trouble removing residence: ", error);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -128,6 +155,15 @@ const Profile = () => {
             </li>
             <li>
               <Link
+                to="/bookings"
+                style={{ color: "rgb(4, 18, 26)" }}
+                className="font-bold px-12"
+              >
+                {translations.home.myBookings}
+              </Link>
+            </li>
+            <li>
+              <Link
                 to="/profile"
                 style={{ color: "rgb(4, 18, 26)" }}
                 className="font-bold px-12"
@@ -138,11 +174,15 @@ const Profile = () => {
           </ul>
         </div>
       </nav>
-      <h1 className="font-bold text-3xl mt-8 mb-8">{translations.profile.title}</h1>
+      <h1 className="font-bold text-3xl mt-8 mb-8">
+        {translations.profile.title}
+      </h1>
       <div className="bg-gray-100 p-8 rounded-lg shadow-top text-center mx-auto w-2/5">
         <form onSubmit={handleSubmit}>
           <div className="mt-4 justify-center">
-            <p className="font-bold text-md pb-2">{translations.placeholders.name}</p>
+            <p className="font-bold text-md pb-2">
+              {translations.placeholders.name}
+            </p>
             <input
               type="text"
               placeholder="Name*"
@@ -152,7 +192,9 @@ const Profile = () => {
             />
           </div>
           <div className="mt-4 justify-center">
-            <p className="font-bold text-md pb-2">{translations.placeholders.surname}</p>
+            <p className="font-bold text-md pb-2">
+              {translations.placeholders.surname}
+            </p>
             <input
               type="text"
               placeholder="Surname*"
@@ -162,7 +204,9 @@ const Profile = () => {
             />
           </div>
           <div className="mt-4 justify-center">
-            <p className="font-bold text-md pb-2">{translations.placeholders.email}</p>
+            <p className="font-bold text-md pb-2">
+              {translations.placeholders.email}
+            </p>
             <input
               type="text"
               placeholder="Email*"
@@ -172,7 +216,9 @@ const Profile = () => {
             />
           </div>
           <div className="mt-4 justify-center">
-            <p className="font-bold text-md pb-2">{translations.placeholders.phoneNumber}</p>
+            <p className="font-bold text-md pb-2">
+              {translations.placeholders.phoneNumber}
+            </p>
             <input
               type="number"
               placeholder="Phone number*"
@@ -184,7 +230,9 @@ const Profile = () => {
           {userType === "Host" && (
             <>
               <div className="mt-4 justify-center">
-                <p className="font-bold text-md pb-2">{translations.placeholders.idCard}</p>
+                <p className="font-bold text-md pb-2">
+                  {translations.placeholders.idCard}
+                </p>
                 <input
                   type="text"
                   placeholder="ID Card*"
@@ -194,7 +242,9 @@ const Profile = () => {
                 />
               </div>
               <div className="mt-4 justify-center">
-                <p className="font-bold text-md pb-2">{translations.placeholders.bankAccount}</p>
+                <p className="font-bold text-md pb-2">
+                  {translations.placeholders.bankAccount}
+                </p>
                 <input
                   type="text"
                   placeholder="Bank account*"
@@ -204,7 +254,9 @@ const Profile = () => {
                 />
               </div>
               <div className="mt-4 justify-center">
-                <p className="font-bold text-md pb-2">{translations.placeholders.socialSN}</p>
+                <p className="font-bold text-md pb-2">
+                  {translations.placeholders.socialSN}
+                </p>
                 <input
                   type="text"
                   placeholder="Social SN*"
@@ -214,7 +266,9 @@ const Profile = () => {
                 />
               </div>
               <div className="mt-4 justify-center">
-                <p className="font-bold text-md pb-2">{translations.placeholders.address}</p>
+                <p className="font-bold text-md pb-2">
+                  {translations.placeholders.address}
+                </p>
                 <input
                   type="text"
                   placeholder="Address*"
@@ -243,23 +297,40 @@ const Profile = () => {
           to="/passwordRecovery"
           className="text-blue-500 hover:text-blue-800"
         >
-          {translations.profile.forgorPassword}
+          {translations.profile.forgotPassword}
         </Link>
       </div>
-      <h1 className="font-bold text-3xl mt-8 mb-8">{translations.profile.yourResidences}</h1>
+      <h1
+        id="areThereResidencesHeader"
+        className="font-bold text-3xl mt-8 mb-8"
+      >
+        {translations.profile.yourResidences}
+      </h1>
       {residences.map((residence) => (
         <div
           key={residence.id}
           className="flex bg-gray-100 m-4 mb-8 p-8 rounded-lg mx-auto shadow-top items-center text-center mx-auto w-4/5"
         >
+          <span
+            className="text-red-500 hover:text-red-700 font-bold cursor-pointer px-2 py-1 text-xl"
+            onClick={() => removeResidence(residence.id)}
+          >
+            X
+          </span>
           <img
             src={apartamento}
             alt="Apartamento"
             className="mx-auto h-10 md:h-48 w-96 p-4 rounded-3xl"
           />
-          <p className="p-4">{translations.profile.location}: {residence.residence_address}</p>
-          <p className="p-4">{translations.profile.residenceType}: {residence.residence_type}</p>
-          <p className="p-4">{translations.profile.price}: {residence.price}€</p>
+          <p className="p-4">
+            {translations.profile.location}: {residence.residence_address}
+          </p>
+          <p className="p-4">
+            {translations.profile.residenceType}: {residence.residence_type}
+          </p>
+          <p className="p-4">
+            {translations.profile.price}: {residence.price}€
+          </p>
         </div>
       ))}
     </div>

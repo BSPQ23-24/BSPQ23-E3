@@ -53,9 +53,12 @@
         "successMessage": "Naudotojo duomenys sėkmingai pakeisti!",
         "forgotPassword": "Pamiršote slaptažodį? Spauskite čia, kad jį atkurtumėte.",
         "yourResidences": "Jūsų gyvenamosios vietos",
+        "noResidences": "Šiuo metu neturite jokių apartamentų",
         "location": "Vieta",
         "residenceType": "Būsto tipas",
-        "price": "Kaina"
+        "price": "Kaina",
+        "noBookings": "Nepadarėte jokių užsakymų, eikite į pagrindinį puslapį ir ieškokite nakvynės!",
+        "jūsų užsakymai": "Jūsų užsakymai"
     },
     "residenceRegistration": {
         "title": "Būsto registracija",
@@ -86,7 +89,9 @@
         "locationLabel": "Vieta",
         "residenceTypeLabel": "Apgyvendinimo tipas",
         "priceLabel": "Kaina",
-        "bookButton": "Užsakyti"
+        "bookButton": "Užsakyti",
+        "noResidencesFound": "Pagal pasirinktus parametrus apartamentų nerasta",
+        "myBookings": "Mano užsakymai"
     },
     "footer": {
         "copyright": "© 2024 Lodgify. Visos teisės saugomos."

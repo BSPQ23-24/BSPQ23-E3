@@ -52,9 +52,12 @@
         "successMessage": "User data changed successfully!",
         "forgotPassword": "Forgot your password? Click here to recover it.",
         "yourResidences": "Your residences",
+        "noResidences": "You currently don't have any residences",
         "location": "Location",
         "residenceType": "Residence type",
-        "price": "Price"
+        "price": "Price",
+        "noBookings": "You haven't made any bookings, go to the home page to search for accommodation!",
+        "yourBookings": "Your bookings"
     },
     "residenceRegistration": {
       "title": "Residence Registration",
@@ -85,7 +88,9 @@
       "locationLabel": "Location",
       "residenceTypeLabel": "Residence type",
       "priceLabel": "Price",
-      "bookButton": "Book"
+      "bookButton": "Book",
+      "noResidencesFound": "No residences found for selected parameters",
+      "myBookings": "MY BOOKINGS"
     },
     "footer": {
       "copyright": "© 2024 Lodgify. All rights reserved."
