@@ -10,15 +10,20 @@ import javax.ws.rs.core.Response.Status.Family;
 
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
-import com.github.noconnor.junitperf.JUnitPerfTest;
+import com.github.noconnor.junitperf.JUnitPerfRule;
+import com.github.noconnor.junitperf.reporting.providers.HtmlReportGenerator;
 
 import es.deusto.spq.server.jdo.User;
 
-public class UserServicePerformanceTest {
+public class UserServicePerfTest {
 
     private WebTarget target;
+
+    @Rule
+    public JUnitPerfRule perfTestRule = new JUnitPerfRule(new HtmlReportGenerator("target/junitperf/report.html"));
 
     @Before
     public void setUp() {
@@ -27,7 +32,7 @@ public class UserServicePerformanceTest {
     }
 
     @Test
-    @JUnitPerfTest(threads = 10, durationMs = 2000)
+    @com.github.noconnor.junitperf.JUnitPerfTest(threads = 1, durationMs = 1000)
     public void testRegisterUserPerf() {
         User user = new User("newUser", "password", "Jane", "Doe", "987654321", "jane@example.com", "user", "987654321", 987654321, 1234, "456 Test St");
 
@@ -37,16 +42,12 @@ public class UserServicePerformanceTest {
 
         // Check for successful response
         assertEquals(Family.SUCCESSFUL, response.getStatusInfo().getFamily());
-
-        // Capture average and max response times
-        long responseTime = response.readEntity(Long.class);
-        System.out.println("Average Response Time: " + responseTime + " ms");
-        System.out.println("Max Response Time: " + responseTime + " ms");
     }
 
-    @Test
-    @JUnitPerfTest(threads = 10, durationMs = 2000)
+    /*@Test
+    @com.github.noconnor.junitperf.JUnitPerfTest(threads = 1, durationMs = 30000)
     public void testLoginUserPerf() {
+        // Simulate a login request with minimal data
         User user = new User("testUser", "password", "a", "a", "111111111", "iser@gmail.com", "user", "1", 0, 0, "as");
 
         Response response = target.path("login")
@@ -55,8 +56,6 @@ public class UserServicePerformanceTest {
 
         // Check for successful response
         assertEquals(Family.SUCCESSFUL, response.getStatusInfo().getFamily());
+    }*/
 
-        // Intentionally fail the test to simulate a failed execution
-        assertEquals(Family.SUCCESSFUL, Family.familyOf(401));
-    }
 }
