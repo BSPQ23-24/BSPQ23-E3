@@ -361,5 +361,22 @@
             </plugins>
         </build>
     </profile>
+	<profile>
+		<id>integration-tests</id>
+		<build>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>3.0.0-M5</version> <!-- Use the appropriate version -->
+					<configuration>
+						<includes>
+							<include>**/BookingServiceIntegrationTest.java</include> <!-- Include integration test classes -->
+						</includes>
+					</configuration>
+				</plugin>
+			</plugins>
+		</build>
+	</profile>
 	</profiles>
 </project>
