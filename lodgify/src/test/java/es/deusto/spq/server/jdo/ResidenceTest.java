@@ -15,6 +15,14 @@ public class ResidenceTest {
     }
 
     @Test
+    public void testSetId() {
+        Long newId = 12345L;
+        residence.setId(newId);
+
+        assertEquals(newId, residence.getId());
+    }
+
+    @Test
     public void testGetResidence_address() {
         assertEquals("Av Universidades 9", residence.getResidence_address());
     }

@@ -17,6 +17,22 @@ public class UserTest {
     }
 
     @Test
+    public void testGetId() {
+        Long expectedId = 123L;
+        user.setId(expectedId);
+
+        assertEquals(expectedId, user.getId());
+    }
+
+    @Test
+    public void testSetId() {
+        Long expectedId = 123L;
+        user.setId(expectedId);
+
+        assertEquals(expectedId, user.getId());
+    }
+
+    @Test
     public void testGetUsername() {
         assertEquals("example", user.getUsername());
     }

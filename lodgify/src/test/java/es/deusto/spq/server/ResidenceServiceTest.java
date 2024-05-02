@@ -3,6 +3,7 @@ package es.deusto.spq.server;
 import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
@@ -42,11 +43,21 @@ public class ResidenceServiceTest {
         Residence residence = new Residence("Some Address", "Apartment", 2, 1000, "user image", "user1");
 
         when(pm.newQuery(Residence.class, "id == :id")).thenReturn(query);
-        when(query.execute(residence.getId())).thenReturn(null);
+        when(query.execute(residence.getId())).thenReturn(new ArrayList<Residence>());
 
         Response response = residenceService.registerUser(residence);
 
         assert response.getStatus() == 200;
+    }
+
+    @Test
+    public void testRegisterUser_NotAllDataFilled() {
+        Residence residence = new Residence("", "Apartment", 0, 1000, "user image", "user1");
+
+        Response response = residenceService.registerUser(residence);
+
+        assert response.getStatus() == 400;
+        assert response.getEntity().equals("Fill all the data!");
     }
 
     @Test
@@ -62,6 +73,29 @@ public class ResidenceServiceTest {
     }
 
     @Test
+    public void testSearchResidences_NoResidencesFound() {
+        String address = "Nonexistent Address";
+
+        when(pm.newQuery(Residence.class)).thenReturn(query);
+        when(query.execute(address)).thenReturn(new ArrayList<>());
+
+        Response response = residenceService.searchResidences(address);
+
+        assert response.getStatus() == 404;
+        assert response.getEntity().equals("No residences found at the specified address.");
+    }
+
+    @Test
+    public void testSearchResidences_BlankAddress() {
+        String address = "";
+
+        Response response = residenceService.searchResidences(address);
+
+        assert response.getStatus() == 400;
+        assert response.getEntity().equals("Address query parameter is required");
+    }
+
+    @Test
     public void testSearchResidencesID() {
         String userId = "user1";
 
@@ -74,15 +108,65 @@ public class ResidenceServiceTest {
     }
 
     @Test
+    public void testSearchResidencesID_NoResidencesFound() {
+        String userId = "nonexistentUser";
+
+        when(pm.newQuery(Residence.class)).thenReturn(query);
+        when(query.execute(userId)).thenReturn(new ArrayList<>());
+
+        Response response = residenceService.searchResidencesID(userId);
+
+        assert response.getStatus() == 404;
+        assert response.getEntity().equals("No residences found for the specified user ID.");
+    }
+
+    @Test
+    public void testSearchResidencesID_BlankUserID() {
+        String userId = "";
+
+        Response response = residenceService.searchResidencesID(userId);
+
+        assert response.getStatus() == 400;
+        assert response.getEntity().equals("User ID query parameter is required");
+    }
+
+    @Test
     public void testGetResidenceByID() {
         Long residenceId = 1L;
 
+        List<Residence> residences = new ArrayList<>();
+        residences.add(new Residence("Some Absurd Address", "Absurd Residence Type", 9999, 9999, "absurd image",
+                "absurd user")); // Adding a dummy residence
+
         when(pm.newQuery(Residence.class)).thenReturn(query);
-        when(query.execute(residenceId)).thenReturn(new ArrayList<Residence>());
+        when(query.execute(residenceId)).thenReturn(residences);
 
         Response response = residenceService.getResidenceByID(residenceId);
 
         assert response.getStatus() == 200;
+    }
+
+    @Test
+    public void testGetResidenceByID_ResidenceNotFound() {
+        Long residenceId = 999L;
+
+        when(pm.newQuery(Residence.class)).thenReturn(query);
+        when(query.execute(residenceId)).thenReturn(new ArrayList<>());
+
+        Response response = residenceService.getResidenceByID(residenceId);
+
+        assert response.getStatus() == 404;
+        assert response.getEntity().equals("No residences found for the specified residence ID.");
+    }
+
+    @Test
+    public void testGetResidenceByID_BlankResidenceID() {
+        Long residenceId = null;
+
+        Response response = residenceService.getResidenceByID(residenceId);
+
+        assert response.getStatus() == 400;
+        assert response.getEntity().equals("Residence ID query parameter is required");
     }
 
 }

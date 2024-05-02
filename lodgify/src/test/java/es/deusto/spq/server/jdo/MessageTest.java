@@ -24,6 +24,13 @@ public class MessageTest {
     }
 
     @Test
+    public void setUser() {
+        User user = new User("example", "password", "user");
+        message.setUser(user);
+        assertEquals(user, message.getUser());
+    }
+
+    @Test
     public void testToString() {
         long currentTime = System.currentTimeMillis();
         assertEquals("Message: message --> Hello world!, timestamp -->  " + new Date(currentTime), message.toString());

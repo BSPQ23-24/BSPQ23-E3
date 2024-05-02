@@ -52,4 +52,10 @@ public class BookingService {
             pm.close();
         }
     }
+
+    public void setPersistenceManagerFactory(PersistenceManagerFactory pmf) {
+        this.pm = pmf.getPersistenceManager();
+        this.tx = pm.currentTransaction();
+    }
+
 }

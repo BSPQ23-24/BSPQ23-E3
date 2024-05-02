@@ -16,7 +16,7 @@ import es.deusto.spq.server.jdo.Booking;
 
 public class LodgifyClient {
 
-	protected static final Logger logger = LogManager.getLogger();
+	protected static Logger logger = LogManager.getLogger();
 
 	private static final String USER = "BSPQ23E3";
 	private static final String PASSWORD = "BSPQ23E3";
