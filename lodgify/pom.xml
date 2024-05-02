@@ -340,5 +340,26 @@
                 </plugins>
             </build>
 		</profile>
+		<profile>
+        <id>performance-tests</id>
+        <build>
+            <plugins>
+                <!-- Define configuration specific to the performance tests -->
+                <!-- For example, configure the Maven Surefire plugin to run performance tests -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>3.0.0-M5</version> <!-- Use the appropriate version -->
+                    <configuration>
+                        <includes>
+                            <include>**/UserServicePerfTest.java</include>
+							<include>**/ResidenceServicePerfTest.java</include>
+							<include>**/LodgifyClientPerfTest.java</include> <!-- Include only performance test classes -->
+                        </includes>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </build>
+    </profile>
 	</profiles>
 </project>
