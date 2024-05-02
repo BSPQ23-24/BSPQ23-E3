@@ -2,13 +2,15 @@ package es.deusto.spq.server;
 
 import static org.junit.Assert.assertEquals;
 
+import org.junit.Rule;
 import org.junit.Before;
 import org.junit.Test;
 import com.github.noconnor.junitperf.JUnitPerfRule;
 import com.github.noconnor.junitperf.reporting.providers.HtmlReportGenerator;
+import com.github.noconnor.junitperf.JUnitPerfTestRequirement;
 import javax.ws.rs.core.Response;
 
-public class ResidenceServicePerformanceTest {
+public class ResidenceServicePerfTest {
 
     private ResidenceService residenceService;
 
