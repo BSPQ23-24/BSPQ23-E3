@@ -43,7 +43,7 @@
       "phoneNumber": "Número de teléfono",
       "idCard": "Documento de identidad",
       "bankAccount": "Cuenta bancaria",
-      "socialSN": "Red social",
+      "socialSN": "Nº seguridad social",
       "address": "Dirección"
     },
     "profile": {
@@ -90,7 +90,7 @@
       "priceLabel": "Precio",
       "bookButton": "Reservar",
       "noResidencesFound": "No se encontraron residencias para los parámetros seleccionados",
-      "myBookings": "Mis reservas"
+      "myBookings": "MIS RESERVAS"
     },
     "footer": {
       "copyright": "© 2024 Lodgify. Todos los derechos reservados."
