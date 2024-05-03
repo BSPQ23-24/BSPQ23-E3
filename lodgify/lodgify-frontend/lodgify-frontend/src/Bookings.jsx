@@ -135,6 +135,15 @@ function Bookings() {
                 {translations.home.profileNav}
               </Link>
             </li>
+            <li>
+              <Link
+                to="/"
+                style={{ color: "rgb(4, 18, 26)" }}
+                className="font-bold px-12"
+              >
+                {translations.logout}
+              </Link>
+            </li>
           </ul>
         </div>
       </nav>

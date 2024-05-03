@@ -52,7 +52,6 @@
         "successMessage": "User data changed successfully!",
         "forgotPassword": "Forgot your password? Click here to recover it.",
         "yourResidences": "Your residences",
-        "noResidences": "You currently don't have any residences",
         "location": "Location",
         "residenceType": "Residence type",
         "price": "Price",

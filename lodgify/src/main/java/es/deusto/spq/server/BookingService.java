@@ -1,7 +1,6 @@
 package es.deusto.spq.server;
 
 import es.deusto.spq.server.jdo.Booking;
-import es.deusto.spq.server.jdo.Residence;
 
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;

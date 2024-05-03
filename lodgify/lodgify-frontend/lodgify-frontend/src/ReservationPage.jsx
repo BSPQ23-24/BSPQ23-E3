@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import logo from "./assets/lodgify_logo.png";
+import en from './translations/en.json';
+import es from './translations/es.json';
+import lt from './translations/lt.json';
 import { useUser } from "./contexts/UserContext";
-import { useLocale } from "./contexts/LocaleContext.jsx";
-import en from "./translations/en.json";
-import es from "./translations/es.json";
-import lt from "./translations/lt.json";
+import { useLocale } from './contexts/LocaleContext.jsx';
 const useQuery = () => {
   return new URLSearchParams(useLocation().search);
 };
@@ -15,18 +15,18 @@ const ReservationPage = () => {
   const [endDate, setEndDate] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const {locale, setLocale} = useLocale();
   const [residence, setResidence] = useState(null);
 
   const { user, setUser } = useUser();
-  const { locale, setLocale } = useLocale();
-  console.log(locale);
+  const query = useQuery();
+  const residenceId = query.get("residenceId");
+
   const translations = {
     en,
     es,
-    lt,
+    lt
   }[locale];
-  const query = useQuery();
-  const residenceId = query.get("residenceId");
 
   useEffect(() => {
     // Fetch residence data
@@ -114,6 +114,15 @@ const ReservationPage = () => {
                 className="font-bold px-12"
               >
                 {translations.home.residenceRegNav}
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/bookings"
+                style={{ color: "rgb(4, 18, 26)" }}
+                className="font-bold px-12"
+              >
+                {translations.home.myBookings}
               </Link>
             </li>
             <li>

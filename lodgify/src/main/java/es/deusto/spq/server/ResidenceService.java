@@ -150,7 +150,7 @@ public class ResidenceService {
 
     @GET
     @Path("/searchByUserID")
-    public Response searchResidencesByUserID(@QueryParam("user_id") String user_id) {
+    public Response searchResidencesID(@QueryParam("user_id") String user_id) {
         if (user_id == null || user_id.trim().isEmpty()) {
             return Response.status(Response.Status.BAD_REQUEST).entity("User ID query parameter is required").build();
         }
@@ -177,7 +177,7 @@ public class ResidenceService {
 
     @GET
     @Path("/searchByResidenceID")
-    public Response getResidenceByResidenceID(@QueryParam("residence_id") Long residence_id) {
+    public Response getResidenceByID(@QueryParam("residence_id") Long residence_id) {
         if (residence_id == null) {
             return Response.status(Response.Status.BAD_REQUEST).entity("Residence ID query parameter is required")
                     .build();
@@ -197,39 +197,6 @@ public class ResidenceService {
             }
             logger.info(residences);
             return Response.ok(residences.get(0)).build();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("An error occurred while fetching the data.").build();
-        } finally {
-            pm.close();
-        }
-    }
-
-    @POST
-    @Path("/deleteResidence")
-    public Response deleteResidenceByID(@QueryParam("residence_id") Long residence_id) {
-        if (residence_id == null) {
-            return Response.status(Response.Status.BAD_REQUEST).entity("Residence ID query parameter is required")
-                    .build();
-        }
-        Query<Residence> query = pm.newQuery(Residence.class);
-        query.setFilter("id == :residence_id");
-        try {
-            logger.info(residence_id);
-            @SuppressWarnings("unchecked")
-            List<Residence> residences = (List<Residence>) query.execute(residence_id);
-            if (residences.isEmpty()) {
-                return Response.status(Response.Status.NOT_FOUND)
-                        .entity("No residences found for the specified residence ID.").build();
-            } else if (residences.size() > 1) {
-                return Response.status(Response.Status.CONFLICT)
-                        .entity("Multiple residences found for the specified residence ID.").build();
-            }
-            logger.info(residences);
-            Residence residenceToDelete = residences.get(0);
-            pm.deletePersistent(residenceToDelete);
-            return Response.ok().build();
         } catch (Exception e) {
             e.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)

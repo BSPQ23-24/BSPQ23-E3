@@ -88,6 +88,15 @@ const ResidenceRegistration = () => {
             </li>
             <li>
               <Link
+                to="/bookings"
+                style={{ color: "rgb(4, 18, 26)" }}
+                className="font-bold px-12"
+              >
+                {translations.home.myBookings}
+              </Link>
+            </li>
+            <li>
+              <Link
                 to="/profile"
                 style={{ color: "rgb(4, 18, 26)" }}
                 className="font-bold px-12"
@@ -114,7 +123,8 @@ const ResidenceRegistration = () => {
                     <p className = "font-semibold text-xl mt-8">{translations.residenceRegistration.hostMessage}</p> 
                     <div className="bg-gray-100 m-8 mb-8 mx-auto p-8 rounded-lg shadow-top text-center w-2/5">
                         <form onSubmit={handleSubmit}>
-                            <div className="flex mt-4 justify-center">
+                            <div className="flex-col mt-4 justify-center items-center">
+                              <p className="font-bold text-md pb-2">{translations.residenceRegistration.placeholders.residenceAddress}</p>
                                 <input
                                     type="text"
                                     placeholder={translations.residenceRegistration.placeholders.residenceAddress}
@@ -123,7 +133,8 @@ const ResidenceRegistration = () => {
                                     onChange={(e) => setResidence_address(e.target.value)}
                                 />
                             </div>
-                            <div className="flex mt-4 justify-center">
+                            <div className="flex-col mt-4 justify-center items-center">
+                              <p className="font-bold text-md pb-2">{translations.residenceRegistration.placeholders.residenceType}</p>
                                 <input
                                     type="text"
                                     placeholder={translations.residenceRegistration.placeholders.residenceType}
@@ -132,7 +143,8 @@ const ResidenceRegistration = () => {
                                     onChange={(e) => setResidence_type(e.target.value)}
                                 />
                             </div>
-                            <div className="flex mt-4 justify-center">
+                            <div className="flex-col mt-4 justify-center items-center">
+                              <p className="font-bold text-md pb-2">{translations.residenceRegistration.placeholders.numberOfRooms}</p>
                                 <input
                                     type="number"
                                     placeholder={translations.residenceRegistration.placeholders.numberOfRooms}
@@ -141,7 +153,8 @@ const ResidenceRegistration = () => {
                                     onChange={(e) => setN_rooms(e.target.value)}
                                 />
                             </div>
-                            <div className="flex mt-4 justify-center">
+                            <div className="flex-col mt-4 justify-center items-center">
+                              <p className="font-bold text-md pb-2">{translations.residenceRegistration.placeholders.price}</p>
                                 <input
                                     type="number"
                                     placeholder={translations.residenceRegistration.placeholders.price}
