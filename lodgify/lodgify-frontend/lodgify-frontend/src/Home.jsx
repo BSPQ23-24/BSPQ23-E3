@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import en from "./translations/en.json";
 import es from "./translations/es.json";
 import lt from "./translations/lt.json";
@@ -10,22 +10,28 @@ import { useLocale } from "./contexts/LocaleContext.jsx";
 
 const HomePage = () => {
   const [place, setPlace] = useState("");
+  const [start_date, setStartDate] = useState("");
+  const [end_date, setEndDate] = useState("");
   const [residences, setResidences] = useState([]);
   const { user, setUser } = useUser();
   const { locale, setLocale } = useLocale();
+  const navigate = useNavigate();
 
   console.log(locale);
 
-  const translations = {
-    en,
-    es,
-    lt,
-  }[locale];
+  const translations = locale
+    ? {
+        en,
+        es,
+        lt,
+      }[locale]
+    : en;
 
   const handleSearch = async () => {
+    console.log("hadnling search");
     try {
       const response = await fetch(
-        `http://localhost:8080/rest/residence/search?address=${place}`
+        `http://localhost:8080/rest/residence/search?address=${place}&start_date=${start_date}&end_date=${end_date}`
       );
       if (response.status == 404) {
         document.getElementById("noResidencesFound").innerText =
@@ -40,6 +46,11 @@ const HomePage = () => {
     } catch (error) {
       console.error("Error:", error);
     }
+  };
+
+  const handleNavigation = (residence_id) => {
+    console.log("navigating ????");
+    navigate(`/reservation?residenceId=${residence_id}`);
   };
 
   const handleSearchBooking = async () => {
@@ -96,12 +107,26 @@ const HomePage = () => {
                 {translations.home.profileNav}
               </Link>
             </li>
+            <li>
+              <Link
+                to="/"
+                style={{ color: "rgb(4, 18, 26)" }}
+                className="font-bold px-12"
+              >
+                {translations.logout}
+              </Link>
+            </li>
           </ul>
         </div>
       </nav>
       <div className="bg-gray-100 m-20 mb-8 p-8 rounded-lg shadow-top text-center w-4/5">
         <h1 className="font-bold text-xl">{translations.home.title}</h1>
-        <form onSubmit={handleSearch}>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault(); // Prevent default form submission behavior
+            handleSearch(); // Call your search handler
+          }}
+        >
           <div className="flex w-full justify-center">
             <input
               type="text"
@@ -111,22 +136,28 @@ const HomePage = () => {
               className="m-4 mt-8 p-2 w-72 rounded-md border"
             />
           </div>
+          {/*
           <div className="flex w-full justify-center">
             <input
               type="text"
+              value={start_date}
+              onChange={(e) => setStartDate(e.target.value)}
               placeholder={translations.home.arrivalDatePlaceholder}
               className="m-4 p-2 w-56 rounded-md border"
             />
             <input
               type="text"
+              value={end_date}
+              onChange={(e) => setEndDate(e.target.value)}
               placeholder={translations.home.departureDatePlaceholder}
               className="m-4 p-2 w-56 rounded-md border"
             />
           </div>
+          */}
         </form>
         <div className="flex mt-4 mx-auto w-4/5 justify-center">
           <button
-            onClick={handleSearch}
+            onClick={() => handleSearch()}
             className="bg-blue-950 hover:bg-blue-500 text-white py-2 px-4 rounded-xl"
           >
             {translations.home.searchButton}
@@ -154,9 +185,12 @@ const HomePage = () => {
             <p className="p-4">
               {translations.home.priceLabel}: {residence.price}€
             </p>
-            <Link to={`/reservation?residenceId=${residence.id}`}>
+            <button
+              onClick={() => handleNavigation(residence.id)}
+              className="bg-blue-950 hover:bg-blue-500 text-white py-2 px-4 rounded-xl"
+            >
               {translations.home.bookButton}
-            </Link>
+            </button>
           </div>
         ))}
         <h1

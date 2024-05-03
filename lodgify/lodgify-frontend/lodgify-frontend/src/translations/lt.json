@@ -77,6 +77,7 @@
         },
         "successMessage": "Būstas sėkmingai užregistruotas!"
     },
+    "logout": "ATSIJUNGTI",
     "home": {
         "title": "RASKITE NAKVYNĖS NAUDODAMI FILTRĄ!",
         "homeNav": "PRADŽIA",

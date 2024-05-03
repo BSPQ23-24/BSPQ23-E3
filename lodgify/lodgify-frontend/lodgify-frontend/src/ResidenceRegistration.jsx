@@ -64,40 +64,49 @@ const ResidenceRegistration = () => {
 
     return (
         <div className = "text-center">
-            <nav className="bg-gray-50 p-4 shadow-md w-full">
-              <div className="flex justify-between items-center">
-                <img src={logo} alt="Lodgify" className="h-5 md:h-12 px-12" />
-                <ul className="flex">
-                  <li>
-                    <Link
-                      to="/home"
-                      style={{ color: "rgb(4, 18, 26)" }}
-                      className="font-bold px-12"
-                    >
-                      {translations.home.homeNav}
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/registerResidence"
-                      style={{ color: "rgb(4, 18, 26)" }}
-                      className="font-bold px-12"
-                    >
-                      {translations.home.residenceRegNav}
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/profile"
-                      style={{ color: "rgb(4, 18, 26)" }}
-                      className="font-bold px-12"
-                    >
-                      {translations.home.profileNav}
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-            </nav>
+        <nav className="bg-gray-50 p-4 shadow-md w-full">
+        <div className="flex justify-between items-center">
+          <img src={logo} alt="Lodgify" className="h-5 md:h-12 px-12" />
+          <ul className="flex">
+            <li>
+              <Link
+                to="/home"
+                style={{ color: "rgb(4, 18, 26)" }}
+                className="font-bold px-12"
+              >
+                {translations.home.homeNav}
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/registerResidence"
+                style={{ color: "rgb(4, 18, 26)" }}
+                className="font-bold px-12"
+              >
+                {translations.home.residenceRegNav}
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/profile"
+                style={{ color: "rgb(4, 18, 26)" }}
+                className="font-bold px-12"
+              >
+                {translations.home.profileNav}
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/"
+                style={{ color: "rgb(4, 18, 26)" }}
+                className="font-bold px-12"
+              >
+                {translations.logout}
+              </Link>
+            </li>
+          </ul>
+        </div>
+      </nav>
             <h1 className = "font-bold text-3xl mt-8">{translations.residenceRegistration.welcome}{user ? user.name : 'Invitado'}!</h1>
             {user ? (
                 user.user_type === 'Host' ?
