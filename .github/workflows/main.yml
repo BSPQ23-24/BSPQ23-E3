@@ -16,11 +16,19 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Verify SQL file exists
+        run: |
+          if [ ! -f lodgify/sql/create-db.sql ]; then
+            echo "SQL file not found!"
+            exit 1
+          fi
+
       - name: Prepare database for integration tests
         run: |
           sudo /etc/init.d/mysql start
           mysql -uroot -proot < lodgify/sql/create-db.sql
           mvn --batch-mode --update-snapshots datanucleus:enhance datanucleus:schema-create
+        working-directory: lodgify
 
       - name: Build with Maven
         run: mvn --batch-mode --update-snapshots package
