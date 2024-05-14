@@ -19,7 +19,7 @@ jobs:
       - name: Prepare database for integration tests
         run: |
           sudo /etc/init.d/mysql start
-          mysql -uroot -proot < sql/create-db.sql
+          mysql -uroot -proot < lodgify/sql/create-db.sql
           mvn --batch-mode --update-snapshots datanucleus:enhance datanucleus:schema-create
 
       - name: Build with Maven
