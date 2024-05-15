@@ -6,6 +6,8 @@ import es from './translations/es.json';
 import lt from './translations/lt.json';
 import { useUser } from "./contexts/UserContext";
 import { useLocale } from './contexts/LocaleContext.jsx';
+import Datepicker from "react-tailwindcss-datepicker";
+
 const useQuery = () => {
   return new URLSearchParams(useLocation().search);
 };
@@ -27,6 +29,16 @@ const ReservationPage = () => {
     es,
     lt
   }[locale];
+
+  const [value, setValue] = useState({
+    startDate: new Date(),
+    endDate: new Date().setMonth(11)
+  });
+
+  const handleValueChange = newValue => {
+    console.log("newValue:", newValue);
+    setStartDate(newValue);
+  };
 
   useEffect(() => {
     // Fetch residence data
@@ -107,6 +119,8 @@ const ReservationPage = () => {
                 {translations.home.homeNav}
               </Link>
             </li>
+            {user ? (
+                user.user_type === 'Host' ?
             <li>
               <Link
                 to="/registerResidence"
@@ -116,6 +130,7 @@ const ReservationPage = () => {
                 {translations.home.residenceRegNav}
               </Link>
             </li>
+            : null): null }
             <li>
               <Link
                 to="/bookings"
@@ -149,21 +164,9 @@ const ReservationPage = () => {
       <h1 className="font-bold text-3xl mt-8">Reservation Process</h1>
       <div className="bg-gray-100 m-8 mb-8 mx-auto p-8 rounded-lg shadow-top text-center w-2/5">
         <form onSubmit={handleSubmit}>
-          <div className="flex mt-4 justify-center">
-            <input
-              type="text"
-              placeholder="Start Date (DD/MM/YY)"
-              className="m-4 p-2 w-56 rounded-md border"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-            />
-            <input
-              type="text"
-              placeholder="End Date (DD/MM/YY)"
-              className="m-4 p-2 w-56 rounded-md border"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-            />
+          <div className="flex flex-col mt-4 items-center">
+            <p className="font-bold text-md pb-2">Introduce the dates</p>
+            <Datepicker value={value} onChange={handleValueChange} />
           </div>
           {error && <div className="text-red-500 mb-2">{error}</div>}
           {success && <div className="text-green-500 mb-2">{success}</div>}

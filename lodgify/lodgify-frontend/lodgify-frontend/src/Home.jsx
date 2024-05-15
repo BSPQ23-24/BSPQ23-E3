@@ -73,6 +73,8 @@ const HomePage = () => {
                 {translations.home.homeNav}
               </Link>
             </li>
+            {user ? (
+                user.user_type === 'Host' ?
             <li>
               <Link
                 to="/registerResidence"
@@ -82,6 +84,7 @@ const HomePage = () => {
                 {translations.home.residenceRegNav}
               </Link>
             </li>
+            : null): null }
             <li>
               <Link
                 to="/bookings"

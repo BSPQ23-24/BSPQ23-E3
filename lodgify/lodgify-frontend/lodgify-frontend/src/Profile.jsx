@@ -137,6 +137,8 @@ const Profile = () => {
                 {translations.home.homeNav}
               </Link>
             </li>
+            {user ? (
+                user.user_type === 'Host' ?
             <li>
               <Link
                 to="/registerResidence"
@@ -146,6 +148,7 @@ const Profile = () => {
                 {translations.home.residenceRegNav}
               </Link>
             </li>
+            : null): null }
             <li>
               <Link
                 to="/bookings"

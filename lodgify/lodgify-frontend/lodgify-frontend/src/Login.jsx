@@ -11,7 +11,6 @@ import { useUser } from "./contexts/UserContext.jsx";
 import { useLocale } from './contexts/LocaleContext.jsx';
 
 const Login = () => {
-  const [userType, setUserType] = useState("User");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -29,8 +28,7 @@ const Login = () => {
     e.preventDefault();
     const credentials = {
       username: username,
-      password: password,
-      user_type: userType
+      password: password
     };
 
     console.log(credentials);
@@ -88,16 +86,6 @@ const Login = () => {
             <img src={logo} alt="Logo" className="h-10 md:h-48" />
           </div>
           <form onSubmit={handleSubmit}>
-            <div className="flex mt-4 justify-center">
-              <select
-                className="mb-2 p-2 rounded-md border"
-                value={userType}
-                onChange={(e) => setUserType(e.target.value)}
-              >
-                <option value="User">{translations.login.userType.traveller}</option>
-                <option value="Host">{translations.login.userType.host}</option>
-              </select>
-            </div>
             <div className="flex justify-center mt-4">
               <input
                 type="text"

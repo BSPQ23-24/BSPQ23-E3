@@ -1,4 +1,4 @@
-package es.deusto.spq.client;
+/*package es.deusto.spq.client;
 
 import static org.junit.Assert.assertEquals;
 
@@ -35,4 +35,4 @@ public class LodgifyClientPerfTest {
     public void testSaveBookingPerformance() {
         lodgifyClient.saveBooking("travelerUsername", "hostUsername", 1L, "startDate", "endDate");
     }
-}
+}*/

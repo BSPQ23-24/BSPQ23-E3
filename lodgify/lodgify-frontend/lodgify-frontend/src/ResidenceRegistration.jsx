@@ -77,15 +77,18 @@ const ResidenceRegistration = () => {
                 {translations.home.homeNav}
               </Link>
             </li>
-            <li>
-              <Link
-                to="/registerResidence"
-                style={{ color: "rgb(4, 18, 26)" }}
-                className="font-bold px-12"
-              >
-                {translations.home.residenceRegNav}
-              </Link>
-            </li>
+            {user ? (
+                user.user_type === 'Host' ?
+              <li>
+                <Link
+                  to="/registerResidence"
+                  style={{ color: "rgb(4, 18, 26)" }}
+                  className="font-bold px-12"
+                >
+                  {translations.home.residenceRegNav}
+                </Link>
+              </li>
+            : null): null}
             <li>
               <Link
                 to="/bookings"

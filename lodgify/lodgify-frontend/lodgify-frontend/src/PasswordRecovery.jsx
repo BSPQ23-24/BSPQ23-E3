@@ -38,6 +38,8 @@ const PasswordRecoveryPage = () => {
                 {translations.home.homeNav}
               </Link>
             </li>
+            {user ? (
+                user.user_type === 'Host' ?
             <li>
               <Link
                 to="/registerResidence"
@@ -47,6 +49,7 @@ const PasswordRecoveryPage = () => {
                 {translations.home.residenceRegNav}
               </Link>
             </li>
+            : null): null }
             <li>
               <Link
                 to="/profile"

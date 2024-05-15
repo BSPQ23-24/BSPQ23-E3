@@ -17,7 +17,6 @@
 		<jersey.version>2.35</jersey.version>
 		<server.hostname>127.0.0.1</server.hostname>
 		<server.port>8080</server.port>
-		<doxygen.config.file>${basedir}/src/main/resources/Doxyfile</doxygen.config.file>
 	</properties>
 
 	<dependencyManagement>
@@ -208,20 +207,21 @@
     			<groupId>org.codehaus.mojo</groupId>
     			<artifactId>exec-maven-plugin</artifactId>
     			<version>1.6.0</version>
-    			<executions>
+    			 <executions>
         			<execution>
-            			<id>npm install</id>
-            			<goals>
-                			<goal>exec</goal>
-            			</goals>
-            			<phase>generate-sources</phase>
-            			<configuration>
-                			<workingDirectory>lodgify-frontend/lodgify-frontend</workingDirectory>
-                			<executable>npm</executable>
-                			<arguments>
-                    			<argument>install</argument>
-                			</arguments>
-            			</configuration>
+        			    <id>npm install</id>
+        			    <goals>
+        			        <goal>exec</goal>
+        			    </goals>
+        			    <phase>generate-sources</phase>
+        			    <configuration>
+        			        <workingDirectory>lodgify-frontend/lodgify-frontend</workingDirectory>
+        			        <executable>npm</executable>
+        			        <arguments>
+        			            <argument>install</argument>
+        			            <argument>react-tailwindcss-datepicker</argument>
+        			        </arguments>
+        			    </configuration>
         			</execution>
         			<execution>
             			<id>npm run build</id>
@@ -309,14 +309,6 @@
 				<configuration>
 					<show>private</show>
 					<nohelp>true</nohelp>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>com.soebes.maven.plugins</groupId>
-				<artifactId>doxygen-maven-plugin</artifactId>
-				<version>1.1.0</version>
-				<configuration>
-					<configurationFile>${doxygen.config.file}</configurationFile>
 				</configuration>
 			</plugin>
 		</plugins>
