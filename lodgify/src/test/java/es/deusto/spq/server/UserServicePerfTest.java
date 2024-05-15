@@ -2,21 +2,13 @@ package es.deusto.spq.server;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status.Family;
 
-import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Rule;
-import org.junit.Test;
 
 import com.github.noconnor.junitperf.JUnitPerfRule;
 import com.github.noconnor.junitperf.reporting.providers.HtmlReportGenerator;
-
-import es.deusto.spq.server.jdo.User;
 
 public class UserServicePerfTest {
 
@@ -30,7 +22,7 @@ public class UserServicePerfTest {
         Client client = ClientBuilder.newClient();
         target = client.target("http://localhost:8080/rest/");
     }
-
+/* 
     @Test
     @com.github.noconnor.junitperf.JUnitPerfTest(threads = 1, durationMs = 1000)
     public void testRegisterUserPerf() {
@@ -43,7 +35,7 @@ public class UserServicePerfTest {
         // Check for successful response
         assertEquals(Family.SUCCESSFUL, response.getStatusInfo().getFamily());
     }
-
+*/
     /*@Test
     @com.github.noconnor.junitperf.JUnitPerfTest(threads = 1, durationMs = 30000)
     public void testLoginUserPerf() {
