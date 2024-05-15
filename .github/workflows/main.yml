@@ -10,30 +10,41 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
       
-      - name: Set up JDK 17
+      - name: Set up JDK 21
         uses: actions/setup-java@v3
         with:
-          java-version: '17'
+          java-version: '21'
           distribution: 'temurin'
 
-      - name: Verify SQL file exists
+      - name: Clean and compile the project
         run: |
-          if [ ! -f lodgify/sql/create-db.sql ]; then
-            echo "SQL file not found!"
-            exit 1
-          fi
+          cd lodgify
+          mvn --batch-mode clean compile
 
-      - name: Prepare database for integration tests
-        run: |
+      - name: Prepare database for testing
+        run: | 
           sudo /etc/init.d/mysql start
-          mysql -uroot -proot < lodgify/sql/create-db.sql
+          cd lodgify
+          mysql -uroot -proot < sql/create-db.sql
           mvn --batch-mode --update-snapshots datanucleus:enhance datanucleus:schema-create
-        working-directory: lodgify
 
-      - name: Build with Maven
-        run: mvn --batch-mode --update-snapshots package
-        working-directory: lodgify
+      - name: Start the server in the background
+        run: |
+          cd lodgify
+          mvn --batch-mode jetty:run &
+          sleep 10
 
-      - name: Run tests
-        run: mvn test
-        working-directory: lodgify
+      - name: Run the unit tests
+        run: |
+          cd lodgify
+          mvn test
+
+      - name: Execute integration tests
+        run: |
+          cd lodgify
+          mvn --batch-mode --update-snapshots verify -Pintegration-tests
+
+      - name: Execute performance tests
+        run: |
+          cd lodgify
+          mvn --batch-mode --update-snapshots verify -Pperformance-tests
