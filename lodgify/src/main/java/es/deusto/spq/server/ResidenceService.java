@@ -1,41 +1,57 @@
 package es.deusto.spq.server;
 
-import es.deusto.spq.server.jdo.Residence;
+import java.util.List;
 
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
+import javax.jdo.Query;
 import javax.jdo.Transaction;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.jdo.Query;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.QueryParam;
 
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import java.util.List;
+import es.deusto.spq.server.jdo.Residence;
 
+/**
+ * @class ResidenceService
+ * @brief Provides RESTful web services for managing residences.
+ */
 @Path("/residence")
 @Produces(MediaType.APPLICATION_JSON)
 public class ResidenceService {
 
+    /** The logger instance for this class. */
     protected static final Logger logger = LogManager.getLogger();
 
+    /** The PersistenceManager instance for interacting with the database. */
     private PersistenceManager pm = null;
+
+    /** The Transaction instance for database transactions. */
     private Transaction tx = null;
 
+    /**
+     * Constructor for ResidenceService class.
+     * Initializes the PersistenceManager and Transaction objects.
+     */
     public ResidenceService() {
         PersistenceManagerFactory pmf = JDOHelper.getPersistenceManagerFactory("datanucleus.properties");
         this.pm = pmf.getPersistenceManager();
         this.tx = pm.currentTransaction();
     }
 
+    /**
+     * Registers a new residence in the database.
+     * @param residence The residence to be registered.
+     * @return A Response indicating the success or failure of the registration process.
+     */
     @POST
     @Path("/register")
     public Response registerUser(Residence residence) {
@@ -86,6 +102,11 @@ public class ResidenceService {
         }
     }
 
+    /**
+     * Searches for residences based on the specified address.
+     * @param address The address to search for residences.
+     * @return A Response containing a list of residences that match the address or an error message if none are found.
+     */
     @GET
     @Path("/search")
     public Response searchResidences(@QueryParam("address") String address) {
@@ -114,6 +135,11 @@ public class ResidenceService {
         }
     }
 
+    /**
+     * Deletes a residence based on the specified residence ID.
+     * @param residenceId The ID of the residence to be deleted.
+     * @return A Response indicating the success or failure of the deletion process.
+     */
     @POST
     @Path("/delete")
     public Response deleteResidence(@QueryParam("residence_id") Long residenceId) {
@@ -148,6 +174,11 @@ public class ResidenceService {
         }
     }
 
+    /**
+     * Searches for residences based on the specified user ID.
+     * @param user_id The ID of the user whose residences are to be searched.
+     * @return A Response containing a list of residences that match the user ID or an error message if none are found.
+     */
     @GET
     @Path("/searchByUserID")
     public Response searchResidencesID(@QueryParam("user_id") String user_id) {
@@ -175,6 +206,11 @@ public class ResidenceService {
         }
     }
 
+    /**
+     * Retrieves a residence based on the specified residence ID.
+     * @param residence_id The ID of the residence to be retrieved.
+     * @return A Response containing the residence details or an error message if none is found.
+     */
     @GET
     @Path("/searchByResidenceID")
     public Response getResidenceByID(@QueryParam("residence_id") Long residence_id) {

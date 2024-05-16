@@ -1,6 +1,6 @@
 package es.deusto.spq.server;
 
-import es.deusto.spq.server.jdo.Booking;
+import java.util.List;
 
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
@@ -15,26 +15,44 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.List;
 
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import es.deusto.spq.server.jdo.Booking;
+
+/**
+ * @class BookingService
+ * @brief Provides RESTful web services for managing bookings.
+ */
 @Path("/booking")
 @Produces(MediaType.APPLICATION_JSON)
 public class BookingService {
 
+    /** The logger instance for this class. */
     protected static final Logger logger = LogManager.getLogger();
 
+    /** The PersistenceManager instance for interacting with the database. */
     private PersistenceManager pm = null;
+
+    /** The Transaction instance for database transactions. */
     private Transaction tx = null;
 
+    /**
+     * Constructor for BookingService class.
+     * Initializes the PersistenceManager and Transaction objects.
+     */
     public BookingService() {
         PersistenceManagerFactory pmf = JDOHelper.getPersistenceManagerFactory("datanucleus.properties");
         this.pm = pmf.getPersistenceManager();
         this.tx = pm.currentTransaction();
     }
 
+    /**
+     * Saves a new booking in the database.
+     * @param booking The booking to be saved.
+     * @return A Response indicating the success or failure of the save operation.
+     */
     @POST
     @Path("/save")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -57,6 +75,11 @@ public class BookingService {
         }
     }
 
+    /**
+     * Searches for bookings based on the specified user username.
+     * @param user_username The username of the user whose bookings are to be searched.
+     * @return A Response containing a list of bookings that match the username or an error message if none are found.
+     */
     @GET
     @Path("/searchByUserUsername")
     public Response searchByUserID(@QueryParam("user_username") String user_username) {
@@ -84,6 +107,11 @@ public class BookingService {
         }
     }
 
+    /**
+     * Deletes a booking based on the specified booking ID.
+     * @param booking_id The ID of the booking to be deleted.
+     * @return A Response indicating the success or failure of the deletion process.
+     */
     @POST
     @Path("/deleteBooking")
     public Response deleteBookingByID(@QueryParam("booking_id") Long booking_id) {
@@ -117,6 +145,10 @@ public class BookingService {
         }
     }
 
+    /**
+     * Sets the PersistenceManagerFactory for this service.
+     * @param pmf The PersistenceManagerFactory to be set.
+     */
     public void setPersistenceManagerFactory(PersistenceManagerFactory pmf) {
         this.pm = pmf.getPersistenceManager();
         this.tx = pm.currentTransaction();

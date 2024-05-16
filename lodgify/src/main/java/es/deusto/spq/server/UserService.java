@@ -1,40 +1,60 @@
+/**
+ * @file UserService.java
+ * @brief Contains the implementation of the UserService class.
+ */
 package es.deusto.spq.server;
 
-import es.deusto.spq.server.helper.Hashing;
-import es.deusto.spq.server.jdo.User;
+import java.util.List;
 
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
+import javax.jdo.Query;
 import javax.jdo.Transaction;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.jdo.Query;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import java.util.List;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import es.deusto.spq.server.helper.Hashing;
+import es.deusto.spq.server.jdo.User;
+
+/**
+ * @class UserService
+ * @brief Provides RESTful web services for user management.
+ */
 @Path("/user")
 @Produces(MediaType.APPLICATION_JSON)
 public class UserService {
 
+    /** The logger instance for this class. */
     protected static final Logger logger = LogManager.getLogger();
 
+    /** The PersistenceManager instance for interacting with the database. */
     private PersistenceManager pm = null;
+
+    /** The Transaction instance for database transactions. */
     private Transaction tx = null;
 
+    /**
+     * Constructor for UserService class.
+     * Initializes the PersistenceManager and Transaction objects.
+     */
     public UserService() {
         PersistenceManagerFactory pmf = JDOHelper.getPersistenceManagerFactory("datanucleus.properties");
         this.pm = pmf.getPersistenceManager();
         this.tx = pm.currentTransaction();
     }
 
+    /**
+     * Retrieves a simple greeting message.
+     * @return A Response containing the greeting message.
+     */
     @GET
     @Path("/hello")
     @Produces(MediaType.TEXT_PLAIN)
@@ -42,6 +62,11 @@ public class UserService {
         return Response.ok("Hello world!").build();
     }
 
+    /**
+     * Registers a new user in the database.
+     * @param user The user to be registered.
+     * @return A Response indicating the success or failure of the registration process.
+     */
     @POST
     @Path("/register")
     public Response registerUser(User user) {
@@ -100,6 +125,11 @@ public class UserService {
         }
     }
 
+    /**
+     * Logs in an existing user.
+     * @param user The user to log in.
+     * @return A Response containing user information if login is successful, or an error response otherwise.
+     */
     @POST
     @Path("/login")
     public Response loginUser(User user) {
@@ -147,6 +177,11 @@ public class UserService {
         }
     }
 
+    /**
+     * Modifies an existing user's information.
+     * @param user The user whose information needs to be modified.
+     * @return A Response indicating the success or failure of the modification process.
+     */
     @POST
     @Path("/modify")
     public Response modifyUser(User user) {
