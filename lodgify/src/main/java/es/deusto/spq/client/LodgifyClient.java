@@ -11,9 +11,13 @@ import javax.ws.rs.core.Response.Status;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import es.deusto.spq.server.jdo.User;
-import es.deusto.spq.server.jdo.Booking;
 
+import es.deusto.spq.server.jdo.Booking;
+import es.deusto.spq.server.jdo.User;
+
+/**
+ * Client class for interacting with the Lodgify server.
+ */
 public class LodgifyClient {
 
 	protected static Logger logger = LogManager.getLogger();
@@ -24,6 +28,11 @@ public class LodgifyClient {
 	private Client client;
 	private WebTarget webTarget;
 
+	/**
+     * Constructor for the LodgifyClient.
+     * @param hostname The hostname of the server.
+     * @param port The port of the server.
+     */
 	public LodgifyClient(String hostname, String port) {
 		client = ClientBuilder.newClient();
 		webTarget = client.target(String.format("http://%s:%s/rest", hostname, port));
@@ -35,6 +44,20 @@ public class LodgifyClient {
 		}
 	}
 
+	/**
+     * Registers a user on the server.
+     * @param username The username of the user.
+     * @param password The password of the user.
+     * @param name The name of the user.
+     * @param surname The surname of the user.
+     * @param phone_number The phone number of the user.
+     * @param email The email of the user.
+     * @param user_type The type of user.
+     * @param id_card The ID card of the user.
+     * @param bank_account The bank account of the user.
+     * @param social_SN The social security number of the user.
+     * @param address The address of the user.
+     */
 	public void registerUser(String username, String password, String name, String surname, String phone_number,
 			String email, String user_type, String id_card, int bank_account, int social_SN, String address) {
 		WebTarget registerUserWebTarget = webTarget.path("user/register");
@@ -50,6 +73,14 @@ public class LodgifyClient {
 		}
 	}
 
+	/**
+     * Saves a booking on the server.
+     * @param travelerUsername The username of the traveler.
+     * @param hostUsername The username of the host.
+     * @param residenceId The ID of the residence.
+     * @param startDate The start date of the booking.
+     * @param endDate The end date of the booking.
+     */
 	public void saveBooking(String travelerUsername, String hostUsername, Long residenceId, String startDate,
 			String endDate) {
 		WebTarget saveBookingWebTarget = webTarget.path("booking/save");
@@ -102,6 +133,10 @@ public class LodgifyClient {
 		this.webTarget = webTarget;
 	}
 
+	/**
+     * Main method to run the LodgifyClient.
+     * @param args Command-line arguments.
+     */
 	public static void main(String[] args) {
 		if (args.length != 2) {
 			logger.info("Use: java Client.Client [host] [port]");
