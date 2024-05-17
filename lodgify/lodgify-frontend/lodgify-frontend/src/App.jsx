@@ -21,6 +21,7 @@ const App = () => {
                 <Route path="/passwordRecovery" element={<PasswordRecoveryPage />} />
                 <Route path="/reservation" element={<ReservationPage />} />
                 <Route path="/bookings" element={<Bookings />} />
+                <Route path="/payment" element={<PaymentForm />} />
             </Routes>
         </Router>
     );

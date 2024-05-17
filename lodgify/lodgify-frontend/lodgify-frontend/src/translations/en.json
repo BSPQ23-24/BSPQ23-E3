@@ -94,5 +94,13 @@
     },
     "footer": {
       "copyright": "© 2024 Lodgify. All rights reserved."
-    }
+    },
+      "payment": {
+        "title": "Payment Information",
+        "name": "Name on Card",
+        "cardNumber": "Card Number",
+        "cvv": "CVV",
+        "submit": "Submit Payment",
+        "successMessage": "Payment Successful!"
+      }
 }

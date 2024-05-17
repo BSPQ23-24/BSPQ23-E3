@@ -95,5 +95,13 @@
     },
     "footer": {
         "copyright": "© 2024 Lodgify. Visos teisės saugomos."
+    },
+    "payment": {
+      "title": "Mokėjimo Informacija",
+      "name": "Vardas Ant Kortelės",
+      "cardNumber": "Kortelės Numeris",
+      "cvv": "CVV",
+      "submit": "Pateikti Mokėjimą",
+      "successMessage": "Mokėjimas Sėkmingas!"
     }
 }
