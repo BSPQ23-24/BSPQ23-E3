@@ -1,0 +1,15 @@
+networks:
+  my_network:
+
+services:
+  lodgify:
+    container_name: lodgify
+    build: .
+    ports:
+      - "8080:8080"
+    expose:
+      - "8080"
+    command: "mvn jetty:run"
+    restart: "always"
+    networks:
+      - my_network
