@@ -18,6 +18,7 @@ import javax.ws.rs.core.Response;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import es.deusto.spq.server.jdo.Booking;
 import es.deusto.spq.server.jdo.Residence;
 
 /**
@@ -49,8 +50,10 @@ public class ResidenceService {
 
     /**
      * Registers a new residence in the database.
+     * 
      * @param residence The residence to be registered.
-     * @return A Response indicating the success or failure of the registration process.
+     * @return A Response indicating the success or failure of the registration
+     *         process.
      */
     @POST
     @Path("/register")
@@ -104,8 +107,10 @@ public class ResidenceService {
 
     /**
      * Searches for residences based on the specified address.
+     * 
      * @param address The address to search for residences.
-     * @return A Response containing a list of residences that match the address or an error message if none are found.
+     * @return A Response containing a list of residences that match the address or
+     *         an error message if none are found.
      */
     @GET
     @Path("/search")
@@ -137,6 +142,7 @@ public class ResidenceService {
 
     /**
      * Deletes a residence based on the specified residence ID.
+     * 
      * @param residenceId The ID of the residence to be deleted.
      * @return A Response indicating the success or failure of the deletion process.
      */
@@ -144,25 +150,38 @@ public class ResidenceService {
     @Path("/delete")
     public Response deleteResidence(@QueryParam("residence_id") Long residenceId) {
         if (residenceId == null) {
-            return Response.status(Response.Status.BAD_REQUEST).entity("Residence ID query parameter is required").build();
+            return Response.status(Response.Status.BAD_REQUEST).entity("Residence ID query parameter is required")
+                    .build();
         }
-    
+
         try {
             tx.begin();
             Query<Residence> query = pm.newQuery(Residence.class);
             query.setFilter("id == :residence_id");
-        
+
             @SuppressWarnings("unchecked")
             List<Residence> residences = (List<Residence>) query.execute(residenceId);
             if (residences.isEmpty()) {
                 return Response.status(Response.Status.NOT_FOUND).entity("Residence not found.").build();
             }
-        
+
             Residence residenceToDelete = residences.get(0);
             pm.deletePersistent(residenceToDelete);
             tx.commit();
+            Response response = new BookingService().searchByResidenceID(residenceId.toString());
+            if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+                @SuppressWarnings("unchecked")
+                List<Booking> bookingsToDelete = (List<Booking>) response.getEntity();
+                logger.info("Bookings associated with this residence (to delete): {}", bookingsToDelete);
+                for (Booking booking : bookingsToDelete) {
+                    new BookingService().deleteBookingByID(booking.getId());
+                }
+            } else {
+                logger.warn("No bookings found or an error occurred when searching for bookings with residence ID: {}",
+                        residenceId);
+            }
             return Response.ok().entity("Residence deleted successfully.").build();
-        
+
         } catch (Exception e) {
             if (tx.isActive()) {
                 tx.rollback();
@@ -176,8 +195,10 @@ public class ResidenceService {
 
     /**
      * Searches for residences based on the specified user ID.
+     * 
      * @param user_id The ID of the user whose residences are to be searched.
-     * @return A Response containing a list of residences that match the user ID or an error message if none are found.
+     * @return A Response containing a list of residences that match the user ID or
+     *         an error message if none are found.
      */
     @GET
     @Path("/searchByUserID")
@@ -208,8 +229,10 @@ public class ResidenceService {
 
     /**
      * Retrieves a residence based on the specified residence ID.
+     * 
      * @param residence_id The ID of the residence to be retrieved.
-     * @return A Response containing the residence details or an error message if none is found.
+     * @return A Response containing the residence details or an error message if
+     *         none is found.
      */
     @GET
     @Path("/searchByResidenceID")

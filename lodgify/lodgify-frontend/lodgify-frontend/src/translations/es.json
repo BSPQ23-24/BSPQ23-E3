@@ -56,7 +56,8 @@
       "residenceType": "Tipo de residencia",
       "price": "Precio",
       "noBookings": "¡No has realizado ninguna reserva, ve a la página de inicio para buscar alojamiento!",
-      "yourBookings": "Tus reservas"
+      "yourBookings": "Tus reservas",
+      "noResidences": "No has creado ninguna residencia, ¡¿a qué estás esperando?!"
     },
     "residenceRegistration": {
       "title": "Registro de residencia",

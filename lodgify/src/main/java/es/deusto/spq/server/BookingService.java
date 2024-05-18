@@ -50,6 +50,7 @@ public class BookingService {
 
     /**
      * Saves a new booking in the database.
+     * 
      * @param booking The booking to be saved.
      * @return A Response indicating the success or failure of the save operation.
      */
@@ -77,8 +78,11 @@ public class BookingService {
 
     /**
      * Searches for bookings based on the specified user username.
-     * @param user_username The username of the user whose bookings are to be searched.
-     * @return A Response containing a list of bookings that match the username or an error message if none are found.
+     * 
+     * @param user_username The username of the user whose bookings are to be
+     *                      searched.
+     * @return A Response containing a list of bookings that match the username or
+     *         an error message if none are found.
      */
     @GET
     @Path("/searchByUserUsername")
@@ -108,7 +112,54 @@ public class BookingService {
     }
 
     /**
+     * Searches for bookings based on the specified residence Id.
+     * 
+     * @param residenceIdStr The id of the residence whose bookings are to be
+     *                       searched.
+     * @return A Response containing a list of bookings that match the residence id
+     *         or
+     *         an error message if none are found.
+     */
+
+    @GET
+    @Path("/searchByResidenceID")
+    public Response searchByResidenceID(@QueryParam("residenceId") String residenceIdStr) {
+        if (residenceIdStr == null || residenceIdStr.trim().isEmpty()) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Residence ID query parameter is required")
+                    .build();
+        }
+
+        Long residenceId;
+        try {
+            residenceId = Long.parseLong(residenceIdStr);
+        } catch (NumberFormatException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Invalid Residence ID format").build();
+        }
+
+        Query<Booking> query = pm.newQuery(Booking.class);
+        query.setFilter("residenceId == :residenceId");
+        try {
+            logger.info("Searching for bookings with residence ID: {}", residenceId);
+            @SuppressWarnings("unchecked")
+            List<Booking> bookings = (List<Booking>) query.execute(residenceId);
+            if (bookings.isEmpty()) {
+                return Response.status(Response.Status.NOT_FOUND)
+                        .entity("No bookings found for the specified residence ID.").build();
+            }
+            logger.info("Found bookings: {}", bookings);
+            return Response.ok(bookings).build();
+        } catch (Exception e) {
+            logger.error("An error occurred while fetching the data for residence ID: {}", residenceId, e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("An error occurred while fetching the data.").build();
+        } finally {
+            pm.close();
+        }
+    }
+
+    /**
      * Deletes a booking based on the specified booking ID.
+     * 
      * @param booking_id The ID of the booking to be deleted.
      * @return A Response indicating the success or failure of the deletion process.
      */
@@ -147,6 +198,7 @@ public class BookingService {
 
     /**
      * Sets the PersistenceManagerFactory for this service.
+     * 
      * @param pmf The PersistenceManagerFactory to be set.
      */
     public void setPersistenceManagerFactory(PersistenceManagerFactory pmf) {

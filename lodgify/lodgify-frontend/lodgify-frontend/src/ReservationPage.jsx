@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import logo from "./assets/lodgify_logo.png";
-import en from './translations/en.json';
-import es from './translations/es.json';
-import lt from './translations/lt.json';
+import en from "./translations/en.json";
+import es from "./translations/es.json";
+import lt from "./translations/lt.json";
 import { useUser } from "./contexts/UserContext";
-import { useLocale } from './contexts/LocaleContext.jsx';
+import { useLocale } from "./contexts/LocaleContext.jsx";
 import Datepicker from "react-tailwindcss-datepicker";
 
 const useQuery = () => {
@@ -17,7 +17,7 @@ const ReservationPage = () => {
   const [endDate, setEndDate] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const {locale, setLocale} = useLocale();
+  const { locale, setLocale } = useLocale();
   const [residence, setResidence] = useState(null);
 
   const { user, setUser } = useUser();
@@ -27,15 +27,15 @@ const ReservationPage = () => {
   const translations = {
     en,
     es,
-    lt
+    lt,
   }[locale];
 
   const [value, setValue] = useState({
     startDate: new Date(),
-    endDate: new Date().setMonth(11)
+    endDate: new Date().setMonth(11),
   });
 
-  const handleValueChange = newValue => {
+  const handleValueChange = (newValue) => {
     console.log("newValue:", newValue);
     setStartDate(newValue);
   };
@@ -120,17 +120,18 @@ const ReservationPage = () => {
               </Link>
             </li>
             {user ? (
-                user.user_type === 'Host' ?
-            <li>
-              <Link
-                to="/registerResidence"
-                style={{ color: "rgb(4, 18, 26)" }}
-                className="font-bold px-12"
-              >
-                {translations.home.residenceRegNav}
-              </Link>
-            </li>
-            : null): null }
+              user.user_type === "Host" ? (
+                <li>
+                  <Link
+                    to="/registerResidence"
+                    style={{ color: "rgb(4, 18, 26)" }}
+                    className="font-bold px-12"
+                  >
+                    {translations.home.residenceRegNav}
+                  </Link>
+                </li>
+              ) : null
+            ) : null}
             <li>
               <Link
                 to="/bookings"

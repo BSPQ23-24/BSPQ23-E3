@@ -57,7 +57,8 @@
         "residenceType": "Būsto tipas",
         "price": "Kaina",
         "noBookings": "Nepadarėte jokių užsakymų, eikite į pagrindinį puslapį ir ieškokite nakvynės!",
-        "jūsų užsakymai": "Jūsų užsakymai"
+        "yourBookings": "Jūsų užsakymai",
+        "noResidences": "Jūs nesukūrėte jokių rezidencijų, ko laukiate?!"
     },
     "residenceRegistration": {
         "title": "Būsto registracija",

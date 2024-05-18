@@ -56,7 +56,8 @@
         "residenceType": "Residence type",
         "price": "Price",
         "noBookings": "You haven't made any bookings, go to the home page to search for accommodation!",
-        "yourBookings": "Your bookings"
+        "yourBookings": "Your bookings",
+        "noResidences": "You have not created any residences, what are you waiting for ?!"
     },
     "residenceRegistration": {
       "title": "Residence Registration",

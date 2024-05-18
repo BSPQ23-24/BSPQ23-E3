@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import en from './translations/en.json';
-import es from './translations/es.json';
-import lt from './translations/lt.json';
+import en from "./translations/en.json";
+import es from "./translations/es.json";
+import lt from "./translations/lt.json";
 import { useUser } from "./contexts/UserContext.jsx";
-import { useLocale } from './contexts/LocaleContext.jsx';
+import { useLocale } from "./contexts/LocaleContext.jsx";
 import logo from "./assets/lodgify_logo.png";
 import apartamento from "./assets/apartamento.jpg";
+import Confirmation from "./Confirmation.jsx";
 
 const Profile = () => {
   const { user, setUser } = useUser();
@@ -24,13 +25,15 @@ const Profile = () => {
   const [socialSN, setSocialSN] = useState(user.social_sn);
   const [address, setAddress] = useState(user.address);
   const [error, setError] = useState("");
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [residenceIdToDelete, setResidenceIdToDelete] = useState(null);
   const [warning, setWarning] = useState("");
-  const {locale, setLocale} = useLocale();
-  
+  const { locale, setLocale } = useLocale();
+
   const translations = {
     en,
     es,
-    lt
+    lt,
   }[locale];
 
   useEffect(() => {
@@ -56,17 +59,21 @@ const Profile = () => {
     handleSearch();
   }, [user.username]);
 
-  const handleRemove = async (residenceId, e) => {
-    e.preventDefault();
+  const handleRemove = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/rest/residence/delete?residence_id=${residenceId}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `http://localhost:8080/rest/residence/delete?residence_id=${residenceIdToDelete}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       if (response.ok) {
-        setResidences(residences.filter(residence => residence.id !== residenceId));
+        setResidences(
+          residences.filter((residence) => residence.id !== residenceIdToDelete)
+        );
         console.log("Residence removed successfully.");
       } else {
         console.log("Failed to remove residence.");
@@ -122,6 +129,15 @@ const Profile = () => {
     }
   };
 
+  const handleShowConfirmation = function (residenceId) {
+    setShowConfirmation(true);
+    setResidenceIdToDelete(residenceId);
+  };
+
+  const handleCancel = function () {
+    setShowConfirmation(false);
+  };
+
   return (
     <div className="text-center mx-auto">
       <nav className="bg-gray-50 p-4 shadow-md w-full">
@@ -138,17 +154,18 @@ const Profile = () => {
               </Link>
             </li>
             {user ? (
-                user.user_type === 'Host' ?
-            <li>
-              <Link
-                to="/registerResidence"
-                style={{ color: "rgb(4, 18, 26)" }}
-                className="font-bold px-12"
-              >
-                {translations.home.residenceRegNav}
-              </Link>
-            </li>
-            : null): null }
+              user.user_type === "Host" ? (
+                <li>
+                  <Link
+                    to="/registerResidence"
+                    style={{ color: "rgb(4, 18, 26)" }}
+                    className="font-bold px-12"
+                  >
+                    {translations.home.residenceRegNav}
+                  </Link>
+                </li>
+              ) : null
+            ) : null}
             <li>
               <Link
                 to="/bookings"
@@ -179,11 +196,15 @@ const Profile = () => {
           </ul>
         </div>
       </nav>
-      <h1 className="font-bold text-3xl mt-8 mb-8">{translations.profile.title}</h1>
+      <h1 className="font-bold text-3xl mt-8 mb-8">
+        {translations.profile.title}
+      </h1>
       <div className="bg-gray-100 p-8 rounded-lg shadow-top text-center mx-auto w-2/5">
         <form onSubmit={handleSubmit}>
           <div className="mt-4 justify-center">
-            <p className="font-bold text-md pb-2">{translations.placeholders.name}</p>
+            <p className="font-bold text-md pb-2">
+              {translations.placeholders.name}
+            </p>
             <input
               type="text"
               placeholder="Name*"
@@ -193,7 +214,9 @@ const Profile = () => {
             />
           </div>
           <div className="mt-4 justify-center">
-            <p className="font-bold text-md pb-2">{translations.placeholders.surname}</p>
+            <p className="font-bold text-md pb-2">
+              {translations.placeholders.surname}
+            </p>
             <input
               type="text"
               placeholder="Surname*"
@@ -203,7 +226,9 @@ const Profile = () => {
             />
           </div>
           <div className="mt-4 justify-center">
-            <p className="font-bold text-md pb-2">{translations.placeholders.email}</p>
+            <p className="font-bold text-md pb-2">
+              {translations.placeholders.email}
+            </p>
             <input
               type="text"
               placeholder="Email*"
@@ -213,7 +238,9 @@ const Profile = () => {
             />
           </div>
           <div className="mt-4 justify-center">
-            <p className="font-bold text-md pb-2">{translations.placeholders.phoneNumber}</p>
+            <p className="font-bold text-md pb-2">
+              {translations.placeholders.phoneNumber}
+            </p>
             <input
               type="number"
               placeholder="Phone number*"
@@ -225,7 +252,9 @@ const Profile = () => {
           {userType === "Host" && (
             <>
               <div className="mt-4 justify-center">
-                <p className="font-bold text-md pb-2">{translations.placeholders.idCard}</p>
+                <p className="font-bold text-md pb-2">
+                  {translations.placeholders.idCard}
+                </p>
                 <input
                   type="text"
                   placeholder="ID Card*"
@@ -235,7 +264,9 @@ const Profile = () => {
                 />
               </div>
               <div className="mt-4 justify-center">
-                <p className="font-bold text-md pb-2">{translations.placeholders.bankAccount}</p>
+                <p className="font-bold text-md pb-2">
+                  {translations.placeholders.bankAccount}
+                </p>
                 <input
                   type="text"
                   placeholder="Bank account*"
@@ -245,7 +276,9 @@ const Profile = () => {
                 />
               </div>
               <div className="mt-4 justify-center">
-                <p className="font-bold text-md pb-2">{translations.placeholders.socialSN}</p>
+                <p className="font-bold text-md pb-2">
+                  {translations.placeholders.socialSN}
+                </p>
                 <input
                   type="text"
                   placeholder="Social SN*"
@@ -255,7 +288,9 @@ const Profile = () => {
                 />
               </div>
               <div className="mt-4 justify-center">
-                <p className="font-bold text-md pb-2">{translations.placeholders.address}</p>
+                <p className="font-bold text-md pb-2">
+                  {translations.placeholders.address}
+                </p>
                 <input
                   type="text"
                   placeholder="Address*"
@@ -287,37 +322,68 @@ const Profile = () => {
           {translations.profile.forgorPassword}
         </Link>
       </div>
-      {user && user.user_type === 'Host' ? (
-      <div>
-        <h1 className="font-bold text-3xl mt-8 mb-8">{translations.profile.yourResidences}</h1>
-        {residences.map((residence) => (
-          <div
-            key={residence.id}
-            className="flex bg-gray-100 m-4 mb-8 p-8 rounded-lg mx-auto shadow-top items-center text-center mx-auto w-4/5"
-          >
-            <img
-              src={apartamento}
-              alt="Apartamento"
-              className="mx-auto h-10 md:h-48 w-96 p-4 rounded-3xl"
-            />
-            <p className="p-4">{translations.profile.location}: {residence.residence_address}</p>
-            <p className="p-4">{translations.profile.residenceType}: {residence.residence_type}</p>
-            <p className="p-4">{translations.profile.price}: {residence.price}€</p>
-            <div className="p-10">
-              <button onClick={(e) => handleRemove(residence.id, e)}>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="red" class="w-6 h-6">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                </svg>
-              </button>
-            </div>
+      {user && user.user_type === "Host" ? (
+        residences && residences.length > 0 ? (
+          <div>
+            <h1 className="font-bold text-3xl mt-8 mb-8">
+              {translations.profile.yourResidences}
+            </h1>
+            {residences.map((residence) => (
+              <div
+                key={residence.id}
+                className="flex bg-gray-100 m-4 mb-8 p-8 rounded-lg mx-auto shadow-top items-center text-center mx-auto w-4/5"
+              >
+                <img
+                  src={apartamento}
+                  alt="Apartamento"
+                  className="mx-auto h-10 md:h-48 w-96 p-4 rounded-3xl"
+                />
+                <p className="p-4">
+                  {translations.profile.location}: {residence.residence_address}
+                </p>
+                <p className="p-4">
+                  {translations.profile.residenceType}:{" "}
+                  {residence.residence_type}
+                </p>
+                <p className="p-4">
+                  {translations.profile.price}: {residence.price}€
+                </p>
+                <div className="p-10">
+                  <button onClick={() => handleShowConfirmation(residence.id)}>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="red"
+                      className="w-6 h-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            ))}
+            {showConfirmation && (
+              <Confirmation
+                message={`Are you sure you want to delete this residence?`}
+                onConfirm={() => handleRemove}
+                onCancel={handleCancel}
+              />
+            )}
           </div>
-        ))}
-      </div>
-      ) : (
-        null
-      )}
-      </div>
-    );
-  };
+        ) : (
+          <h1 className="font-bold text-3xl mt-8 mb-8">
+            {translations.profile.noResidences}
+          </h1>
+        )
+      ) : null}
+    </div>
+  );
+};
 
 export default Profile;
