@@ -60,6 +60,7 @@ const Profile = () => {
   }, [user.username]);
 
   const handleRemove = async () => {
+    console.log("Removing residences");
     try {
       const response = await fetch(
         `http://localhost:8080/rest/residence/delete?residence_id=${residenceIdToDelete}`,
@@ -319,7 +320,7 @@ const Profile = () => {
           to="/passwordRecovery"
           className="text-blue-500 hover:text-blue-800"
         >
-          {translations.profile.forgorPassword}
+          {translations.profile.forgotPassword}
         </Link>
       </div>
       {user && user.user_type === "Host" ? (
@@ -371,7 +372,7 @@ const Profile = () => {
             {showConfirmation && (
               <Confirmation
                 message={`Are you sure you want to delete this residence?`}
-                onConfirm={() => handleRemove}
+                onConfirm={handleRemove}
                 onCancel={handleCancel}
               />
             )}
