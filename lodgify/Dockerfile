@@ -1,9 +1,10 @@
 FROM maven:3.8.1-openjdk-11
 
 RUN apt-get update && \
-    apt-get install -y curl && \
+    apt-get install -y curl netcat && \
     curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
-    apt-get install -y nodejs
+    apt-get install -y nodejs && \
+    npm install -g npm@7
 
 WORKDIR /app
 

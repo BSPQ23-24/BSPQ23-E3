@@ -1,7 +1,24 @@
+version: '3.8'
+
 networks:
   my_network:
 
 services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: lodgifyDB
+      MYSQL_USER: spq
+      MYSQL_PASSWORD: spq
+    ports:
+      - "3307:3306"
+    networks:
+      - my_network
+    volumes:
+      - mysql_data:/var/lib/mysql
+
   lodgify:
     container_name: lodgify
     build: .
@@ -9,7 +26,18 @@ services:
       - "8080:8080"
     expose:
       - "8080"
-    command: "mvn jetty:run"
-    restart: "always"
+    command: >
+      /bin/sh -c "
+      until nc -z mysql 3306; do
+        echo 'Connecting...';
+        sleep 3;
+      done;
+      mvn jetty:run"
+    restart: always
     networks:
       - my_network
+    depends_on:
+      - mysql
+
+volumes:
+  mysql_data:
