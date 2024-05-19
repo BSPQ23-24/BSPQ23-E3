@@ -138,13 +138,15 @@ const ResidenceRegistration = () => {
                             </div>
                             <div className="flex-col mt-4 justify-center items-center">
                               <p className="font-bold text-md pb-2">{translations.residenceRegistration.placeholders.residenceType}</p>
-                                <input
-                                    type="text"
-                                    placeholder={translations.residenceRegistration.placeholders.residenceType}
-                                    className="mb-2 p-2 rounded-md border"
-                                    value={residence_type}
-                                    onChange={(e) => setResidence_type(e.target.value)}
-                                />
+                              <select
+                                className="mb-2 p-2 rounded-md border"
+                                value={residence_type}
+                                onChange={(e) => setResidence_type(e.target.value)}
+                              >
+                                <option value=""></option>
+                                <option value="Flat">Flat</option>
+                                <option value="House">House</option>
+                              </select>
                             </div>
                             <div className="flex-col mt-4 justify-center items-center">
                               <p className="font-bold text-md pb-2">{translations.residenceRegistration.placeholders.numberOfRooms}</p>

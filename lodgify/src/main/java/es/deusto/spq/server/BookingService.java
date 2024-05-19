@@ -20,6 +20,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import es.deusto.spq.server.jdo.Booking;
+import java.util.Date;
 
 /**
  * @class BookingService
@@ -48,6 +49,49 @@ public class BookingService {
         this.tx = pm.currentTransaction();
     }
 
+    
+    @POST
+    @Path("/checkAvailability")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response checkAvailability(Booking booking) {
+        if (booking.getResidenceId() == null || booking.getStartDate() == null || booking.getEndDate() == null) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Fill all the data!").build();
+        }
+    
+        Long aresidenceId = booking.getResidenceId();
+        Date startDate = booking.getStartDate();
+        Date endDate = booking.getEndDate();
+    
+        logger.info("ResidenceID: {}, StartDate: {}, EndDate: {}", aresidenceId, startDate, endDate);
+        logger.info(startDate.getClass());
+    
+        Query<Booking> query = pm.newQuery(Booking.class);
+        query.setFilter("this.residenceId == param0 && this.startDate <= param1 && this.endDate >= param2");
+        query.declareParameters("Long param0, java.util.Date param1, java.util.Date param2");
+    
+        Transaction tx = pm.currentTransaction();
+        try {
+            logger.info("Checking availability for residence ID: {} from {} to {}", aresidenceId, startDate, endDate);
+            tx.begin();
+            @SuppressWarnings("unchecked")
+            List<Booking> bookings = (List<Booking>) query.execute(aresidenceId, endDate, startDate);
+            tx.commit();
+            if (bookings.isEmpty()) {
+                return Response.ok().entity("Available").build();
+            }
+            return Response.status(Response.Status.CONFLICT).entity("Residence not available on those dates!").build();
+        } catch (Exception e) {
+            logger.error("Error checking availability: {}", e.getMessage());
+            if (tx.isActive()) {
+                tx.rollback();
+            }
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("An error occurred while checking availability!").build();
+        } finally {
+            pm.close();
+        }
+    }    
+    
     /**
      * Saves a new booking in the database.
      * 

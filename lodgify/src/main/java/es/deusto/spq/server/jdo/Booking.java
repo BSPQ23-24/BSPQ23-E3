@@ -4,6 +4,7 @@ import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
+import java.util.Date;
 
 /**
  * @class Booking
@@ -27,10 +28,10 @@ public class Booking {
     private Long residenceId;
 
     /** The start date of the booking. */
-    private String startDate;
+    private Date startDate;
 
     /** The end date of the booking. */
-    private String endDate;
+    private Date endDate;
 
     /**
      * Constructs a new Booking with the specified details.
@@ -40,7 +41,7 @@ public class Booking {
      * @param startDate The start date of the booking.
      * @param endDate The end date of the booking.
      */
-    public Booking(String travelerUsername, String hostUsername, Long residenceId, String startDate, String endDate) {
+    public Booking(String travelerUsername, String hostUsername, Long residenceId, Date startDate, Date endDate) {
         this.travelerUsername = travelerUsername;
         this.hostUsername = hostUsername;
         this.residenceId = residenceId;
@@ -116,7 +117,7 @@ public class Booking {
      * Gets the start date of the booking.
      * @return The start date.
      */
-    public String getStartDate() {
+    public Date getStartDate() {
         return startDate;
     }
 
@@ -124,7 +125,7 @@ public class Booking {
      * Sets the start date of the booking.
      * @param startDate The start date.
      */
-    public void setStartDate(String startDate) {
+    public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
 
@@ -132,7 +133,7 @@ public class Booking {
      * Gets the end date of the booking.
      * @return The end date.
      */
-    public String getEndDate() {
+    public Date getEndDate() {
         return endDate;
     }
 
@@ -140,7 +141,7 @@ public class Booking {
      * Sets the end date of the booking.
      * @param endDate The end date.
      */
-    public void setEndDate(String endDate) {
+    public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
 

@@ -14,14 +14,14 @@ const useQuery = () => {
 };
 
 const ReservationPage = () => {
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const { locale, setLocale } = useLocale();
+  const { locale } = useLocale();
   const [residence, setResidence] = useState(null);
 
-  const { user, setUser } = useUser();
+  const { user } = useUser();
   const query = useQuery();
   const residenceId = query.get("residenceId");
 
@@ -30,16 +30,6 @@ const ReservationPage = () => {
     es,
     lt,
   }[locale];
-
-  const [value, setValue] = useState({
-    startDate: new Date(),
-    endDate: new Date().setMonth(11),
-  });
-
-  const handleValueChange = (newValue) => {
-    console.log("newValue:", newValue);
-    setStartDate(newValue);
-  };
 
   useEffect(() => {
     // Fetch residence data
@@ -58,11 +48,41 @@ const ReservationPage = () => {
       .catch((error) => {
         console.error("Error fetching residence data:", error);
       });
-  }, []);
+  }, [residenceId]);
+
+  const checkAvailability = async () => {
+    const bookingData = {
+      startDate,
+      endDate,
+      residenceId: residence.id,
+    };
+
+    console.log(bookingData)
+    try {
+      const response = await fetch("http://localhost:8080/rest/booking/checkAvailability", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(bookingData),
+      });
+
+      if (response.ok) {
+        return true;
+      } else {
+        console.log(response)
+        const message = await response.text();
+        setError(message);
+        return false;
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      setError("An error occurred while checking availability.");
+      return false;
+    }
+  };
 
   const handleSubmit = async (e) => {
-    console.log(startDate)
-    console.log(endDate)
     e.preventDefault();
 
     if (!user || !residence) {
@@ -70,20 +90,19 @@ const ReservationPage = () => {
       return;
     }
 
-    // Replace user.id, hostId, and residenceId with actual IDs
-    console.log(JSON.stringify(user));
-    console.log(JSON.stringify(residence));
+    if (!await checkAvailability()) {
+      return;
+    }
+
     const bookingData = {
-      startDate: startDate,
-      endDate: endDate,
+      startDate,
+      endDate,
       travelerUsername: user.username,
-      hostUsername: residence.user_username, // Assuming you have user ID of the host available
-      residenceId: residence.id, // Assuming you have residence ID available
+      hostUsername: residence.user_username,
+      residenceId: residence.id,
     };
 
-    // Make the API call to save the booking data
     try {
-      console.log(JSON.stringify(bookingData));
       const response = await fetch("http://localhost:8080/rest/booking/save", {
         method: "POST",
         headers: {
@@ -97,8 +116,8 @@ const ReservationPage = () => {
       }
 
       // Handle success
-      setStartDate("");
-      setEndDate("");
+      setStartDate(new Date());
+      setEndDate(new Date());
       setSuccess("Residence booked successfully!");
     } catch (error) {
       // Handle error

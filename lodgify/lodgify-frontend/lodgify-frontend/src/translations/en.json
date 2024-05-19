@@ -54,7 +54,7 @@
         "yourResidences": "Your residences",
         "location": "Location",
         "residenceType": "Residence type",
-        "price": "Price",
+        "price": "Price/day",
         "noBookings": "You haven't made any bookings, go to the home page to search for accommodation!",
         "yourBookings": "Your bookings",
         "noResidences": "You have not created any residences, what are you waiting for ?!"
@@ -68,7 +68,7 @@
         "residenceAddress": "Residence address",
         "residenceType": "Residence type",
         "numberOfRooms": "Nº rooms",
-        "price": "Price"
+        "price": "Price/day"
       },
       "registerButton": "Register residence",
       "errors": {

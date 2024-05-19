@@ -54,7 +54,7 @@
       "yourResidences": "Tus alojamientos",
       "location": "Ubicación",
       "residenceType": "Tipo de residencia",
-      "price": "Precio",
+      "price": "Precio/día",
       "noBookings": "¡No has realizado ninguna reserva, ve a la página de inicio para buscar alojamiento!",
       "yourBookings": "Tus reservas",
       "noResidences": "No has creado ninguna residencia, ¡¿a qué estás esperando?!"
@@ -65,10 +65,10 @@
       "hostMessage": "Como eres un anfitrión, ¡puedes añadir residencias!",
       "guestMessage": "Lo siento, no eres un anfitrión, ¡así que no puedes añadir ninguna residencia!",
       "placeholders": {
-        "residenceAddress": "Dirección de la residencia*",
-        "residenceType": "Tipo de residencia*",
-        "numberOfRooms": "Nº de habitaciones*",
-        "price": "Precio*"
+        "residenceAddress": "Dirección de la residencia",
+        "residenceType": "Tipo de residencia",
+        "numberOfRooms": "Nº de habitaciones",
+        "price": "Precio/día"
       },
       "registerButton": "Registar residencia",
       "errors": {

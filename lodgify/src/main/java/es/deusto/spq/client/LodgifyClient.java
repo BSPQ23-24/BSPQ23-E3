@@ -8,12 +8,16 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import java.text.ParseException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import es.deusto.spq.server.jdo.Booking;
 import es.deusto.spq.server.jdo.User;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Client class for interacting with the Lodgify server.
@@ -81,8 +85,8 @@ public class LodgifyClient {
      * @param startDate The start date of the booking.
      * @param endDate The end date of the booking.
      */
-	public void saveBooking(String travelerUsername, String hostUsername, Long residenceId, String startDate,
-			String endDate) {
+	public void saveBooking(String travelerUsername, String hostUsername, Long residenceId, Date startDate,
+			Date endDate) {
 		WebTarget saveBookingWebTarget = webTarget.path("booking/save");
 		Invocation.Builder invocationBuilder = saveBookingWebTarget.request(MediaType.APPLICATION_JSON);
 
@@ -146,8 +150,20 @@ public class LodgifyClient {
 		String hostname = args[0];
 		String port = args[1];
 
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+		Date startDate = null;
+    	Date endDate = null;
+    	try {
+        	startDate = sdf.parse("2024-01-01");
+        	endDate = sdf.parse("2024-01-07");
+    	} catch (ParseException e) {
+        	logger.error("Error parsing dates", e);
+        	System.exit(1);
+    	}
+
 		LodgifyClient exampleClient = new LodgifyClient(hostname, port);
 		exampleClient.registerUser(USER, PASSWORD, "user", "user", "999999999", "user@mail.es", "User", "", 0, 0, "");
-		exampleClient.saveBooking("New", "test", 1L, "hostname", "port");
+		exampleClient.saveBooking("New", "test", 1L, startDate, endDate);
 	}
 }

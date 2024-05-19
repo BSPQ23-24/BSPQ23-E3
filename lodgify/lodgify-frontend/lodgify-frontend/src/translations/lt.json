@@ -55,7 +55,7 @@
         "yourResidences": "Jūsų gyvenamosios vietos",
         "location": "Vieta",
         "residenceType": "Būsto tipas",
-        "price": "Kaina",
+        "price": "Kaina/dieną",
         "noBookings": "Nepadarėte jokių užsakymų, eikite į pagrindinį puslapį ir ieškokite nakvynės!",
         "yourBookings": "Jūsų užsakymai",
         "noResidences": "Jūs nesukūrėte jokių rezidencijų, ko laukiate?!"
@@ -66,10 +66,10 @@
         "hostMessage": "Kadangi esate šeimininkas, galite pridėti būstus!",
         "guestMessage": "Labas, Atsiprašome, nesate šeimininkas, todėl negalite pridėti jokių būstų!",
         "placeholders": {
-          "residenceAddress": "Būsto adresas*",
-          "residenceType": "Būsto tipas*",
-          "numberOfRooms": "Kambarių skaičius*",
-          "price": "Kaina*"
+          "residenceAddress": "Būsto adresas",
+          "residenceType": "Būsto tipas",
+          "numberOfRooms": "Kambarių skaičius",
+          "price": "Kaina/dieną"
         },
         "registerButton": "Registruoti būstą",
         "errors": {

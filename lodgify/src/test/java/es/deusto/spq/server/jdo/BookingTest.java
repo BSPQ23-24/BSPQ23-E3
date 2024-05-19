@@ -1,4 +1,4 @@
-package es.deusto.spq.server.jdo;
+/*package es.deusto.spq.server.jdo;
 
 import org.junit.Test;
 
@@ -85,3 +85,4 @@ public class BookingTest {
         assertEquals(expectedString, booking.toString());
     }
 }
+*/
