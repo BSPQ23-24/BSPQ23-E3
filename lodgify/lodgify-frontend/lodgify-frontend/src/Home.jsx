@@ -1,29 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import en from './translations/en.json';
-import es from './translations/es.json';
-import lt from './translations/lt.json';
+import en from "./translations/en.json";
+import es from "./translations/es.json";
+import lt from "./translations/lt.json";
 import logo from "./assets/lodgify_logo.png";
 import apartamento from "./assets/apartamento.jpg";
 import { useUser } from "./contexts/UserContext.jsx";
-import { useLocale } from './contexts/LocaleContext.jsx';
+import { useLocale } from "./contexts/LocaleContext.jsx";
 
 const HomePage = () => {
-
   const [place, setPlace] = useState("");
   const [start_date, setStartDate] = useState("");
   const [end_date, setEndDate] = useState("");
   const [residences, setResidences] = useState([]);
   const { user, setUser } = useUser();
-  const {locale, setLocale} = useLocale();
+  const [noResidencesFound, setNoResidencesFound] = useState(false);
+  const { locale, setLocale } = useLocale();
+
   const navigate = useNavigate();
 
-  console.log(locale)
+  console.log(locale);
 
   const translations = {
     en,
     es,
-    lt
+    lt,
   }[locale];
 
   const handleSearch = async () => {
@@ -32,11 +33,15 @@ const HomePage = () => {
         `http://localhost:8080/rest/residence/search?address=${place}`
       );
       console.log(response);
-      if (!response.ok) {
+      if (response.status == 404) {
+        setNoResidencesFound(true);
+        return;
+      } else if (!response.ok) {
         throw new Error(response);
       }
       const data = await response.json();
       setResidences(data);
+      setNoResidencesFound(false);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -60,7 +65,7 @@ const HomePage = () => {
 
   return (
     <div className="flex flex-col items-center">
-            <nav className="bg-gray-50 p-4 shadow-md w-full">
+      <nav className="bg-gray-50 p-4 shadow-md w-full">
         <div className="flex justify-between items-center">
           <img src={logo} alt="Lodgify" className="h-5 md:h-12 px-12" />
           <ul className="flex">
@@ -74,17 +79,18 @@ const HomePage = () => {
               </Link>
             </li>
             {user ? (
-                user.user_type === 'Host' ?
-            <li>
-              <Link
-                to="/registerResidence"
-                style={{ color: "rgb(4, 18, 26)" }}
-                className="font-bold px-12"
-              >
-                {translations.home.residenceRegNav}
-              </Link>
-            </li>
-            : null): null }
+              user.user_type === "Host" ? (
+                <li>
+                  <Link
+                    to="/registerResidence"
+                    style={{ color: "rgb(4, 18, 26)" }}
+                    className="font-bold px-12"
+                  >
+                    {translations.home.residenceRegNav}
+                  </Link>
+                </li>
+              ) : null
+            ) : null}
             <li>
               <Link
                 to="/bookings"
@@ -116,9 +122,7 @@ const HomePage = () => {
         </div>
       </nav>
       <div className="bg-gray-100 m-20 mb-8 p-8 rounded-lg shadow-top text-center w-4/5">
-        <h1 className="font-bold text-xl">
-          {translations.home.title}
-        </h1>
+        <h1 className="font-bold text-xl">{translations.home.title}</h1>
         <form onSubmit={handleSearch}>
           <div className="flex w-full justify-center">
             <input
@@ -169,9 +173,15 @@ const HomePage = () => {
               alt="Apartamento"
               className="mx-auto h-10 md:h-48 w-96 p-4 rounded-3xl"
             />
-            <p className="p-4">{translations.home.locationLabel}: {residence.residence_address}</p>
-            <p className="p-4">{translations.home.residenceTypeLabel}: {residence.residence_type}</p>
-            <p className="p-4">{translations.home.priceLabel}: {residence.price}€</p>
+            <p className="p-4">
+              {translations.home.locationLabel}: {residence.residence_address}
+            </p>
+            <p className="p-4">
+              {translations.home.residenceTypeLabel}: {residence.residence_type}
+            </p>
+            <p className="p-4">
+              {translations.home.priceLabel}: {residence.price}€
+            </p>
             <button
               className="bg-blue-950 hover:bg-blue-500 text-white py-2 px-4 rounded-xl"
               onClick={() => handleNavigation(residence.id)}
@@ -181,6 +191,11 @@ const HomePage = () => {
           </div>
         ))}
       </div>
+      {noResidencesFound && (
+        <h1 className="font-bold text-xl mb-20 underline">
+          {translations.home.noResidencesFound}
+        </h1>
+      )}
 
       <footer>
         <p>&copy; {translations.footer.copyright}</p>

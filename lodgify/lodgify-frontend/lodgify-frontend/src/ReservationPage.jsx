@@ -57,20 +57,23 @@ const ReservationPage = () => {
       residenceId: residence.id,
     };
 
-    console.log(bookingData)
+    console.log(bookingData);
     try {
-      const response = await fetch("http://localhost:8080/rest/booking/checkAvailability", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(bookingData),
-      });
+      const response = await fetch(
+        "http://localhost:8080/rest/booking/checkAvailability",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(bookingData),
+        }
+      );
 
       if (response.ok) {
         return true;
       } else {
-        console.log(response)
+        console.log(response);
         const message = await response.text();
         setError(message);
         return false;
@@ -90,7 +93,7 @@ const ReservationPage = () => {
       return;
     }
 
-    if (!await checkAvailability()) {
+    if (!(await checkAvailability())) {
       return;
     }
 
