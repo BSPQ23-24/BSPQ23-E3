@@ -219,8 +219,9 @@
         			        <workingDirectory>lodgify-frontend/lodgify-frontend</workingDirectory>
         			        <executable>npm</executable>
         			        <arguments>
-        			            <argument>install</argument>
-        			            <argument>react-tailwindcss-datepicker</argument>
+                                <argument>install</argument>
+                                <argument>react-datepicker</argument>
+                                <argument>date-fns</argument>
         			        </arguments>
         			    </configuration>
         			</execution>

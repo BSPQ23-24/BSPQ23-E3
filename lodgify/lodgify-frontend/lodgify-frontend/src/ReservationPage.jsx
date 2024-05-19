@@ -6,7 +6,8 @@ import es from "./translations/es.json";
 import lt from "./translations/lt.json";
 import { useUser } from "./contexts/UserContext";
 import { useLocale } from "./contexts/LocaleContext.jsx";
-import Datepicker from "react-tailwindcss-datepicker";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const useQuery = () => {
   return new URLSearchParams(useLocation().search);
@@ -60,6 +61,8 @@ const ReservationPage = () => {
   }, []);
 
   const handleSubmit = async (e) => {
+    console.log(startDate)
+    console.log(endDate)
     e.preventDefault();
 
     if (!user || !residence) {
@@ -166,8 +169,25 @@ const ReservationPage = () => {
       <div className="bg-gray-100 m-8 mb-8 mx-auto p-8 rounded-lg shadow-top text-center w-2/5">
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col mt-4 items-center">
-            <p className="font-bold text-md pb-2">Introduce the dates</p>
-            <Datepicker value={value} onChange={handleValueChange} />
+            <p className="font-bold text-md pb-2">Arrival date</p>
+            <DatePicker
+              selected={startDate}
+              onChange={(date) => setStartDate(date)}
+              startDate={startDate}
+              endDate={endDate}
+              selectsStart
+              className="mt-2"
+            />
+            <p className="font-bold text-md mt-2 pb-2">Departure date</p>
+            <DatePicker
+              selected={endDate}
+              onChange={(date) => setEndDate(date)}
+              startDate={startDate}
+              endDate={endDate}
+              selectsEnd
+              minDate={startDate}
+              className="mt-2"
+            />
           </div>
           {error && <div className="text-red-500 mb-2">{error}</div>}
           {success && <div className="text-green-500 mb-2">{success}</div>}

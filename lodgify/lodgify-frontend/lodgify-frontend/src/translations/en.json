@@ -88,7 +88,7 @@
       "searchButton": "Search",
       "locationLabel": "Location",
       "residenceTypeLabel": "Residence type",
-      "priceLabel": "Price",
+      "priceLabel": "Price/day",
       "bookButton": "Book",
       "noResidencesFound": "No residences found for selected parameters",
       "myBookings": "MY BOOKINGS"

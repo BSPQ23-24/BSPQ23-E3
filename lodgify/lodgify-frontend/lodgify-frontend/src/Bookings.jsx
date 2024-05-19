@@ -8,6 +8,7 @@ import { useLocale } from "./contexts/LocaleContext.jsx";
 import logo from "./assets/lodgify_logo.png";
 import apartamento from "./assets/apartamento.jpg";
 import Confirmation from "./Confirmation.jsx";
+import { format, differenceInDays } from 'date-fns';
 
 function Bookings() {
   const [bookings, setBookings] = useState([]);
@@ -174,7 +175,7 @@ function Bookings() {
             className="flex bg-gray-100 m-4 mb-8 p-8 rounded-lg mx-auto shadow-top items-center text-center w-full"
           >
             <img
-              src={apartamento} // ensure this variable is defined or imported
+              src={apartamento}
               alt="Apartamento"
               className="mx-auto h-10 md:h-48 w-96 p-4 rounded-3xl"
             />
@@ -190,11 +191,17 @@ function Bookings() {
             <p className="p-4">
               {translations.profile.price}:{" "}
               {residences[booking.residenceId]?.price
-                ? `${residences[booking.residenceId].price}€`
+                ? `${residences[booking.residenceId].price * (differenceInDays(booking.endDate, booking.startDate) + 1)}€`
                 : "Loading..."}
             </p>
             <p className="p-4">
               {translations.login.userType.host}: {booking.hostUsername}
+            </p>
+            <p className="p-4">
+              Start date: {format(new Date(booking.startDate), 'yyyy-MM-dd')}
+            </p>
+            <p className="p-4">
+              End date: {format(new Date(booking.endDate), 'yyyy-MM-dd')}
             </p>
             <div className="p-10">
               {/* <button onClick={(e) => removeBooking(booking.id)}> */}

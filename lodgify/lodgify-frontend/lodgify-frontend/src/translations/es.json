@@ -88,7 +88,7 @@
       "searchButton": "Buscar",
       "locationLabel": "Ubicación",
       "residenceTypeLabel": "Tipo de residencia",
-      "priceLabel": "Precio",
+      "priceLabel": "Precio/día",
       "bookButton": "Reservar",
       "noResidencesFound": "No se encontraron residencias para los parámetros seleccionados",
       "myBookings": "MIS RESERVAS"
