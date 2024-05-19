@@ -24,15 +24,6 @@ services:
     build: .
     ports:
       - "8080:8080"
-    expose:
-      - "8080"
-    command: >
-      /bin/sh -c "
-      until nc -z mysql 3306; do
-        echo 'Connecting...';
-        sleep 3;
-      done;
-      mvn jetty:run"
     restart: always
     networks:
       - my_network
