@@ -20,6 +20,10 @@ Now, the client sample code can be executed in a new command window with
 
 # Docker
 
+To run the web application with docker you must set connection URL in datanucleus.properties:
+
+      javax.jdo.option.ConnectionURL=jdbc:mysql://mysql/lodgifyDB
+
 To run docker compose:
 
       docker compose up
