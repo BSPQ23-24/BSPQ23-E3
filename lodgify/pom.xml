@@ -144,7 +144,7 @@
 				<configuration>
 					<filesets>
 						<fileset>
-							<directory>${basedir}</directory>
+							<directory>${basedir}/docs</directory>
 							<includes>
 								<include>*.log</include>
 								<include>*.ods</include>
@@ -320,6 +320,32 @@
 				<configuration>
 					<configurationFile>${doxygen.config.file}</configurationFile>
 				</configuration>
+			</plugin>
+			<!-- Resources Plugin to Copy Doxygen Output -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.2.0</version>
+				<executions>
+					<execution>
+						<id>copy-doxygen-docs</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${basedir}/docs</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${project.build.directory}/doxygen/html</directory>
+									<includes>
+										<include>**/*</include>
+									</includes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
