@@ -1,4 +1,4 @@
-/*package es.deusto.spq.client;
+package es.deusto.spq.client;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -7,6 +7,7 @@ import static org.mockito.Mockito.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.Date;
 
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.InternalServerErrorException;
@@ -70,6 +71,7 @@ public class LodgifyClientTest {
         fail("Se esperaba una InternalServerErrorException al registrar usuario pero no se lanzó ninguna excepción.");
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     public void testSaveBooking() {
         WebTarget saveBookingWebTarget = mock(WebTarget.class);
@@ -79,12 +81,14 @@ public class LodgifyClientTest {
         Response response = Response.ok().build();
         when(invocationBuilder.post(any())).thenReturn(response);
 
-        lodgifyClient.saveBooking("travelerUsername", "hostUsername", 1L, "startDate", "endDate");
+        lodgifyClient.saveBooking("travelerUsername", "hostUsername", 1L, new Date(2024, 6, 2024),
+                new Date(2024, 5, 2024));
 
         verify(saveBookingWebTarget, times(1)).request(MediaType.APPLICATION_JSON);
         verify(invocationBuilder, times(1)).post(any());
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     public void testSaveBooking_Error() {
         WebTarget saveBookingWebTarget = mock(WebTarget.class);
@@ -94,7 +98,8 @@ public class LodgifyClientTest {
         when(invocationBuilder.post(any())).thenThrow(new BadRequestException());
 
         try {
-            lodgifyClient.saveBooking("travelerUsername", "hostUsername", 1L, "startDate", "endDate");
+            lodgifyClient.saveBooking("travelerUsername", "hostUsername", 1L, new Date(2024, 6, 2024),
+                    new Date(2024, 5, 2024));
         } catch (BadRequestException e) {
             verify(saveBookingWebTarget, times(1)).request(MediaType.APPLICATION_JSON);
             verify(invocationBuilder, times(1)).post(any());
@@ -124,4 +129,3 @@ public class LodgifyClientTest {
         assertEquals(expectedOutput, outContent.toString());
     }
 }
-*/
