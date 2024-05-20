@@ -57,25 +57,25 @@ const ReservationPage = () => {
       residenceId: residence.id,
     };
 
-    console.log(bookingData);
+    console.log(bookingData)
     try {
-      const response = await fetch(
-        "http://localhost:8080/rest/booking/checkAvailability",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(bookingData),
-        }
-      );
+      const response = await fetch("http://localhost:8080/rest/booking/checkAvailability", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(bookingData),
+      });
 
       if (response.ok) {
         return true;
       } else {
-        console.log(response);
+        console.log(response)
         const message = await response.text();
         setError(message);
+        setTimeout(() => {
+          setError("");
+        }, 5000);
         return false;
       }
     } catch (error) {
@@ -93,7 +93,7 @@ const ReservationPage = () => {
       return;
     }
 
-    if (!(await checkAvailability())) {
+    if (!await checkAvailability()) {
       return;
     }
 
@@ -122,6 +122,9 @@ const ReservationPage = () => {
       setStartDate(new Date());
       setEndDate(new Date());
       setSuccess("Residence booked successfully!");
+      setTimeout(() => {
+        setSuccess("");
+      }, 5000);
     } catch (error) {
       // Handle error
       setError("Failed to book residence");
@@ -211,8 +214,6 @@ const ReservationPage = () => {
               className="mt-2"
             />
           </div>
-          {error && <div className="text-red-500 mb-2">{error}</div>}
-          {success && <div className="text-green-500 mb-2">{success}</div>}
           <div className="flex mt-4 justify-center">
             <button
               type="submit"
@@ -221,6 +222,8 @@ const ReservationPage = () => {
               Book Residence
             </button>
           </div>
+          {error && <div className="text-red-500 m-2">{error}</div>}
+          {success && <div className="text-green-500 m-2">{success}</div>}
         </form>
       </div>
     </div>

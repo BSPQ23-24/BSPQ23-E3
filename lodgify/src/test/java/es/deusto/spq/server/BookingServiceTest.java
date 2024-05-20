@@ -1,6 +1,10 @@
-/*package es.deusto.spq.server;
+package es.deusto.spq.server;
 
 import static org.mockito.Mockito.*;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
@@ -33,7 +37,18 @@ public class BookingServiceTest {
 
     @Test
     public void testSaveBooking_Success() {
-        Booking booking = new Booking("travelerUsername", "hostUsername", 1L, "startDate", "endDate");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+		Date startDate = null;
+    	Date endDate = null;
+    	try {
+        	startDate = sdf.parse("2024-01-01");
+        	endDate = sdf.parse("2024-01-07");
+    	} catch (ParseException e) {
+        	System.exit(1);
+    	}
+
+        Booking booking = new Booking("travelerUsername", "hostUsername", 1L, startDate, endDate);
 
         Response response = bookingService.saveBooking(booking);
 
@@ -48,7 +63,19 @@ public class BookingServiceTest {
 
     @Test
     public void testSaveBooking_Failure() {
-        Booking booking = new Booking("travelerUsername", "hostUsername", 1L, "startDate", "endDate");
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+		Date startDate = null;
+    	Date endDate = null;
+    	try {
+        	startDate = sdf.parse("2024-01-01");
+        	endDate = sdf.parse("2024-01-07");
+    	} catch (ParseException e) {
+        	System.exit(1);
+    	}
+        
+        Booking booking = new Booking("travelerUsername", "hostUsername", 1L, startDate, endDate);
 
         doThrow(new RuntimeException("Test Exception")).when(pm).makePersistent(booking);
 
@@ -61,4 +88,3 @@ public class BookingServiceTest {
         assert response.getStatus() == 500;
     }
 }
-*/

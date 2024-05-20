@@ -121,6 +121,9 @@ const Profile = () => {
         setSocialSN(socialSN);
         setAddress(address);
         setWarning(translations.profile.successMessage);
+        setTimeout(() => {
+          setWarning("");
+        }, 5000);
         console.log("User data changed successfully!");
       } else {
         console.error(responseBody);
