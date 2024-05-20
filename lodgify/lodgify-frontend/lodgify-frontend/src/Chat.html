@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lodgify</title>
+    <link rel="icon" type="image/png" href="assets/lodgify_icon.png">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+        }
+        nav {
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        nav img {
+            height: 50px;
+        }
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+        nav ul li {
+            margin: 0 15px;
+        }
+        nav ul li a {
+            text-decoration: none;
+            color: #000;
+            font-weight: bold;
+        }
+        #main-content {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+        #search-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: center;
+            width: 80%;
+        }
+        #search-container input {
+            padding: 10px;
+            width: 200px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        #search-container button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #chat-container {
+            width: 90%;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin: 20px auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        #message-container {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+        }
+        .message {
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+            max-width: 80%; /* Limit message width */
+        }
+        .message-right {
+            background-color: #007bff;
+            color: #fff;
+            text-align: right;
+            justify-content: flex-end;
+            align-self: flex-end;
+            margin-left: 500px; /* Margen de 20px desde la derecha */
+            margin-right: auto;  /* Empuja el mensaje hacia la derecha */
+        }
+
+        .message-left {
+            background-color: #e0e0e0;
+            text-align: left;
+            justify-content: flex-start;
+            align-self: flex-start;
+            margin-right: 500px;  /* Margen de 20px desde la izquierda */
+            margin-left: auto; /* Empuja el mensaje hacia la izquierda */
+        }
+
+        #input-container {
+            width: 100%; /* Fill the container */
+            display: flex;
+            justify-content: center; /* Center button horizontally */
+            align-items: center; /* Center input and button vertically */
+        }
+        #input-container input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        #input-container button {
+            padding: 10px 15px;
+            margin-left: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <img src="assets/lodgify_logo.png" alt="Lodgify">
+        <ul>
+            <li><a href="http://localhost:8080/home">Home</a></li>
+            <li><a href="/bookings">My Bookings</a></li>
+            <li><a href="/profile">My Profile</a></li>
+            <li><a href="/logout">Log Out</a></li>
+        </ul>
+    </nav>
+    <div id="chat-container">
+        <div id="message-container"></div>
+            <div class="message-column" id="left-column"></div>
+            <div class="message-column" id="right-column"></div>
+        <div id="input-container">
+            <input type="text" id="message-input" placeholder="Write a message...">
+            <button id="send-button">Send</button>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const messageContainer = document.getElementById('message-container');
+        const messageInput = document.getElementById('message-input');
+        const sendButton = document.getElementById('send-button');
+
+        let socketId;
+
+        socket.on('connect', () => {
+            socketId = socket.id;
+        });
+
+        sendButton.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        function sendMessage() {
+            const message = messageInput.value;
+            if (message.trim() === '') return;
+            appendMessage(message, 'right');
+            socket.emit('chat message', { message, socketId });
+            messageInput.value = '';
+        }
+
+        function appendMessage(message, side) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', `message-${side}`);
+            messageElement.textContent = message;
+            messageContainer.appendChild(messageElement);
+            messageContainer.scrollTop = messageContainer.scrollHeight;
+        }
+
+        socket.on('chat message', (data) => {
+            const { message, socketId: senderId } = data;
+            if (senderId !== socketId) {
+                appendMessage(message, 'left');
+            }
+        });
+    </script>
+</body>
+</html>

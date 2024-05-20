@@ -2,13 +2,14 @@ import React, { useState, useEffect, useRef } from 'react';
 import { io } from 'socket.io-client';
 
 
+
 const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState('');
   const socketRef = useRef();
 
   useEffect(() => {
-    socketRef.current = io('http://localhost:8080');
+    socketRef.current = io('http://localhost:3000');
     
     socketRef.current.on('connect', () => {
       console.log('Connected with socket ID:', socketRef.current.id);
