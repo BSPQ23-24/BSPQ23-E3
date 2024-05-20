@@ -1,8 +1,12 @@
-/*package es.deusto.spq.server.jdo;
+package es.deusto.spq.server.jdo;
 
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class BookingTest {
 
@@ -12,8 +16,17 @@ public class BookingTest {
         String travelerUsername = "JohnDoe";
         String hostUsername = "JaneSmith";
         Long residenceId = 12345L;
-        String startDate = "2024-05-01";
-        String endDate = "2024-05-10";
+        
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+		Date startDate = null;
+    	Date endDate = null;
+    	try {
+        	startDate = sdf.parse("2024-01-01");
+        	endDate = sdf.parse("2024-01-07");
+    	} catch (ParseException e) {
+        	System.exit(1);
+    	}
 
         // Create a real instance of Booking
         Booking booking = new Booking(travelerUsername, hostUsername, residenceId, startDate, endDate);
@@ -29,8 +42,16 @@ public class BookingTest {
         String newTravelerUsername = "NewUser";
         String newHostUsername = "NewHost";
         Long newResidenceId = 54321L;
-        String newStartDate = "2024-06-01";
-        String newEndDate = "2024-06-10";
+
+        Date newStartDate = null;
+        Date newEndDate = null;
+
+    	try {
+        	newStartDate = sdf.parse("2024-01-02");
+        	newEndDate = sdf.parse("2024-01-08");
+    	} catch (ParseException e) {
+        	System.exit(1);
+    	}
 
         booking.settravelerUsername(newTravelerUsername);
         booking.sethostUsername(newHostUsername);
@@ -47,8 +68,18 @@ public class BookingTest {
 
     @Test
     public void testSetId() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+		Date startDate = null;
+    	Date endDate = null;
+    	try {
+        	startDate = sdf.parse("2024-01-01");
+        	endDate = sdf.parse("2024-01-07");
+    	} catch (ParseException e) {
+        	System.exit(1);
+    	}
         // Create a Booking instance
-        Booking booking = new Booking("JohnDoe", "JaneSmith", 12345L, "2024-05-01", "2024-05-10");
+        Booking booking = new Booking("JohnDoe", "JaneSmith", 12345L, startDate, endDate);
 
         // Set new ID
         Long newId = 98765L;
@@ -64,9 +95,18 @@ public class BookingTest {
         String travelerUsername = "JohnDoe";
         String hostUsername = "JaneSmith";
         Long residenceId = 12345L;
-        String startDate = "2024-05-01";
-        String endDate = "2024-05-10";
         Long id = 98765L;
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+		Date startDate = null;
+    	Date endDate = null;
+    	try {
+        	startDate = sdf.parse("2024-01-01");
+        	endDate = sdf.parse("2024-01-07");
+    	} catch (ParseException e) {
+        	System.exit(1);
+    	}
 
         // Create a Booking instance
         Booking booking = new Booking(travelerUsername, hostUsername, residenceId, startDate, endDate);
@@ -85,4 +125,3 @@ public class BookingTest {
         assertEquals(expectedString, booking.toString());
     }
 }
-*/
