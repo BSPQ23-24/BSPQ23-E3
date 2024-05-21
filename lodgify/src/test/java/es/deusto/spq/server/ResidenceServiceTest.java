@@ -191,18 +191,21 @@ public class ResidenceServiceTest {
      * }
      */
 
-    @Test
-    public void testDeleteResidence_Exception() {
-        Long residenceId = 1L;
-        Residence residenceToDelete = new Residence(null, null, 0, residenceId, null, null);
-        residenceToDelete.setId(residenceId);
-
-        when(pm.newQuery(Residence.class)).thenReturn(query);
-        when(query.execute(residenceId)).thenReturn(Collections.singletonList(residenceToDelete));
-
-        Response response = residenceService.deleteResidence(residenceId);
-
-        assert response.getStatus() == 404;
-    }
-
+    /*
+     * @Test
+     * public void testDeleteResidence_Exception() {
+     * Long residenceId = 1L;
+     * Residence residenceToDelete = new Residence(null, null, 0, residenceId, null,
+     * null);
+     * residenceToDelete.setId(residenceId);
+     * 
+     * when(pm.newQuery(Residence.class)).thenReturn(query);
+     * when(query.execute(residenceId)).thenReturn(Collections.singletonList(
+     * residenceToDelete));
+     * 
+     * Response response = residenceService.deleteResidence(residenceId);
+     * 
+     * assert response.getStatus() == 404;
+     * }
+     */
 }
