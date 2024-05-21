@@ -28,6 +28,33 @@ function PaymentForm() {
     setSubmitted(true);
   };
 
+  const dwnldTxtFile = () => {
+    const name = document.getElementById('name').value;
+    const cardNumber = document.getElementById('cardNumber').value;
+    const cvv = document.getElementById('cvv').value;
+
+    const header = "THANK YOU FOR CHOOSING LODGIFY, HERE IS YOUR PAYMENT RECEIPT";
+    const separator = "****************************************";
+    
+    const now = new Date();
+    const dateStr = `${now.toLocaleDateString()} ${now.toLocaleTimeString()}`;
+
+    const content = `${header}\n${separator}\nName: ${name}\nCard Number: ${cardNumber}\nCVV: ${cvv}\n${separator}\nDate: ${dateStr}`;
+    
+    const file = new Blob([content], { type: "text/plain;charset=utf-8" });
+    
+    const elem = document.createElement('a');
+    elem.href = URL.createObjectURL(file);
+    elem.download = "Receipt.txt";
+    
+    document.body.appendChild(elem);
+    elem.click();
+    
+    // Clean up
+    document.body.removeChild(elem);
+    navigate("/bookings");
+}
+
   if (submitted) {
     return <div>{translations.payment.successMessage}</div>;
   }
@@ -77,7 +104,7 @@ function PaymentForm() {
             />
           </div>
           <div className="flex items-center justify-between">
-            <button onClick={() => navigate("/bookings")}
+            <button onClick={dwnldTxtFile}
               type="submit"
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             >
