@@ -36,34 +36,6 @@
             color: #000;
             font-weight: bold;
         }
-        #main-content {
-            display: flex;
-            justify-content: center;
-            padding: 20px;
-        }
-        #search-container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            text-align: center;
-            width: 80%;
-        }
-        #search-container input {
-            padding: 10px;
-            width: 200px;
-            margin: 10px 0;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-        }
-        #search-container button {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
         #chat-container {
             width: 90%;
             background-color: #fff;
@@ -79,35 +51,33 @@
             flex: 1;
             padding: 10px;
             overflow-y: auto;
+            width: 100%;
         }
         .message {
             margin: 5px 0;
             padding: 10px;
             border-radius: 5px;
             max-width: 80%; /* Limit message width */
+            word-wrap: break-word;
         }
         .message-right {
             background-color: #007bff;
             color: #fff;
             text-align: right;
-            justify-content: flex-end;
             align-self: flex-end;
-            margin-left: 500px; /* Margen de 20px desde la derecha */
-            margin-right: auto;  /* Empuja el mensaje hacia la derecha */
+            margin-left: auto;
         }
-
         .message-left {
             background-color: #e0e0e0;
             text-align: left;
-            justify-content: flex-start;
             align-self: flex-start;
-            margin-right: 500px;  /* Margen de 20px desde la izquierda */
-            margin-left: auto; /* Empuja el mensaje hacia la izquierda */
+            margin-right: auto;
         }
-
         #input-container {
-            width: 100%; /* Fill the container */
+            width: 100%;
             display: flex;
+            padding: 10px;
+            border-top: 1px solid #ddd;
             justify-content: center; /* Center button horizontally */
             align-items: center; /* Center input and button vertically */
         }
@@ -140,8 +110,6 @@
     </nav>
     <div id="chat-container">
         <div id="message-container"></div>
-            <div class="message-column" id="left-column"></div>
-            <div class="message-column" id="right-column"></div>
         <div id="input-container">
             <input type="text" id="message-input" placeholder="Write a message...">
             <button id="send-button">Send</button>
@@ -150,7 +118,7 @@
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
-        const socket = io();
+        const socket = io('http://localhost:3000'); // Asegúrate de que la URL es correcta
         const messageContainer = document.getElementById('message-container');
         const messageInput = document.getElementById('message-input');
         const sendButton = document.getElementById('send-button');
@@ -171,7 +139,6 @@
         function sendMessage() {
             const message = messageInput.value;
             if (message.trim() === '') return;
-            appendMessage(message, 'right');
             socket.emit('chat message', { message, socketId });
             messageInput.value = '';
         }
@@ -186,9 +153,8 @@
 
         socket.on('chat message', (data) => {
             const { message, socketId: senderId } = data;
-            if (senderId !== socketId) {
-                appendMessage(message, 'left');
-            }
+            const side = senderId === socketId ? 'right' : 'left';
+            appendMessage(message, side);
         });
     </script>
 </body>
