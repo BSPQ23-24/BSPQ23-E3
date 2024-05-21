@@ -149,20 +149,20 @@ public class ResidenceService {
     @POST
     @Path(&quot;/delete&quot;)
     public Response deleteResidence(@QueryParam(&quot;residence_id&quot;) Long residenceId) {
-<span class="nc bnc" id="L152" title="All 2 branches missed.">        if (residenceId == null) {</span>
+<span class="pc bpc" id="L152" title="1 of 2 branches missed.">        if (residenceId == null) {</span>
 <span class="nc" id="L153">            return Response.status(Response.Status.BAD_REQUEST).entity(&quot;Residence ID query parameter is required&quot;)</span>
 <span class="nc" id="L154">                    .build();</span>
         }
 
         try {
-<span class="nc" id="L158">            tx.begin();</span>
-<span class="nc" id="L159">            Query&lt;Residence&gt; query = pm.newQuery(Residence.class);</span>
-<span class="nc" id="L160">            query.setFilter(&quot;id == :residence_id&quot;);</span>
+<span class="fc" id="L158">            tx.begin();</span>
+<span class="fc" id="L159">            Query&lt;Residence&gt; query = pm.newQuery(Residence.class);</span>
+<span class="fc" id="L160">            query.setFilter(&quot;id == :residence_id&quot;);</span>
 
             @SuppressWarnings(&quot;unchecked&quot;)
-<span class="nc" id="L163">            List&lt;Residence&gt; residences = (List&lt;Residence&gt;) query.execute(residenceId);</span>
-<span class="nc bnc" id="L164" title="All 2 branches missed.">            if (residences.isEmpty()) {</span>
-<span class="nc" id="L165">                return Response.status(Response.Status.NOT_FOUND).entity(&quot;Residence not found.&quot;).build();</span>
+<span class="fc" id="L163">            List&lt;Residence&gt; residences = (List&lt;Residence&gt;) query.execute(residenceId);</span>
+<span class="pc bpc" id="L164" title="1 of 2 branches missed.">            if (residences.isEmpty()) {</span>
+<span class="fc" id="L165">                return Response.status(Response.Status.NOT_FOUND).entity(&quot;Residence not found.&quot;).build();</span>
             }
 
 <span class="nc" id="L168">            Residence residenceToDelete = residences.get(0);</span>
@@ -189,7 +189,7 @@ public class ResidenceService {
 <span class="nc" id="L189">            e.printStackTrace();</span>
 <span class="nc" id="L190">            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(&quot;Error deleting residence.&quot;).build();</span>
         } finally {
-<span class="nc" id="L192">            pm.close();</span>
+<span class="fc" id="L192">            pm.close();</span>
         }
     }
 
@@ -212,12 +212,12 @@ public class ResidenceService {
 <span class="fc" id="L212">            logger.info(user_id);</span>
             @SuppressWarnings(&quot;unchecked&quot;)
 <span class="fc" id="L214">            List&lt;Residence&gt; residences = (List&lt;Residence&gt;) query.execute(user_id);</span>
-<span class="fc bfc" id="L215" title="All 2 branches covered.">            if (residences.isEmpty()) {</span>
+<span class="pc bpc" id="L215" title="1 of 2 branches missed.">            if (residences.isEmpty()) {</span>
 <span class="fc" id="L216">                return Response.status(Response.Status.NOT_FOUND)</span>
 <span class="fc" id="L217">                        .entity(&quot;No residences found for the specified user ID.&quot;).build();</span>
             }
-<span class="fc" id="L219">            logger.info(residences);</span>
-<span class="fc" id="L220">            return Response.ok(residences).build();</span>
+<span class="nc" id="L219">            logger.info(residences);</span>
+<span class="nc" id="L220">            return Response.ok(residences).build();</span>
 <span class="nc" id="L221">        } catch (Exception e) {</span>
 <span class="nc" id="L222">            e.printStackTrace();</span>
 <span class="nc" id="L223">            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
