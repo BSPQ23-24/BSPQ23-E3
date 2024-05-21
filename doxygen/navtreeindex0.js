@@ -1,5 +1,8 @@
 var NAVTREEINDEX0 =
 {
+"":[0,0,0],
+"":[0,0,0,0],
+"":[0,0,0,0,0],
 "BookingService_8java.html":[2,0,0,0,0,0,0,0,2,2],
 "BookingService_8java_source.html":[2,0,0,0,0,0,0,0,2,2],
 "Booking_8java.html":[2,0,0,0,0,0,0,0,2,1,0],
@@ -164,8 +167,5 @@ var NAVTREEINDEX0 =
 "namespacees_1_1deusto_1_1spq_1_1server_1_1helper.html":[0,0,0,0,0,2,0],
 "namespacees_1_1deusto_1_1spq_1_1server_1_1jdo.html":[0,0,0,0,0,2,1],
 "namespaces.html":[0,0],
-"pages.html":[],
-"":[0,0,0],
-"":[0,0,0,0],
-"":[0,0,0,0,0]
+"pages.html":[]
 };
