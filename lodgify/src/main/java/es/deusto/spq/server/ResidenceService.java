@@ -120,16 +120,17 @@ public class ResidenceService {
             return Response.status(Response.Status.BAD_REQUEST).entity("Address query parameter is required").build();
         }
         Query<Residence> query = pm.newQuery(Residence.class);
+        // address = address.trim();
         query.setFilter("residence_address == :address");
         try {
-            logger.info(address);
+            logger.info("Searching for residences with address: {}", address);
             @SuppressWarnings("unchecked")
             List<Residence> residences = (List<Residence>) query.execute(address);
             if (residences.isEmpty()) {
                 return Response.status(Response.Status.NOT_FOUND)
                         .entity("No residences found at the specified address.").build();
             }
-            logger.info(residences);
+            logger.info("Found residences: {}", residences);
             return Response.ok(residences).build();
         } catch (Exception e) {
             e.printStackTrace();
@@ -209,14 +210,14 @@ public class ResidenceService {
         Query<Residence> query = pm.newQuery(Residence.class);
         query.setFilter("user_username == :user_id");
         try {
-            logger.info(user_id);
+            logger.info("Searching for residences whose host is with user_id: {}", user_id);
             @SuppressWarnings("unchecked")
             List<Residence> residences = (List<Residence>) query.execute(user_id);
             if (residences.isEmpty()) {
                 return Response.status(Response.Status.NOT_FOUND)
                         .entity("No residences found for the specified user ID.").build();
             }
-            logger.info(residences);
+            logger.info("Found residences: {}", residences);
             return Response.ok(residences).build();
         } catch (Exception e) {
             e.printStackTrace();
@@ -244,7 +245,7 @@ public class ResidenceService {
         Query<Residence> query = pm.newQuery(Residence.class);
         query.setFilter("id == :residence_id");
         try {
-            logger.info(residence_id);
+            logger.info("Searching for residence with id: {}", residence_id);
             @SuppressWarnings("unchecked")
             List<Residence> residences = (List<Residence>) query.execute(residence_id);
             if (residences.isEmpty()) {
@@ -254,7 +255,7 @@ public class ResidenceService {
                 return Response.status(Response.Status.CONFLICT)
                         .entity("Multiple residences found for the specified residence ID.").build();
             }
-            logger.info(residences);
+            logger.info("Found residences: {}", residences);
             return Response.ok(residences.get(0)).build();
         } catch (Exception e) {
             e.printStackTrace();

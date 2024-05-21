@@ -35,6 +35,7 @@ const HomePage = () => {
       );
       console.log(response);
       if (response.status == 404) {
+        setResidences([]);
         setNoResidencesFound(true);
         return;
       } else if (!response.ok) {
@@ -214,7 +215,7 @@ const HomePage = () => {
         ))}
       </div>
       {noResidencesFound && (
-        <h1 className="font-bold text-xl mb-20 underline">
+        <h1 className="font-bold text-xl mb-20 underline text-red-500">
           {translations.home.noResidencesFound}
         </h1>
       )}
