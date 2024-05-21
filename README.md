@@ -46,3 +46,10 @@ You must change the following line in datanucleus.properties:
 Change to:
 
       javax.jdo.option.ConnectionURL=jdbc:mysql://localhost/lodgifyDB
+
+
+# Socket
+
+Inside BSPQ23-E3\lodgify\lodgify-frontend\lodgify-frontend (where server.js is):
+
+      npm start
