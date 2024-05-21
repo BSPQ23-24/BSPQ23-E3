@@ -1,14 +1,27 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useUser } from "./contexts/UserContext.jsx";
+import { useNavigate, Link } from "react-router-dom";
 import { io } from 'socket.io-client';
+import logo from "./assets/lodgify_logo.png";
+import { useUser } from "./contexts/UserContext.jsx";
+import { useLocale } from "./contexts/LocaleContext.jsx";
+import en from "./translations/en.json";
+import es from "./translations/es.json";
+import lt from "./translations/lt.json";
 
 const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState('');
   const [recipient, setRecipient] = useState('');
   const { user, setUser } = useUser();
+  const { locale, setLocale } = useLocale();
   const username = user.username;
   const socketRef = useRef();
+
+  const translations = {
+    en,
+    es,
+    lt,
+  }[locale];
 
   useEffect(() => {
     socketRef.current = io('http://localhost:3000');
@@ -46,48 +59,106 @@ const Chat = () => {
   };
 
   return (
-    <div style={styles.body}>
-      <div style={styles.chatContainer}>
-        <div style={styles.messageContainer}>
-          {messages.map((msg, index) => (
-            <div
-              key={index}
-              style={{
-                ...styles.message,
-                ...(msg.side === 'left' ? styles.messageLeft : styles.messageRight),
-              }}
-            >
-              {msg.message}
-            </div>
-          ))}
+    <div className='flex flex-col items-center'>
+      <nav className="bg-gray-50 p-4 shadow-md w-full">
+        <div className="flex justify-between items-center">
+          <img src={logo} alt="Lodgify" className="h-5 md:h-12 px-12" />
+          <ul className="flex">
+            <li>
+              <Link
+                to="/home"
+                style={{ color: "rgb(4, 18, 26)" }}
+                className="font-bold px-12"
+              >
+                {translations.home.homeNav}
+              </Link>
+            </li>
+            {user ? (
+              user.user_type === "Host" ? (
+                <li>
+                  <Link
+                    to="/registerResidence"
+                    style={{ color: "rgb(4, 18, 26)" }}
+                    className="font-bold px-12"
+                  >
+                    {translations.home.residenceRegNav}
+                  </Link>
+                </li>
+              ) : null
+            ) : null}
+            <li>
+              <Link
+                to="/bookings"
+                style={{ color: "rgb(4, 18, 26)" }}
+                className="font-bold px-12"
+              >
+                {translations.home.myBookings}
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/profile"
+                style={{ color: "rgb(4, 18, 26)" }}
+                className="font-bold px-12"
+              >
+                {translations.home.profileNav}
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/"
+                style={{ color: "rgb(4, 18, 26)" }}
+                className="font-bold px-12"
+              >
+                {translations.logout}
+              </Link>
+            </li>
+          </ul>
         </div>
-        <div style={styles.inputContainer}>
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="Tu nombre de usuario"
-            style={styles.input}
-          />
-          <button onClick={registerUser} style={styles.button}>Registrar</button>
-        </div>
-        <div style={styles.inputContainer}>
-          <input
-            type="text"
-            value={recipient}
-            onChange={(e) => setRecipient(e.target.value)}
-            placeholder="Nombre del destinatario"
-            style={styles.input}
-          />
-          <input
-            type="text"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
-            placeholder="Escribe un mensaje..."
-            style={styles.input}
-          />
-          <button onClick={sendMessage} style={styles.button}>Enviar</button>
+      </nav>
+      <div style={styles.body}>
+        <div style={styles.chatContainer}>
+          <div style={styles.messageContainer}>
+            {messages.map((msg, index) => (
+              <div
+                key={index}
+                style={{
+                  ...styles.message,
+                  ...(msg.side === 'left' ? styles.messageLeft : styles.messageRight),
+                }}
+              >
+                {msg.message}
+              </div>
+            ))}
+          </div>
+          <div style={styles.inputContainer}>
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Tu nombre de usuario"
+              style={styles.input}
+            />
+            <button onClick={registerUser} style={styles.button}>Registrar</button>
+          </div>
+          <div style={styles.inputContainer}>
+            <input
+              type="text"
+              value={recipient}
+              onChange={(e) => setRecipient(e.target.value)}
+              placeholder="Nombre del destinatario"
+              style={styles.input}
+            />
+            <input
+              type="text"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+              placeholder="Escribe un mensaje..."
+              style={styles.input}
+            />
+            <button onClick={sendMessage} style={styles.button}>Enviar</button>
+          </div>
         </div>
       </div>
     </div>
@@ -100,13 +171,13 @@ const styles = {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    height: '100vh',
+    height: '85vh',
     margin: 0,
     backgroundColor: '#f0f0f0',
   },
   chatContainer: {
     width: '600px',
-    height: '600px',
+    height: '500px',
     backgroundColor: '#fff',
     borderRadius: '8px',
     boxShadow: '0 0 10px rgba(0,0,0,0.1)',
@@ -126,13 +197,24 @@ const styles = {
   messageLeft: {
     backgroundColor: '#e0e0e0',
     textAlign: 'left',
+    justifyContent: 'flex-start',
     alignSelf: 'flex-start',
+    marginLeft: '20px',
+    marginRight: 'auto',
+    maxWidth: '60%',
+    padding: '10px',
+    borderRadius: '10px',
   },
   messageRight: {
     backgroundColor: '#007bff',
     color: '#fff',
     textAlign: 'right',
     alignSelf: 'flex-end',
+    marginRight: '20px',
+    marginLeft: 'auto',
+    maxWidth: '60%',
+    padding: '10px',
+    borderRadius: '10px',
   },
   inputContainer: {
     display: 'flex',

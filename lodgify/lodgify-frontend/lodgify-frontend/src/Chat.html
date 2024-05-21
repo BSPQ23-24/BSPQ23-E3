@@ -63,7 +63,7 @@
             margin: 5px 0;
             padding: 10px;
             border-radius: 5px;
-            max-width: 80%; /* Limit message width */
+            max-width: 80%; 
             word-wrap: break-word;
         }
         .message-right {
@@ -84,8 +84,8 @@
             display: flex;
             padding: 10px;
             border-top: 1px solid #ddd;
-            justify-content: center; /* Center button horizontally */
-            align-items: center; /* Center input and button vertically */
+            justify-content: center;
+            align-items: center;
         }
         #input-container input {
             flex: 1;
@@ -139,7 +139,7 @@
         document.getElementById('user-name').textContent = `@${name}`;
         document.title = `Lodgify`;
 
-        const socket = io();
+        const socket = io('http://localhost:3000');
         const messageContainer = document.getElementById('message-container');
         const messageInput = document.getElementById('message-input');
         const sendButton = document.getElementById('send-button');
@@ -175,9 +175,8 @@
 
         socket.on('chat message', (data) => {
             const { message, socketId: senderId, name: senderName } = data;
-            if (senderId !== socketId) {
-                appendMessage(`${senderName}: ${message}`, 'left');
-            }
+            const side = senderId === socketId ? 'right' : 'left';
+            appendMessage(message, side);
         });
     </script>
 </body>

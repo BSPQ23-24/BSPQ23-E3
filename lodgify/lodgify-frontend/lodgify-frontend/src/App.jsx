@@ -9,7 +9,7 @@ import Profile from "./Profile.jsx";
 import PasswordRecoveryPage from "./PasswordRecovery.jsx";
 import ReservationPage from "./ReservationPage";
 import PaymentForm from "./PaymentForm.jsx";
-//import Chat from "./Chat.jsx";
+import Chat from "./Chat.jsx";
 
 const App = () => {
   return (
@@ -24,7 +24,7 @@ const App = () => {
         <Route path="/reservation" element={<ReservationPage />} />
         <Route path="/bookings" element={<Bookings />} />
         <Route path="/payment" element={<PaymentForm />} />
-        {/* <Route path="/chat" element={<Chat />} /> */}
+        <Route path="/chat" element={<Chat />} />
       </Routes>
     </Router>
   );
