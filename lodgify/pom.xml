@@ -295,6 +295,12 @@
 						</goals>
 					</execution>
 				</executions>
+				<configuration>
+					<excludes>
+						<!-- Excluir métodos generados por DataNucleus -->
+						<exclude>**/jdo/*</exclude>
+					</excludes>
+            	</configuration>
 			</plugin>
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
