@@ -247,15 +247,15 @@ public class ResidenceService {
 <span class="fc" id="L247">            logger.info(residence_id);</span>
             @SuppressWarnings(&quot;unchecked&quot;)
 <span class="fc" id="L249">            List&lt;Residence&gt; residences = (List&lt;Residence&gt;) query.execute(residence_id);</span>
-<span class="fc bfc" id="L250" title="All 2 branches covered.">            if (residences.isEmpty()) {</span>
+<span class="pc bpc" id="L250" title="1 of 2 branches missed.">            if (residences.isEmpty()) {</span>
 <span class="fc" id="L251">                return Response.status(Response.Status.NOT_FOUND)</span>
 <span class="fc" id="L252">                        .entity(&quot;No residences found for the specified residence ID.&quot;).build();</span>
-<span class="pc bpc" id="L253" title="1 of 2 branches missed.">            } else if (residences.size() &gt; 1) {</span>
+<span class="nc bnc" id="L253" title="All 2 branches missed.">            } else if (residences.size() &gt; 1) {</span>
 <span class="nc" id="L254">                return Response.status(Response.Status.CONFLICT)</span>
 <span class="nc" id="L255">                        .entity(&quot;Multiple residences found for the specified residence ID.&quot;).build();</span>
             }
-<span class="fc" id="L257">            logger.info(residences);</span>
-<span class="fc" id="L258">            return Response.ok(residences.get(0)).build();</span>
+<span class="nc" id="L257">            logger.info(residences);</span>
+<span class="nc" id="L258">            return Response.ok(residences.get(0)).build();</span>
 <span class="nc" id="L259">        } catch (Exception e) {</span>
 <span class="nc" id="L260">            e.printStackTrace();</span>
 <span class="nc" id="L261">            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>

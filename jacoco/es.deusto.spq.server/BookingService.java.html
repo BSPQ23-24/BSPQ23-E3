@@ -54,32 +54,32 @@ public class BookingService {
     @Path(&quot;/checkAvailability&quot;)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response checkAvailability(Booking booking) {
-<span class="nc bnc" id="L57" title="All 6 branches missed.">        if (booking.getResidenceId() == null || booking.getStartDate() == null || booking.getEndDate() == null) {</span>
+<span class="pc bpc" id="L57" title="3 of 6 branches missed.">        if (booking.getResidenceId() == null || booking.getStartDate() == null || booking.getEndDate() == null) {</span>
 <span class="nc" id="L58">            return Response.status(Response.Status.BAD_REQUEST).entity(&quot;Fill all the data!&quot;).build();</span>
         }
     
-<span class="nc" id="L61">        Long aresidenceId = booking.getResidenceId();</span>
-<span class="nc" id="L62">        Date startDate = booking.getStartDate();</span>
-<span class="nc" id="L63">        Date endDate = booking.getEndDate();</span>
+<span class="fc" id="L61">        Long aresidenceId = booking.getResidenceId();</span>
+<span class="fc" id="L62">        Date startDate = booking.getStartDate();</span>
+<span class="fc" id="L63">        Date endDate = booking.getEndDate();</span>
     
-<span class="nc" id="L65">        logger.info(&quot;ResidenceID: {}, StartDate: {}, EndDate: {}&quot;, aresidenceId, startDate, endDate);</span>
-<span class="nc" id="L66">        logger.info(startDate.getClass());</span>
+<span class="fc" id="L65">        logger.info(&quot;ResidenceID: {}, StartDate: {}, EndDate: {}&quot;, aresidenceId, startDate, endDate);</span>
+<span class="fc" id="L66">        logger.info(startDate.getClass());</span>
     
-<span class="nc" id="L68">        Query&lt;Booking&gt; query = pm.newQuery(Booking.class);</span>
-<span class="nc" id="L69">        query.setFilter(&quot;this.residenceId == param0 &amp;&amp; this.startDate &lt;= param1 &amp;&amp; this.endDate &gt;= param2&quot;);</span>
-<span class="nc" id="L70">        query.declareParameters(&quot;Long param0, java.util.Date param1, java.util.Date param2&quot;);</span>
+<span class="fc" id="L68">        Query&lt;Booking&gt; query = pm.newQuery(Booking.class);</span>
+<span class="fc" id="L69">        query.setFilter(&quot;this.residenceId == param0 &amp;&amp; this.startDate &lt;= param1 &amp;&amp; this.endDate &gt;= param2&quot;);</span>
+<span class="fc" id="L70">        query.declareParameters(&quot;Long param0, java.util.Date param1, java.util.Date param2&quot;);</span>
     
-<span class="nc" id="L72">        Transaction tx = pm.currentTransaction();</span>
+<span class="fc" id="L72">        Transaction tx = pm.currentTransaction();</span>
         try {
-<span class="nc" id="L74">            logger.info(&quot;Checking availability for residence ID: {} from {} to {}&quot;, aresidenceId, startDate, endDate);</span>
-<span class="nc" id="L75">            tx.begin();</span>
+<span class="fc" id="L74">            logger.info(&quot;Checking availability for residence ID: {} from {} to {}&quot;, aresidenceId, startDate, endDate);</span>
+<span class="fc" id="L75">            tx.begin();</span>
             @SuppressWarnings(&quot;unchecked&quot;)
-<span class="nc" id="L77">            List&lt;Booking&gt; bookings = (List&lt;Booking&gt;) query.execute(aresidenceId, endDate, startDate);</span>
-<span class="nc" id="L78">            tx.commit();</span>
-<span class="nc bnc" id="L79" title="All 2 branches missed.">            if (bookings.isEmpty()) {</span>
-<span class="nc" id="L80">                return Response.ok().entity(&quot;Available&quot;).build();</span>
+<span class="fc" id="L77">            List&lt;Booking&gt; bookings = (List&lt;Booking&gt;) query.execute(aresidenceId, endDate, startDate);</span>
+<span class="fc" id="L78">            tx.commit();</span>
+<span class="fc bfc" id="L79" title="All 2 branches covered.">            if (bookings.isEmpty()) {</span>
+<span class="fc" id="L80">                return Response.ok().entity(&quot;Available&quot;).build();</span>
             }
-<span class="nc" id="L82">            return Response.status(Response.Status.CONFLICT).entity(&quot;Residence not available on those dates!&quot;).build();</span>
+<span class="fc" id="L82">            return Response.status(Response.Status.CONFLICT).entity(&quot;Residence not available on those dates!&quot;).build();</span>
 <span class="nc" id="L83">        } catch (Exception e) {</span>
 <span class="nc" id="L84">            logger.error(&quot;Error checking availability: {}&quot;, e.getMessage());</span>
 <span class="nc bnc" id="L85" title="All 2 branches missed.">            if (tx.isActive()) {</span>
@@ -88,7 +88,7 @@ public class BookingService {
 <span class="nc" id="L88">            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
 <span class="nc" id="L89">                    .entity(&quot;An error occurred while checking availability!&quot;).build();</span>
         } finally {
-<span class="nc" id="L91">            pm.close();</span>
+<span class="fc" id="L91">            pm.close();</span>
         }
     }    
     
@@ -131,27 +131,27 @@ public class BookingService {
     @GET
     @Path(&quot;/searchByUserUsername&quot;)
     public Response searchByUserID(@QueryParam(&quot;user_username&quot;) String user_username) {
-<span class="nc bnc" id="L134" title="All 4 branches missed.">        if (user_username == null || user_username.trim().isEmpty()) {</span>
+<span class="pc bpc" id="L134" title="2 of 4 branches missed.">        if (user_username == null || user_username.trim().isEmpty()) {</span>
 <span class="nc" id="L135">            return Response.status(Response.Status.BAD_REQUEST).entity(&quot;User ID query parameter is required&quot;).build();</span>
         }
-<span class="nc" id="L137">        Query&lt;Booking&gt; query = pm.newQuery(Booking.class);</span>
-<span class="nc" id="L138">        query.setFilter(&quot;travelerUsername == :user_username&quot;);</span>
+<span class="fc" id="L137">        Query&lt;Booking&gt; query = pm.newQuery(Booking.class);</span>
+<span class="fc" id="L138">        query.setFilter(&quot;travelerUsername == :user_username&quot;);</span>
         try {
-<span class="nc" id="L140">            logger.info(&quot;Searching for bookings with user username: {}&quot;, user_username);</span>
+<span class="fc" id="L140">            logger.info(&quot;Searching for bookings with user username: {}&quot;, user_username);</span>
             @SuppressWarnings(&quot;unchecked&quot;)
-<span class="nc" id="L142">            List&lt;Booking&gt; Bookings = (List&lt;Booking&gt;) query.execute(user_username);</span>
-<span class="nc bnc" id="L143" title="All 2 branches missed.">            if (Bookings.isEmpty()) {</span>
-<span class="nc" id="L144">                return Response.status(Response.Status.NOT_FOUND)</span>
-<span class="nc" id="L145">                        .entity(&quot;No Bookings found for the specified user ID.&quot;).build();</span>
+<span class="fc" id="L142">            List&lt;Booking&gt; Bookings = (List&lt;Booking&gt;) query.execute(user_username);</span>
+<span class="fc bfc" id="L143" title="All 2 branches covered.">            if (Bookings.isEmpty()) {</span>
+<span class="fc" id="L144">                return Response.status(Response.Status.NOT_FOUND)</span>
+<span class="fc" id="L145">                        .entity(&quot;No Bookings found for the specified user ID.&quot;).build();</span>
             }
-<span class="nc" id="L147">            logger.info(&quot;Found bookings: {}&quot;, Bookings);</span>
-<span class="nc" id="L148">            return Response.ok(Bookings).build();</span>
+<span class="fc" id="L147">            logger.info(&quot;Found bookings: {}&quot;, Bookings);</span>
+<span class="fc" id="L148">            return Response.ok(Bookings).build();</span>
 <span class="nc" id="L149">        } catch (Exception e) {</span>
 <span class="nc" id="L150">            e.printStackTrace();</span>
 <span class="nc" id="L151">            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
 <span class="nc" id="L152">                    .entity(&quot;An error occurred while fetching the data.&quot;).build();</span>
         } finally {
-<span class="nc" id="L154">            pm.close();</span>
+<span class="fc" id="L154">            pm.close();</span>
         }
     }
 
@@ -168,36 +168,36 @@ public class BookingService {
     @GET
     @Path(&quot;/searchByResidenceID&quot;)
     public Response searchByResidenceID(@QueryParam(&quot;residenceId&quot;) String residenceIdStr) {
-<span class="nc bnc" id="L171" title="All 4 branches missed.">        if (residenceIdStr == null || residenceIdStr.trim().isEmpty()) {</span>
+<span class="pc bpc" id="L171" title="2 of 4 branches missed.">        if (residenceIdStr == null || residenceIdStr.trim().isEmpty()) {</span>
 <span class="nc" id="L172">            return Response.status(Response.Status.BAD_REQUEST).entity(&quot;Residence ID query parameter is required&quot;)</span>
 <span class="nc" id="L173">                    .build();</span>
         }
 
         Long residenceId;
         try {
-<span class="nc" id="L178">            residenceId = Long.parseLong(residenceIdStr);</span>
+<span class="fc" id="L178">            residenceId = Long.parseLong(residenceIdStr);</span>
 <span class="nc" id="L179">        } catch (NumberFormatException e) {</span>
 <span class="nc" id="L180">            return Response.status(Response.Status.BAD_REQUEST).entity(&quot;Invalid Residence ID format&quot;).build();</span>
-<span class="nc" id="L181">        }</span>
+<span class="fc" id="L181">        }</span>
 
-<span class="nc" id="L183">        Query&lt;Booking&gt; query = pm.newQuery(Booking.class);</span>
-<span class="nc" id="L184">        query.setFilter(&quot;residenceId == :residenceId&quot;);</span>
+<span class="fc" id="L183">        Query&lt;Booking&gt; query = pm.newQuery(Booking.class);</span>
+<span class="fc" id="L184">        query.setFilter(&quot;residenceId == :residenceId&quot;);</span>
         try {
-<span class="nc" id="L186">            logger.info(&quot;Searching for bookings with residence ID: {}&quot;, residenceId);</span>
+<span class="fc" id="L186">            logger.info(&quot;Searching for bookings with residence ID: {}&quot;, residenceId);</span>
             @SuppressWarnings(&quot;unchecked&quot;)
-<span class="nc" id="L188">            List&lt;Booking&gt; bookings = (List&lt;Booking&gt;) query.execute(residenceId);</span>
-<span class="nc bnc" id="L189" title="All 2 branches missed.">            if (bookings.isEmpty()) {</span>
-<span class="nc" id="L190">                return Response.status(Response.Status.NOT_FOUND)</span>
-<span class="nc" id="L191">                        .entity(&quot;No bookings found for the specified residence ID.&quot;).build();</span>
+<span class="fc" id="L188">            List&lt;Booking&gt; bookings = (List&lt;Booking&gt;) query.execute(residenceId);</span>
+<span class="fc bfc" id="L189" title="All 2 branches covered.">            if (bookings.isEmpty()) {</span>
+<span class="fc" id="L190">                return Response.status(Response.Status.NOT_FOUND)</span>
+<span class="fc" id="L191">                        .entity(&quot;No bookings found for the specified residence ID.&quot;).build();</span>
             }
-<span class="nc" id="L193">            logger.info(&quot;Found bookings: {}&quot;, bookings);</span>
-<span class="nc" id="L194">            return Response.ok(bookings).build();</span>
+<span class="fc" id="L193">            logger.info(&quot;Found bookings: {}&quot;, bookings);</span>
+<span class="fc" id="L194">            return Response.ok(bookings).build();</span>
 <span class="nc" id="L195">        } catch (Exception e) {</span>
 <span class="nc" id="L196">            logger.error(&quot;An error occurred while fetching the data for residence ID: {}&quot;, residenceId, e);</span>
 <span class="nc" id="L197">            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
 <span class="nc" id="L198">                    .entity(&quot;An error occurred while fetching the data.&quot;).build();</span>
         } finally {
-<span class="nc" id="L200">            pm.close();</span>
+<span class="fc" id="L200">            pm.close();</span>
         }
     }
 
@@ -210,33 +210,33 @@ public class BookingService {
     @POST
     @Path(&quot;/deleteBooking&quot;)
     public Response deleteBookingByID(@QueryParam(&quot;booking_id&quot;) Long booking_id) {
-<span class="nc bnc" id="L213" title="All 2 branches missed.">        if (booking_id == null) {</span>
+<span class="pc bpc" id="L213" title="1 of 2 branches missed.">        if (booking_id == null) {</span>
 <span class="nc" id="L214">            return Response.status(Response.Status.BAD_REQUEST).entity(&quot;booking ID query parameter is required&quot;)</span>
 <span class="nc" id="L215">                    .build();</span>
         }
-<span class="nc" id="L217">        Query&lt;Booking&gt; query = pm.newQuery(Booking.class);</span>
-<span class="nc" id="L218">        query.setFilter(&quot;id == :booking_id&quot;);</span>
+<span class="fc" id="L217">        Query&lt;Booking&gt; query = pm.newQuery(Booking.class);</span>
+<span class="fc" id="L218">        query.setFilter(&quot;id == :booking_id&quot;);</span>
         try {
-<span class="nc" id="L220">            logger.info(&quot;Deleting booking with id: {}&quot;, booking_id);</span>
+<span class="fc" id="L220">            logger.info(&quot;Deleting booking with id: {}&quot;, booking_id);</span>
             @SuppressWarnings(&quot;unchecked&quot;)
-<span class="nc" id="L222">            List&lt;Booking&gt; bookings = (List&lt;Booking&gt;) query.execute(booking_id);</span>
-<span class="nc bnc" id="L223" title="All 2 branches missed.">            if (bookings.isEmpty()) {</span>
-<span class="nc" id="L224">                return Response.status(Response.Status.NOT_FOUND)</span>
-<span class="nc" id="L225">                        .entity(&quot;No bookings found for the specified booking ID.&quot;).build();</span>
-<span class="nc bnc" id="L226" title="All 2 branches missed.">            } else if (bookings.size() &gt; 1) {</span>
+<span class="fc" id="L222">            List&lt;Booking&gt; bookings = (List&lt;Booking&gt;) query.execute(booking_id);</span>
+<span class="fc bfc" id="L223" title="All 2 branches covered.">            if (bookings.isEmpty()) {</span>
+<span class="fc" id="L224">                return Response.status(Response.Status.NOT_FOUND)</span>
+<span class="fc" id="L225">                        .entity(&quot;No bookings found for the specified booking ID.&quot;).build();</span>
+<span class="pc bpc" id="L226" title="1 of 2 branches missed.">            } else if (bookings.size() &gt; 1) {</span>
 <span class="nc" id="L227">                return Response.status(Response.Status.CONFLICT)</span>
 <span class="nc" id="L228">                        .entity(&quot;Multiple bookings found for the specified booking ID.&quot;).build();</span>
             }
-<span class="nc" id="L230">            logger.info(&quot;Found bookings to delete: {}&quot;, bookings);</span>
-<span class="nc" id="L231">            Booking bookingToDelete = bookings.get(0);</span>
-<span class="nc" id="L232">            pm.deletePersistent(bookingToDelete);</span>
-<span class="nc" id="L233">            return Response.ok().build();</span>
+<span class="fc" id="L230">            logger.info(&quot;Found bookings to delete: {}&quot;, bookings);</span>
+<span class="fc" id="L231">            Booking bookingToDelete = bookings.get(0);</span>
+<span class="fc" id="L232">            pm.deletePersistent(bookingToDelete);</span>
+<span class="fc" id="L233">            return Response.ok().build();</span>
 <span class="nc" id="L234">        } catch (Exception e) {</span>
 <span class="nc" id="L235">            e.printStackTrace();</span>
 <span class="nc" id="L236">            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
 <span class="nc" id="L237">                    .entity(&quot;An error occurred while fetching the data.&quot;).build();</span>
         } finally {
-<span class="nc" id="L239">            pm.close();</span>
+<span class="fc" id="L239">            pm.close();</span>
         }
     }
 
