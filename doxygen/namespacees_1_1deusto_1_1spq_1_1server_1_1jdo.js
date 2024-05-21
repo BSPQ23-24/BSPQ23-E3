@@ -1,7 +1,7 @@
 var namespacees_1_1deusto_1_1spq_1_1server_1_1jdo =
 [
-    [ "Booking", "classes_1_1deusto_1_1spq_1_1server_1_1jdo_1_1_booking.html", "classes_1_1deusto_1_1spq_1_1server_1_1jdo_1_1_booking" ],
-    [ "Message", "classes_1_1deusto_1_1spq_1_1server_1_1jdo_1_1_message.html", "classes_1_1deusto_1_1spq_1_1server_1_1jdo_1_1_message" ],
-    [ "Residence", "classes_1_1deusto_1_1spq_1_1server_1_1jdo_1_1_residence.html", "classes_1_1deusto_1_1spq_1_1server_1_1jdo_1_1_residence" ],
-    [ "User", "classes_1_1deusto_1_1spq_1_1server_1_1jdo_1_1_user.html", "classes_1_1deusto_1_1spq_1_1server_1_1jdo_1_1_user" ]
+    [ "Booking", "classes_1_1deusto_1_1spq_1_1server_1_1jdo_1_1Booking.html", "classes_1_1deusto_1_1spq_1_1server_1_1jdo_1_1Booking" ],
+    [ "Message", "classes_1_1deusto_1_1spq_1_1server_1_1jdo_1_1Message.html", "classes_1_1deusto_1_1spq_1_1server_1_1jdo_1_1Message" ],
+    [ "Residence", "classes_1_1deusto_1_1spq_1_1server_1_1jdo_1_1Residence.html", "classes_1_1deusto_1_1spq_1_1server_1_1jdo_1_1Residence" ],
+    [ "User", "classes_1_1deusto_1_1spq_1_1server_1_1jdo_1_1User.html", "classes_1_1deusto_1_1spq_1_1server_1_1jdo_1_1User" ]
 ];
