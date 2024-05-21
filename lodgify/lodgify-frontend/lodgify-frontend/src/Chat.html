@@ -75,6 +75,12 @@
             align-items: center;
             justify-content: center;
         }
+        #user-name {
+            font-size: 24px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
         #message-container {
             flex: 1;
             padding: 10px;
@@ -129,16 +135,16 @@
     </style>
 </head>
 <body>
-    <nav>
-        <img src="assets/lodgify_logo.png" alt="Lodgify">
-        <ul>
-            <li><a href="http://localhost:8080/home">Home</a></li>
-            <li><a href="/bookings">My Bookings</a></li>
-            <li><a href="/profile">My Profile</a></li>
-            <li><a href="/logout">Log Out</a></li>
-        </ul>
-    </nav>
+    <div class="flex flex-col items-center">
+        <nav class="bg-gray-50 p-4 shadow-md w-full">
+            <div class="flex justify-center items-center",  style="text-align: center;">
+                <img src="assets/lodgify_logo.png" alt="Lodgify" aline="center" />
+            </div>
+        </nav>
+    </div>      
+
     <div id="chat-container">
+        <div id="user-name"></div> 
         <div id="message-container"></div>
             <div class="message-column" id="left-column"></div>
             <div class="message-column" id="right-column"></div>
@@ -150,6 +156,21 @@
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
+        // Function to get URL parameters
+        function getQueryParams() {
+            const params = {};
+            window.location.search.substring(1).split("&").forEach(pair => {
+                const [key, value] = pair.split("=");
+                params[key] = decodeURIComponent(value);
+            });
+            return params;
+        }
+
+        const params = getQueryParams();
+        const name = params.name || "Guest";
+        document.getElementById('user-name').textContent = `@${name}`;
+        document.title = `Lodgify`;
+
         const socket = io();
         const messageContainer = document.getElementById('message-container');
         const messageInput = document.getElementById('message-input');
@@ -171,8 +192,8 @@
         function sendMessage() {
             const message = messageInput.value;
             if (message.trim() === '') return;
-            appendMessage(message, 'right');
-            socket.emit('chat message', { message, socketId });
+            appendMessage(`${message}`, 'right');
+            socket.emit('chat message', { message, socketId, name });
             messageInput.value = '';
         }
 
@@ -185,9 +206,9 @@
         }
 
         socket.on('chat message', (data) => {
-            const { message, socketId: senderId } = data;
+            const { message, socketId: senderId, name: senderName } = data;
             if (senderId !== socketId) {
-                appendMessage(message, 'left');
+                appendMessage(`${senderName}: ${message}`, 'left');
             }
         });
     </script>
