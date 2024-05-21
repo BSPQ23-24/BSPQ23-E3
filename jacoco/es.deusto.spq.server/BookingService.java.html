@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BookingService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lodgify</a> &gt; <a href="index.source.html" class="el_package">es.deusto.spq.server</a> &gt; <span class="el_source">BookingService.java</span></div><h1>BookingService.java</h1><pre class="source lang-java linenums">package es.deusto.spq.server;
+
+import java.util.List;
+
+import javax.jdo.JDOHelper;
+import javax.jdo.PersistenceManager;
+import javax.jdo.PersistenceManagerFactory;
+import javax.jdo.Query;
+import javax.jdo.Transaction;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import es.deusto.spq.server.jdo.Booking;
+import java.util.Date;
+
+/**
+ * @class BookingService
+ * @brief Provides RESTful web services for managing bookings.
+ */
+@Path(&quot;/booking&quot;)
+@Produces(MediaType.APPLICATION_JSON)
+public class BookingService {
+
+    /** The logger instance for this class. */
+<span class="fc" id="L34">    protected static final Logger logger = LogManager.getLogger();</span>
+
+    /** The PersistenceManager instance for interacting with the database. */
+<span class="fc" id="L37">    private PersistenceManager pm = null;</span>
+
+    /** The Transaction instance for database transactions. */
+<span class="fc" id="L40">    private Transaction tx = null;</span>
+
+    /**
+     * Constructor for BookingService class.
+     * Initializes the PersistenceManager and Transaction objects.
+     */
+<span class="fc" id="L46">    public BookingService() {</span>
+<span class="fc" id="L47">        PersistenceManagerFactory pmf = JDOHelper.getPersistenceManagerFactory(&quot;datanucleus.properties&quot;);</span>
+<span class="fc" id="L48">        this.pm = pmf.getPersistenceManager();</span>
+<span class="fc" id="L49">        this.tx = pm.currentTransaction();</span>
+<span class="fc" id="L50">    }</span>
+
+    
+    @POST
+    @Path(&quot;/checkAvailability&quot;)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response checkAvailability(Booking booking) {
+<span class="nc bnc" id="L57" title="All 6 branches missed.">        if (booking.getResidenceId() == null || booking.getStartDate() == null || booking.getEndDate() == null) {</span>
+<span class="nc" id="L58">            return Response.status(Response.Status.BAD_REQUEST).entity(&quot;Fill all the data!&quot;).build();</span>
+        }
+    
+<span class="nc" id="L61">        Long aresidenceId = booking.getResidenceId();</span>
+<span class="nc" id="L62">        Date startDate = booking.getStartDate();</span>
+<span class="nc" id="L63">        Date endDate = booking.getEndDate();</span>
+    
+<span class="nc" id="L65">        logger.info(&quot;ResidenceID: {}, StartDate: {}, EndDate: {}&quot;, aresidenceId, startDate, endDate);</span>
+<span class="nc" id="L66">        logger.info(startDate.getClass());</span>
+    
+<span class="nc" id="L68">        Query&lt;Booking&gt; query = pm.newQuery(Booking.class);</span>
+<span class="nc" id="L69">        query.setFilter(&quot;this.residenceId == param0 &amp;&amp; this.startDate &lt;= param1 &amp;&amp; this.endDate &gt;= param2&quot;);</span>
+<span class="nc" id="L70">        query.declareParameters(&quot;Long param0, java.util.Date param1, java.util.Date param2&quot;);</span>
+    
+<span class="nc" id="L72">        Transaction tx = pm.currentTransaction();</span>
+        try {
+<span class="nc" id="L74">            logger.info(&quot;Checking availability for residence ID: {} from {} to {}&quot;, aresidenceId, startDate, endDate);</span>
+<span class="nc" id="L75">            tx.begin();</span>
+            @SuppressWarnings(&quot;unchecked&quot;)
+<span class="nc" id="L77">            List&lt;Booking&gt; bookings = (List&lt;Booking&gt;) query.execute(aresidenceId, endDate, startDate);</span>
+<span class="nc" id="L78">            tx.commit();</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">            if (bookings.isEmpty()) {</span>
+<span class="nc" id="L80">                return Response.ok().entity(&quot;Available&quot;).build();</span>
+            }
+<span class="nc" id="L82">            return Response.status(Response.Status.CONFLICT).entity(&quot;Residence not available on those dates!&quot;).build();</span>
+<span class="nc" id="L83">        } catch (Exception e) {</span>
+<span class="nc" id="L84">            logger.error(&quot;Error checking availability: {}&quot;, e.getMessage());</span>
+<span class="nc bnc" id="L85" title="All 2 branches missed.">            if (tx.isActive()) {</span>
+<span class="nc" id="L86">                tx.rollback();</span>
+            }
+<span class="nc" id="L88">            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
+<span class="nc" id="L89">                    .entity(&quot;An error occurred while checking availability!&quot;).build();</span>
+        } finally {
+<span class="nc" id="L91">            pm.close();</span>
+        }
+    }    
+    
+    /**
+     * Saves a new booking in the database.
+     * 
+     * @param booking The booking to be saved.
+     * @return A Response indicating the success or failure of the save operation.
+     */
+    @POST
+    @Path(&quot;/save&quot;)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response saveBooking(Booking booking) {
+        try {
+<span class="fc" id="L106">            tx.begin();</span>
+<span class="fc" id="L107">            pm.makePersistent(booking);</span>
+<span class="fc" id="L108">            tx.commit();</span>
+<span class="fc" id="L109">            logger.info(&quot;Booking saved successfully&quot;);</span>
+<span class="fc" id="L110">            return Response.ok().build();</span>
+<span class="fc" id="L111">        } catch (Exception e) {</span>
+<span class="fc" id="L112">            logger.error(&quot;Error saving booking: {}&quot;, e.getMessage());</span>
+<span class="pc bpc" id="L113" title="1 of 2 branches missed.">            if (tx.isActive()) {</span>
+<span class="nc" id="L114">                tx.rollback();</span>
+            }
+<span class="fc" id="L116">            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
+<span class="fc" id="L117">                    .entity(&quot;An error occurred while saving the booking.&quot;).build();</span>
+        } finally {
+<span class="fc" id="L119">            pm.close();</span>
+        }
+    }
+
+    /**
+     * Searches for bookings based on the specified user username.
+     * 
+     * @param user_username The username of the user whose bookings are to be
+     *                      searched.
+     * @return A Response containing a list of bookings that match the username or
+     *         an error message if none are found.
+     */
+    @GET
+    @Path(&quot;/searchByUserUsername&quot;)
+    public Response searchByUserID(@QueryParam(&quot;user_username&quot;) String user_username) {
+<span class="nc bnc" id="L134" title="All 4 branches missed.">        if (user_username == null || user_username.trim().isEmpty()) {</span>
+<span class="nc" id="L135">            return Response.status(Response.Status.BAD_REQUEST).entity(&quot;User ID query parameter is required&quot;).build();</span>
+        }
+<span class="nc" id="L137">        Query&lt;Booking&gt; query = pm.newQuery(Booking.class);</span>
+<span class="nc" id="L138">        query.setFilter(&quot;travelerUsername == :user_username&quot;);</span>
+        try {
+<span class="nc" id="L140">            logger.info(&quot;Searching for bookings with user username: {}&quot;, user_username);</span>
+            @SuppressWarnings(&quot;unchecked&quot;)
+<span class="nc" id="L142">            List&lt;Booking&gt; Bookings = (List&lt;Booking&gt;) query.execute(user_username);</span>
+<span class="nc bnc" id="L143" title="All 2 branches missed.">            if (Bookings.isEmpty()) {</span>
+<span class="nc" id="L144">                return Response.status(Response.Status.NOT_FOUND)</span>
+<span class="nc" id="L145">                        .entity(&quot;No Bookings found for the specified user ID.&quot;).build();</span>
+            }
+<span class="nc" id="L147">            logger.info(&quot;Found bookings: {}&quot;, Bookings);</span>
+<span class="nc" id="L148">            return Response.ok(Bookings).build();</span>
+<span class="nc" id="L149">        } catch (Exception e) {</span>
+<span class="nc" id="L150">            e.printStackTrace();</span>
+<span class="nc" id="L151">            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
+<span class="nc" id="L152">                    .entity(&quot;An error occurred while fetching the data.&quot;).build();</span>
+        } finally {
+<span class="nc" id="L154">            pm.close();</span>
+        }
+    }
+
+    /**
+     * Searches for bookings based on the specified residence Id.
+     * 
+     * @param residenceIdStr The id of the residence whose bookings are to be
+     *                       searched.
+     * @return A Response containing a list of bookings that match the residence id
+     *         or
+     *         an error message if none are found.
+     */
+
+    @GET
+    @Path(&quot;/searchByResidenceID&quot;)
+    public Response searchByResidenceID(@QueryParam(&quot;residenceId&quot;) String residenceIdStr) {
+<span class="nc bnc" id="L171" title="All 4 branches missed.">        if (residenceIdStr == null || residenceIdStr.trim().isEmpty()) {</span>
+<span class="nc" id="L172">            return Response.status(Response.Status.BAD_REQUEST).entity(&quot;Residence ID query parameter is required&quot;)</span>
+<span class="nc" id="L173">                    .build();</span>
+        }
+
+        Long residenceId;
+        try {
+<span class="nc" id="L178">            residenceId = Long.parseLong(residenceIdStr);</span>
+<span class="nc" id="L179">        } catch (NumberFormatException e) {</span>
+<span class="nc" id="L180">            return Response.status(Response.Status.BAD_REQUEST).entity(&quot;Invalid Residence ID format&quot;).build();</span>
+<span class="nc" id="L181">        }</span>
+
+<span class="nc" id="L183">        Query&lt;Booking&gt; query = pm.newQuery(Booking.class);</span>
+<span class="nc" id="L184">        query.setFilter(&quot;residenceId == :residenceId&quot;);</span>
+        try {
+<span class="nc" id="L186">            logger.info(&quot;Searching for bookings with residence ID: {}&quot;, residenceId);</span>
+            @SuppressWarnings(&quot;unchecked&quot;)
+<span class="nc" id="L188">            List&lt;Booking&gt; bookings = (List&lt;Booking&gt;) query.execute(residenceId);</span>
+<span class="nc bnc" id="L189" title="All 2 branches missed.">            if (bookings.isEmpty()) {</span>
+<span class="nc" id="L190">                return Response.status(Response.Status.NOT_FOUND)</span>
+<span class="nc" id="L191">                        .entity(&quot;No bookings found for the specified residence ID.&quot;).build();</span>
+            }
+<span class="nc" id="L193">            logger.info(&quot;Found bookings: {}&quot;, bookings);</span>
+<span class="nc" id="L194">            return Response.ok(bookings).build();</span>
+<span class="nc" id="L195">        } catch (Exception e) {</span>
+<span class="nc" id="L196">            logger.error(&quot;An error occurred while fetching the data for residence ID: {}&quot;, residenceId, e);</span>
+<span class="nc" id="L197">            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
+<span class="nc" id="L198">                    .entity(&quot;An error occurred while fetching the data.&quot;).build();</span>
+        } finally {
+<span class="nc" id="L200">            pm.close();</span>
+        }
+    }
+
+    /**
+     * Deletes a booking based on the specified booking ID.
+     * 
+     * @param booking_id The ID of the booking to be deleted.
+     * @return A Response indicating the success or failure of the deletion process.
+     */
+    @POST
+    @Path(&quot;/deleteBooking&quot;)
+    public Response deleteBookingByID(@QueryParam(&quot;booking_id&quot;) Long booking_id) {
+<span class="nc bnc" id="L213" title="All 2 branches missed.">        if (booking_id == null) {</span>
+<span class="nc" id="L214">            return Response.status(Response.Status.BAD_REQUEST).entity(&quot;booking ID query parameter is required&quot;)</span>
+<span class="nc" id="L215">                    .build();</span>
+        }
+<span class="nc" id="L217">        Query&lt;Booking&gt; query = pm.newQuery(Booking.class);</span>
+<span class="nc" id="L218">        query.setFilter(&quot;id == :booking_id&quot;);</span>
+        try {
+<span class="nc" id="L220">            logger.info(&quot;Deleting booking with id: {}&quot;, booking_id);</span>
+            @SuppressWarnings(&quot;unchecked&quot;)
+<span class="nc" id="L222">            List&lt;Booking&gt; bookings = (List&lt;Booking&gt;) query.execute(booking_id);</span>
+<span class="nc bnc" id="L223" title="All 2 branches missed.">            if (bookings.isEmpty()) {</span>
+<span class="nc" id="L224">                return Response.status(Response.Status.NOT_FOUND)</span>
+<span class="nc" id="L225">                        .entity(&quot;No bookings found for the specified booking ID.&quot;).build();</span>
+<span class="nc bnc" id="L226" title="All 2 branches missed.">            } else if (bookings.size() &gt; 1) {</span>
+<span class="nc" id="L227">                return Response.status(Response.Status.CONFLICT)</span>
+<span class="nc" id="L228">                        .entity(&quot;Multiple bookings found for the specified booking ID.&quot;).build();</span>
+            }
+<span class="nc" id="L230">            logger.info(&quot;Found bookings to delete: {}&quot;, bookings);</span>
+<span class="nc" id="L231">            Booking bookingToDelete = bookings.get(0);</span>
+<span class="nc" id="L232">            pm.deletePersistent(bookingToDelete);</span>
+<span class="nc" id="L233">            return Response.ok().build();</span>
+<span class="nc" id="L234">        } catch (Exception e) {</span>
+<span class="nc" id="L235">            e.printStackTrace();</span>
+<span class="nc" id="L236">            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
+<span class="nc" id="L237">                    .entity(&quot;An error occurred while fetching the data.&quot;).build();</span>
+        } finally {
+<span class="nc" id="L239">            pm.close();</span>
+        }
+    }
+
+    /**
+     * Sets the PersistenceManagerFactory for this service.
+     * 
+     * @param pmf The PersistenceManagerFactory to be set.
+     */
+    public void setPersistenceManagerFactory(PersistenceManagerFactory pmf) {
+<span class="fc" id="L249">        this.pm = pmf.getPersistenceManager();</span>
+<span class="fc" id="L250">        this.tx = pm.currentTransaction();</span>
+<span class="fc" id="L251">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

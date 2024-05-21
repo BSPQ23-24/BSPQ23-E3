@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lodgify</a> &gt; <a href="index.source.html" class="el_package">es.deusto.spq.server</a> &gt; <span class="el_source">UserService.java</span></div><h1>UserService.java</h1><pre class="source lang-java linenums">/**
+ * @file UserService.java
+ * @brief Contains the implementation of the UserService class.
+ */
+package es.deusto.spq.server;
+
+import java.util.List;
+
+import javax.jdo.JDOHelper;
+import javax.jdo.PersistenceManager;
+import javax.jdo.PersistenceManagerFactory;
+import javax.jdo.Query;
+import javax.jdo.Transaction;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import es.deusto.spq.server.helper.Hashing;
+import es.deusto.spq.server.jdo.User;
+
+/**
+ * @class UserService
+ * @brief Provides RESTful web services for user management.
+ */
+@Path(&quot;/user&quot;)
+@Produces(MediaType.APPLICATION_JSON)
+public class UserService {
+
+    /** The logger instance for this class. */
+<span class="fc" id="L36">    protected static final Logger logger = LogManager.getLogger();</span>
+
+    /** The PersistenceManager instance for interacting with the database. */
+<span class="fc" id="L39">    private PersistenceManager pm = null;</span>
+
+    /** The Transaction instance for database transactions. */
+<span class="fc" id="L42">    private Transaction tx = null;</span>
+
+    /**
+     * Constructor for UserService class.
+     * Initializes the PersistenceManager and Transaction objects.
+     */
+<span class="fc" id="L48">    public UserService() {</span>
+<span class="fc" id="L49">        PersistenceManagerFactory pmf = JDOHelper.getPersistenceManagerFactory(&quot;datanucleus.properties&quot;);</span>
+<span class="fc" id="L50">        this.pm = pmf.getPersistenceManager();</span>
+<span class="fc" id="L51">        this.tx = pm.currentTransaction();</span>
+<span class="fc" id="L52">    }</span>
+
+    /**
+     * Retrieves a simple greeting message.
+     * @return A Response containing the greeting message.
+     */
+    @GET
+    @Path(&quot;/hello&quot;)
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response sayHello() {
+<span class="fc" id="L62">        return Response.ok(&quot;Hello world!&quot;).build();</span>
+    }
+
+    /**
+     * Registers a new user in the database.
+     * @param user The user to be registered.
+     * @return A Response indicating the success or failure of the registration process.
+     */
+    @POST
+    @Path(&quot;/register&quot;)
+    public Response registerUser(User user) {
+        try {
+<span class="fc" id="L74">            tx.begin();</span>
+<span class="fc" id="L75">            logger.info(&quot;Checking whether the user already exits or not: '{}'&quot;, user.getUsername());</span>
+<span class="fc" id="L76">            user.setPassword(Hashing.Hash(user.getPassword()));</span>
+<span class="fc" id="L77">            User user1 = null;</span>
+<span class="fc" id="L78">            Query&lt;User&gt; query = pm.newQuery(User.class, &quot;username == :username&quot;);</span>
+            try {
+                @SuppressWarnings(&quot;unchecked&quot;)
+<span class="fc" id="L81">                List&lt;User&gt; users = (List&lt;User&gt;) query.execute(user.getUsername());</span>
+<span class="pc bpc" id="L82" title="1 of 2 branches missed.">                if (users.isEmpty()) {</span>
+<span class="fc" id="L83">                    logger.info(&quot;User not found!&quot;);</span>
+                } else {
+<span class="nc" id="L85">                    user1 = users.get(0);</span>
+                }
+            } finally {
+<span class="fc" id="L88">                query.closeAll();</span>
+            }
+
+<span class="fc" id="L91">            logger.info(&quot;User: {}&quot;, user);</span>
+<span class="pc bpc" id="L92" title="1 of 2 branches missed.">            if (user1 != null) {</span>
+<span class="nc" id="L93">                logger.info(&quot;User already exists!&quot;);</span>
+<span class="nc" id="L94">                return Response.status(400).entity(&quot;User already exists!&quot;).build();</span>
+            }
+<span class="pc bpc" id="L96" title="1 of 2 branches missed.">            if (user1 == null) {</span>
+<span class="fc" id="L97">                logger.info(&quot;Creating user: {}&quot;, user);</span>
+<span class="fc" id="L98">                logger.info(&quot;Creating username: {}&quot;, user.getUsername());</span>
+<span class="fc" id="L99">                logger.info(&quot;Creating name: {}&quot;, user.getName());</span>
+<span class="pc bpc" id="L100" title="3 of 6 branches missed.">                if (user.getName().equals(&quot;&quot;) || user.getSurname().equals(&quot;&quot;) || user.getUsername().equals(&quot;&quot;)</span>
+<span class="pc bpc" id="L101" title="1 of 2 branches missed.">                        || user.getPassword().equals(&quot;&quot;)) {</span>
+<span class="nc" id="L102">                    logger.info(&quot;Not all the data filled!&quot;);</span>
+<span class="nc" id="L103">                    return Response.status(400).entity(&quot;Fill all the data!&quot;).build();</span>
+<span class="pc bpc" id="L104" title="1 of 2 branches missed.">                } else if (!user.getEmail().matches(&quot;^[A-Za-z0-9+_.-]+@(.+)$&quot;)) {</span>
+<span class="nc" id="L105">                    logger.info(&quot;Email not valid!&quot;);</span>
+<span class="nc" id="L106">                    return Response.status(400).entity(&quot;Not valid email!&quot;).build();</span>
+<span class="pc bpc" id="L107" title="1 of 2 branches missed.">                } else if (user.getPhone_number().length() != 9) {</span>
+<span class="nc" id="L108">                    logger.info(&quot;Phone number must have 9 digits!&quot;);</span>
+<span class="nc" id="L109">                    return Response.status(400).entity(&quot;Not valid phone number!&quot;).build();</span>
+                }
+
+<span class="fc" id="L112">                user1 = new User(user.getUsername(), user.getPassword(), user.getName(), user.getSurname(),</span>
+<span class="fc" id="L113">                        user.getPhone_number(), user.getEmail(), user.getUser_type(), user.getId_card(),</span>
+<span class="fc" id="L114">                        user.getBank_account(), user.getSocial_SN(), user.getAddress());</span>
+<span class="fc" id="L115">                pm.makePersistent(user);</span>
+<span class="fc" id="L116">                logger.info(&quot;User created: {}&quot;, user);</span>
+            }
+<span class="fc" id="L118">            tx.commit();</span>
+<span class="fc" id="L119">            return Response.ok().build();</span>
+        } finally {
+<span class="pc bpc" id="L121" title="1 of 2 branches missed.">            if (tx.isActive()) {</span>
+<span class="nc" id="L122">                tx.rollback();</span>
+            }
+<span class="fc" id="L124">            pm.close();</span>
+        }
+    }
+
+    /**
+     * Logs in an existing user.
+     * @param user The user to log in.
+     * @return A Response containing user information if login is successful, or an error response otherwise.
+     */
+    @POST
+    @Path(&quot;/login&quot;)
+    public Response loginUser(User user) {
+        try {
+<span class="fc" id="L137">            tx.begin();</span>
+<span class="fc" id="L138">            logger.info(&quot;Checking whether the user already exits or not: '{}'&quot;, user.getUsername());</span>
+<span class="fc" id="L139">            user.setPassword(Hashing.Hash(user.getPassword()));</span>
+<span class="fc" id="L140">            User user1 = null;</span>
+<span class="fc" id="L141">            Query&lt;User&gt; query = pm.newQuery(User.class, &quot;username == :username&quot;);</span>
+            try {
+                @SuppressWarnings(&quot;unchecked&quot;)
+<span class="fc" id="L144">                List&lt;User&gt; users = (List&lt;User&gt;) query.execute(user.getUsername());</span>
+<span class="pc bpc" id="L145" title="1 of 2 branches missed.">                if (users.isEmpty()) {</span>
+<span class="nc" id="L146">                    logger.info(&quot;User not found!&quot;);</span>
+                } else {
+<span class="fc" id="L148">                    user1 = users.get(0);</span>
+<span class="fc" id="L149">                    logger.info(&quot;Aquí es {}&quot;, user1);</span>
+                }
+            } finally {
+<span class="fc" id="L152">                query.closeAll();</span>
+            }
+<span class="fc" id="L154">            logger.info(&quot;User: {}&quot;, user);</span>
+<span class="pc bpc" id="L155" title="1 of 2 branches missed.">            if (user1 != null) {</span>
+<span class="fc" id="L156">                logger.info(&quot;Tipo: {}&quot;, user1.getUser_type());</span>
+<span class="fc" id="L157">                logger.info(&quot;User found: {}&quot;, user1.toString());</span>
+<span class="fc" id="L158">                logger.info(&quot;Submitted password: {}&quot;, user.getPassword());</span>
+<span class="fc" id="L159">                logger.info(&quot;DB password: {}&quot;, user1.getPassword());</span>
+<span class="pc bpc" id="L160" title="1 of 2 branches missed.">                if (user.getPassword().equals(user1.getPassword())) {</span>
+<span class="fc" id="L161">                    logger.info(&quot;El usuario es: {}&quot;, user1);</span>
+<span class="fc" id="L162">                    User userDef = new User(user1.getUsername(), user1.getPassword(), user1.getName(),</span>
+<span class="fc" id="L163">                            user1.getSurname(), user1.getPhone_number(), user1.getEmail(), user1.getUser_type(),</span>
+<span class="fc" id="L164">                            user1.getId_card(), user1.getBank_account(), user1.getSocial_SN(), user1.getAddress());</span>
+<span class="fc" id="L165">                    return Response.ok(userDef).build();</span>
+                } else {
+<span class="nc" id="L167">                    return Response.status(401).build();</span>
+                }
+            } else {
+<span class="nc" id="L170">                return Response.status(401).build();</span>
+            }
+        } finally {
+<span class="pc bpc" id="L173" title="1 of 2 branches missed.">            if (tx.isActive()) {</span>
+<span class="nc" id="L174">                tx.rollback();</span>
+            }
+<span class="fc" id="L176">            pm.close();</span>
+        }
+    }
+
+    /**
+     * Modifies an existing user's information.
+     * @param user The user whose information needs to be modified.
+     * @return A Response indicating the success or failure of the modification process.
+     */
+    @POST
+    @Path(&quot;/modify&quot;)
+    public Response modifyUser(User user) {
+        try {
+<span class="fc" id="L189">            tx.begin();</span>
+<span class="fc" id="L190">            logger.info(&quot;Checking whether the user already exits or not: '{}'&quot;, user.getUsername());</span>
+<span class="fc" id="L191">            User user1 = null;</span>
+<span class="fc" id="L192">            Query&lt;User&gt; query = pm.newQuery(User.class, &quot;username == :username&quot;);</span>
+            try {
+                @SuppressWarnings(&quot;unchecked&quot;)
+<span class="fc" id="L195">                List&lt;User&gt; users = (List&lt;User&gt;) query.execute(user.getUsername());</span>
+<span class="pc bpc" id="L196" title="1 of 2 branches missed.">                if (users.isEmpty()) {</span>
+<span class="nc" id="L197">                    logger.info(&quot;User not found!&quot;);</span>
+                } else {
+<span class="fc" id="L199">                    user1 = users.get(0);</span>
+                }
+            } finally {
+<span class="fc" id="L202">                query.closeAll();</span>
+            }
+
+<span class="fc" id="L205">            logger.info(&quot;User: {}&quot;, user1);</span>
+<span class="pc bpc" id="L206" title="1 of 2 branches missed.">            if (user1 != null) {</span>
+<span class="fc" id="L207">                user1.setName(user.getName());</span>
+<span class="fc" id="L208">                user1.setSurname(user.getSurname());</span>
+<span class="fc" id="L209">                user1.setEmail(user.getEmail());</span>
+<span class="fc" id="L210">                user1.setPhone_number(user.getPhone_number());</span>
+<span class="fc" id="L211">                user1.setId_card(user.getId_card());</span>
+<span class="fc" id="L212">                user1.setBank_account(user.getBank_account());</span>
+<span class="fc" id="L213">                user1.setSocial_SN(user.getSocial_SN());</span>
+<span class="fc" id="L214">                user1.setAddress(user.getAddress());</span>
+            }
+<span class="fc" id="L216">            pm.makePersistent(user1);</span>
+<span class="fc" id="L217">            logger.info(&quot;User created: {}&quot;, user);</span>
+<span class="fc" id="L218">            tx.commit();</span>
+<span class="fc" id="L219">            return Response.ok().build();</span>
+        } finally {
+<span class="pc bpc" id="L221" title="1 of 2 branches missed.">            if (tx.isActive()) {</span>
+<span class="nc" id="L222">                tx.rollback();</span>
+            }
+<span class="fc" id="L224">            pm.close();</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

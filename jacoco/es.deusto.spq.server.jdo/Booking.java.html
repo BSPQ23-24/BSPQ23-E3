@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Booking.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lodgify</a> &gt; <a href="index.source.html" class="el_package">es.deusto.spq.server.jdo</a> &gt; <span class="el_source">Booking.java</span></div><h1>Booking.java</h1><pre class="source lang-java linenums">package es.deusto.spq.server.jdo;
+
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
+import java.util.Date;
+
+/**
+ * @class Booking
+ * @brief Represents a booking entity in the system.
+ */
+@PersistenceCapable
+public class Booking {
+
+    /** The unique identifier for the booking. */
+    @PrimaryKey
+    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+    private Long id;
+
+    /** The username of the traveler who made the booking. */
+    private String travelerUsername;
+
+    /** The username of the host who owns the residence. */
+    private String hostUsername;
+
+    /** The ID of the residence that is booked. */
+    private Long residenceId;
+
+    /** The start date of the booking. */
+    private Date startDate;
+
+    /** The end date of the booking. */
+    private Date endDate;
+
+    /**
+     * Constructs a new Booking with the specified details.
+     * @param travelerUsername The username of the traveler.
+     * @param hostUsername The username of the host.
+     * @param residenceId The ID of the residence.
+     * @param startDate The start date of the booking.
+     * @param endDate The end date of the booking.
+     */
+<span class="fc" id="L44">    public Booking(String travelerUsername, String hostUsername, Long residenceId, Date startDate, Date endDate) {</span>
+<span class="fc" id="L45">        this.travelerUsername = travelerUsername;</span>
+<span class="fc" id="L46">        this.hostUsername = hostUsername;</span>
+<span class="fc" id="L47">        this.residenceId = residenceId;</span>
+<span class="fc" id="L48">        this.startDate = startDate;</span>
+<span class="fc" id="L49">        this.endDate = endDate;</span>
+<span class="fc" id="L50">    }</span>
+
+    /**
+     * Gets the unique identifier for the booking.
+     * @return The booking ID.
+     */
+    public Long getId() {
+<span class="fc" id="L57">        return id;</span>
+    }
+
+    /**
+     * Sets the unique identifier for the booking.
+     * @param id The booking ID.
+     */
+    public void setId(Long id) {
+<span class="fc" id="L65">        this.id = id;</span>
+<span class="fc" id="L66">    }</span>
+
+    /**
+     * Gets the username of the traveler.
+     * @return The traveler's username.
+     */
+    public String gettravelerUsername() {
+<span class="fc" id="L73">        return travelerUsername;</span>
+    }
+
+    /**
+     * Sets the username of the traveler.
+     * @param travelerUsername The traveler's username.
+     */
+    public void settravelerUsername(String travelerUsername) {
+<span class="fc" id="L81">        this.travelerUsername = travelerUsername;</span>
+<span class="fc" id="L82">    }</span>
+
+    /**
+     * Gets the username of the host.
+     * @return The host's username.
+     */
+    public String gethostUsername() {
+<span class="fc" id="L89">        return hostUsername;</span>
+    }
+
+    /**
+     * Sets the username of the host.
+     * @param hostUsername The host's username.
+     */
+    public void sethostUsername(String hostUsername) {
+<span class="fc" id="L97">        this.hostUsername = hostUsername;</span>
+<span class="fc" id="L98">    }</span>
+
+    /**
+     * Gets the ID of the booked residence.
+     * @return The residence ID.
+     */
+    public Long getResidenceId() {
+<span class="fc" id="L105">        return residenceId;</span>
+    }
+
+    /**
+     * Sets the ID of the booked residence.
+     * @param residenceId The residence ID.
+     */
+    public void setResidenceId(Long residenceId) {
+<span class="fc" id="L113">        this.residenceId = residenceId;</span>
+<span class="fc" id="L114">    }</span>
+
+    /**
+     * Gets the start date of the booking.
+     * @return The start date.
+     */
+    public Date getStartDate() {
+<span class="fc" id="L121">        return startDate;</span>
+    }
+
+    /**
+     * Sets the start date of the booking.
+     * @param startDate The start date.
+     */
+    public void setStartDate(Date startDate) {
+<span class="fc" id="L129">        this.startDate = startDate;</span>
+<span class="fc" id="L130">    }</span>
+
+    /**
+     * Gets the end date of the booking.
+     * @return The end date.
+     */
+    public Date getEndDate() {
+<span class="fc" id="L137">        return endDate;</span>
+    }
+
+    /**
+     * Sets the end date of the booking.
+     * @param endDate The end date.
+     */
+    public void setEndDate(Date endDate) {
+<span class="fc" id="L145">        this.endDate = endDate;</span>
+<span class="fc" id="L146">    }</span>
+
+    /**
+     * Returns a string representation of the booking.
+     * @return A string containing the booking details.
+     */
+    @Override
+    public String toString() {
+<span class="fc" id="L154">        return &quot;Booking{&quot; +</span>
+                &quot;id=&quot; + id +
+                &quot;, travelerUsername=&quot; + travelerUsername +
+                &quot;, hostUsername=&quot; + hostUsername +
+                &quot;, residenceId=&quot; + residenceId +
+                &quot;, startDate='&quot; + startDate + '\'' +
+                &quot;, endDate='&quot; + endDate + '\'' +
+                '}';
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LodgifyClient.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lodgify</a> &gt; <a href="index.source.html" class="el_package">es.deusto.spq.client</a> &gt; <span class="el_source">LodgifyClient.java</span></div><h1>LodgifyClient.java</h1><pre class="source lang-java linenums">package es.deusto.spq.client;
+
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import java.text.ParseException;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import es.deusto.spq.server.jdo.Booking;
+import es.deusto.spq.server.jdo.User;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+/**
+ * Client class for interacting with the Lodgify server.
+ */
+public class LodgifyClient {
+
+<span class="fc" id="L27">	protected static Logger logger = LogManager.getLogger();</span>
+
+	private static final String USER = &quot;BSPQ23E3&quot;;
+	private static final String PASSWORD = &quot;BSPQ23E3&quot;;
+
+	private Client client;
+	private WebTarget webTarget;
+
+	/**
+     * Constructor for the LodgifyClient.
+     * @param hostname The hostname of the server.
+     * @param port The port of the server.
+     */
+<span class="fc" id="L40">	public LodgifyClient(String hostname, String port) {</span>
+<span class="fc" id="L41">		client = ClientBuilder.newClient();</span>
+<span class="fc" id="L42">		webTarget = client.target(String.format(&quot;http://%s:%s/rest&quot;, hostname, port));</span>
+<span class="fc" id="L43">		Response response = webTarget.request(MediaType.TEXT_PLAIN).get();</span>
+<span class="pc bpc" id="L44" title="1 of 2 branches missed.">		if (response.getStatus() == Response.Status.OK.getStatusCode()) {</span>
+<span class="nc" id="L45">			System.out.println(&quot;Conexión exitosa: &quot; + response.readEntity(String.class));</span>
+		} else {
+<span class="fc" id="L47">			System.out.println(&quot;Fallo en la conexión, código de estado: &quot; + response.getStatus() + webTarget);</span>
+		}
+<span class="fc" id="L49">	}</span>
+
+	/**
+     * Registers a user on the server.
+     * @param username The username of the user.
+     * @param password The password of the user.
+     * @param name The name of the user.
+     * @param surname The surname of the user.
+     * @param phone_number The phone number of the user.
+     * @param email The email of the user.
+     * @param user_type The type of user.
+     * @param id_card The ID card of the user.
+     * @param bank_account The bank account of the user.
+     * @param social_SN The social security number of the user.
+     * @param address The address of the user.
+     */
+	public void registerUser(String username, String password, String name, String surname, String phone_number,
+			String email, String user_type, String id_card, int bank_account, int social_SN, String address) {
+<span class="fc" id="L67">		WebTarget registerUserWebTarget = webTarget.path(&quot;user/register&quot;);</span>
+<span class="fc" id="L68">		Invocation.Builder invocationBuilder = registerUserWebTarget.request(MediaType.APPLICATION_JSON);</span>
+
+<span class="fc" id="L70">		User user = new User(username, password, name, surname, phone_number, email, user_type, id_card, bank_account,</span>
+				social_SN, address);
+<span class="fc" id="L72">		Response response = invocationBuilder.post(Entity.entity(user, MediaType.APPLICATION_JSON));</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">		if (response.getStatus() != Status.OK.getStatusCode()) {</span>
+<span class="fc" id="L74">			logger.error(&quot;Error connecting with the server. Code: {}&quot;, response.getStatus());</span>
+		} else {
+<span class="fc" id="L76">			logger.info(&quot;User correctly registered, the user name is {}&quot;, username);</span>
+		}
+<span class="fc" id="L78">	}</span>
+
+	/**
+     * Saves a booking on the server.
+     * @param travelerUsername The username of the traveler.
+     * @param hostUsername The username of the host.
+     * @param residenceId The ID of the residence.
+     * @param startDate The start date of the booking.
+     * @param endDate The end date of the booking.
+     */
+	public void saveBooking(String travelerUsername, String hostUsername, Long residenceId, Date startDate,
+			Date endDate) {
+<span class="fc" id="L90">		WebTarget saveBookingWebTarget = webTarget.path(&quot;booking/save&quot;);</span>
+<span class="fc" id="L91">		Invocation.Builder invocationBuilder = saveBookingWebTarget.request(MediaType.APPLICATION_JSON);</span>
+
+<span class="fc" id="L93">		Booking booking = new Booking(travelerUsername, hostUsername, residenceId, startDate, endDate);</span>
+<span class="fc" id="L94">		Response response = invocationBuilder.post(Entity.entity(booking, MediaType.APPLICATION_JSON));</span>
+
+<span class="pc bpc" id="L96" title="1 of 2 branches missed.">		if (response.getStatus() != Status.OK.getStatusCode()) {</span>
+<span class="nc" id="L97">			logger.error(&quot;Error saving booking. Code: {}&quot;, response.getStatus());</span>
+		} else {
+<span class="fc" id="L99">			logger.info(&quot;Booking saved successfully&quot;);</span>
+		}
+<span class="fc" id="L101">	}</span>
+
+	/*
+	 * public void sayMessage(String login, String password, String message) {
+	 * WebTarget sayHelloWebTarget = webTarget.path(&quot;sayMessage&quot;);
+	 * Invocation.Builder invocationBuilder =
+	 * sayHelloWebTarget.request(MediaType.APPLICATION_JSON);
+	 * 
+	 * DirectMessage directMessage = new DirectMessage();
+	 * UserData userData = new UserData();
+	 * userData.setLogin(login);
+	 * userData.setPassword(password);
+	 * 
+	 * directMessage.setUserData(userData);
+	 * 
+	 * MessageData messageData = new MessageData();
+	 * messageData.setMessage(message);
+	 * directMessage.setMessageData(messageData);
+	 * 
+	 * Response response = invocationBuilder.post(Entity.entity(directMessage,
+	 * MediaType.APPLICATION_JSON));
+	 * if (response.getStatus() != Status.OK.getStatusCode()) {
+	 * logger.error(&quot;Error connecting with the server. Code: {}&quot;,response.getStatus(
+	 * ));
+	 * } else {
+	 * String responseMessage = response.readEntity(String.class);
+	 * logger.info(&quot;* Message coming from the server: '{}'&quot;, responseMessage);
+	 * }
+	 * }
+	 */
+
+	public void setClient(Client client) {
+<span class="fc" id="L133">		this.client = client;</span>
+<span class="fc" id="L134">	}</span>
+
+	public void setWebTarget(WebTarget webTarget) {
+<span class="fc" id="L137">		this.webTarget = webTarget;</span>
+<span class="fc" id="L138">	}</span>
+
+	/**
+     * Main method to run the LodgifyClient.
+     * @param args Command-line arguments.
+     */
+	public static void main(String[] args) {
+<span class="pc bpc" id="L145" title="1 of 2 branches missed.">		if (args.length != 2) {</span>
+<span class="nc" id="L146">			logger.info(&quot;Use: java Client.Client [host] [port]&quot;);</span>
+<span class="nc" id="L147">			System.exit(0);</span>
+		}
+
+<span class="fc" id="L150">		String hostname = args[0];</span>
+<span class="fc" id="L151">		String port = args[1];</span>
+
+<span class="fc" id="L153">		SimpleDateFormat sdf = new SimpleDateFormat(&quot;yyyy-MM-dd&quot;);</span>
+
+<span class="fc" id="L155">		Date startDate = null;</span>
+<span class="fc" id="L156">    	Date endDate = null;</span>
+    	try {
+<span class="fc" id="L158">        	startDate = sdf.parse(&quot;2024-01-01&quot;);</span>
+<span class="fc" id="L159">        	endDate = sdf.parse(&quot;2024-01-07&quot;);</span>
+<span class="nc" id="L160">    	} catch (ParseException e) {</span>
+<span class="nc" id="L161">        	logger.error(&quot;Error parsing dates&quot;, e);</span>
+<span class="nc" id="L162">        	System.exit(1);</span>
+<span class="fc" id="L163">    	}</span>
+
+<span class="fc" id="L165">		LodgifyClient exampleClient = new LodgifyClient(hostname, port);</span>
+<span class="fc" id="L166">		exampleClient.registerUser(USER, PASSWORD, &quot;user&quot;, &quot;user&quot;, &quot;999999999&quot;, &quot;user@mail.es&quot;, &quot;User&quot;, &quot;&quot;, 0, 0, &quot;&quot;);</span>
+<span class="fc" id="L167">		exampleClient.saveBooking(&quot;New&quot;, &quot;test&quot;, 1L, startDate, endDate);</span>
+<span class="fc" id="L168">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
