@@ -120,23 +120,24 @@ public class ResidenceService {
 <span class="fc" id="L120">            return Response.status(Response.Status.BAD_REQUEST).entity(&quot;Address query parameter is required&quot;).build();</span>
         }
 <span class="fc" id="L122">        Query&lt;Residence&gt; query = pm.newQuery(Residence.class);</span>
-<span class="fc" id="L123">        query.setFilter(&quot;residence_address == :address&quot;);</span>
+        // address = address.trim();
+<span class="fc" id="L124">        query.setFilter(&quot;residence_address == :address&quot;);</span>
         try {
-<span class="fc" id="L125">            logger.info(address);</span>
+<span class="fc" id="L126">            logger.info(&quot;Searching for residences with address: {}&quot;, address);</span>
             @SuppressWarnings(&quot;unchecked&quot;)
-<span class="fc" id="L127">            List&lt;Residence&gt; residences = (List&lt;Residence&gt;) query.execute(address);</span>
-<span class="pc bpc" id="L128" title="1 of 2 branches missed.">            if (residences.isEmpty()) {</span>
-<span class="fc" id="L129">                return Response.status(Response.Status.NOT_FOUND)</span>
-<span class="fc" id="L130">                        .entity(&quot;No residences found at the specified address.&quot;).build();</span>
+<span class="fc" id="L128">            List&lt;Residence&gt; residences = (List&lt;Residence&gt;) query.execute(address);</span>
+<span class="pc bpc" id="L129" title="1 of 2 branches missed.">            if (residences.isEmpty()) {</span>
+<span class="fc" id="L130">                return Response.status(Response.Status.NOT_FOUND)</span>
+<span class="fc" id="L131">                        .entity(&quot;No residences found at the specified address.&quot;).build();</span>
             }
-<span class="nc" id="L132">            logger.info(residences);</span>
-<span class="nc" id="L133">            return Response.ok(residences).build();</span>
-<span class="nc" id="L134">        } catch (Exception e) {</span>
-<span class="nc" id="L135">            e.printStackTrace();</span>
-<span class="nc" id="L136">            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
-<span class="nc" id="L137">                    .entity(&quot;An error occurred while fetching the data.&quot;).build();</span>
+<span class="nc" id="L133">            logger.info(&quot;Found residences: {}&quot;, residences);</span>
+<span class="nc" id="L134">            return Response.ok(residences).build();</span>
+<span class="nc" id="L135">        } catch (Exception e) {</span>
+<span class="nc" id="L136">            e.printStackTrace();</span>
+<span class="nc" id="L137">            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
+<span class="nc" id="L138">                    .entity(&quot;An error occurred while fetching the data.&quot;).build();</span>
         } finally {
-<span class="fc" id="L139">            pm.close();</span>
+<span class="fc" id="L140">            pm.close();</span>
         }
     }
 
@@ -149,47 +150,47 @@ public class ResidenceService {
     @POST
     @Path(&quot;/delete&quot;)
     public Response deleteResidence(@QueryParam(&quot;residence_id&quot;) Long residenceId) {
-<span class="pc bpc" id="L152" title="1 of 2 branches missed.">        if (residenceId == null) {</span>
-<span class="nc" id="L153">            return Response.status(Response.Status.BAD_REQUEST).entity(&quot;Residence ID query parameter is required&quot;)</span>
-<span class="nc" id="L154">                    .build();</span>
+<span class="pc bpc" id="L153" title="1 of 2 branches missed.">        if (residenceId == null) {</span>
+<span class="nc" id="L154">            return Response.status(Response.Status.BAD_REQUEST).entity(&quot;Residence ID query parameter is required&quot;)</span>
+<span class="nc" id="L155">                    .build();</span>
         }
 
         try {
-<span class="fc" id="L158">            tx.begin();</span>
-<span class="fc" id="L159">            Query&lt;Residence&gt; query = pm.newQuery(Residence.class);</span>
-<span class="fc" id="L160">            query.setFilter(&quot;id == :residence_id&quot;);</span>
+<span class="fc" id="L159">            tx.begin();</span>
+<span class="fc" id="L160">            Query&lt;Residence&gt; query = pm.newQuery(Residence.class);</span>
+<span class="fc" id="L161">            query.setFilter(&quot;id == :residence_id&quot;);</span>
 
             @SuppressWarnings(&quot;unchecked&quot;)
-<span class="fc" id="L163">            List&lt;Residence&gt; residences = (List&lt;Residence&gt;) query.execute(residenceId);</span>
-<span class="pc bpc" id="L164" title="1 of 2 branches missed.">            if (residences.isEmpty()) {</span>
-<span class="fc" id="L165">                return Response.status(Response.Status.NOT_FOUND).entity(&quot;Residence not found.&quot;).build();</span>
+<span class="fc" id="L164">            List&lt;Residence&gt; residences = (List&lt;Residence&gt;) query.execute(residenceId);</span>
+<span class="pc bpc" id="L165" title="1 of 2 branches missed.">            if (residences.isEmpty()) {</span>
+<span class="fc" id="L166">                return Response.status(Response.Status.NOT_FOUND).entity(&quot;Residence not found.&quot;).build();</span>
             }
 
-<span class="nc" id="L168">            Residence residenceToDelete = residences.get(0);</span>
-<span class="nc" id="L169">            pm.deletePersistent(residenceToDelete);</span>
-<span class="nc" id="L170">            tx.commit();</span>
-<span class="nc" id="L171">            Response response = new BookingService().searchByResidenceID(residenceId.toString());</span>
-<span class="nc bnc" id="L172" title="All 2 branches missed.">            if (response.getStatus() == Response.Status.OK.getStatusCode()) {</span>
+<span class="nc" id="L169">            Residence residenceToDelete = residences.get(0);</span>
+<span class="nc" id="L170">            pm.deletePersistent(residenceToDelete);</span>
+<span class="nc" id="L171">            tx.commit();</span>
+<span class="nc" id="L172">            Response response = new BookingService().searchByResidenceID(residenceId.toString());</span>
+<span class="nc bnc" id="L173" title="All 2 branches missed.">            if (response.getStatus() == Response.Status.OK.getStatusCode()) {</span>
                 @SuppressWarnings(&quot;unchecked&quot;)
-<span class="nc" id="L174">                List&lt;Booking&gt; bookingsToDelete = (List&lt;Booking&gt;) response.getEntity();</span>
-<span class="nc" id="L175">                logger.info(&quot;Bookings associated with this residence (to delete): {}&quot;, bookingsToDelete);</span>
-<span class="nc bnc" id="L176" title="All 2 branches missed.">                for (Booking booking : bookingsToDelete) {</span>
-<span class="nc" id="L177">                    new BookingService().deleteBookingByID(booking.getId());</span>
-<span class="nc" id="L178">                }</span>
-<span class="nc" id="L179">            } else {</span>
-<span class="nc" id="L180">                logger.warn(&quot;No bookings found or an error occurred when searching for bookings with residence ID: {}&quot;,</span>
+<span class="nc" id="L175">                List&lt;Booking&gt; bookingsToDelete = (List&lt;Booking&gt;) response.getEntity();</span>
+<span class="nc" id="L176">                logger.info(&quot;Bookings associated with this residence (to delete): {}&quot;, bookingsToDelete);</span>
+<span class="nc bnc" id="L177" title="All 2 branches missed.">                for (Booking booking : bookingsToDelete) {</span>
+<span class="nc" id="L178">                    new BookingService().deleteBookingByID(booking.getId());</span>
+<span class="nc" id="L179">                }</span>
+<span class="nc" id="L180">            } else {</span>
+<span class="nc" id="L181">                logger.warn(&quot;No bookings found or an error occurred when searching for bookings with residence ID: {}&quot;,</span>
                         residenceId);
             }
-<span class="nc" id="L183">            return Response.ok().entity(&quot;Residence deleted successfully.&quot;).build();</span>
+<span class="nc" id="L184">            return Response.ok().entity(&quot;Residence deleted successfully.&quot;).build();</span>
 
-<span class="nc" id="L185">        } catch (Exception e) {</span>
-<span class="nc bnc" id="L186" title="All 2 branches missed.">            if (tx.isActive()) {</span>
-<span class="nc" id="L187">                tx.rollback();</span>
+<span class="nc" id="L186">        } catch (Exception e) {</span>
+<span class="nc bnc" id="L187" title="All 2 branches missed.">            if (tx.isActive()) {</span>
+<span class="nc" id="L188">                tx.rollback();</span>
             }
-<span class="nc" id="L189">            e.printStackTrace();</span>
-<span class="nc" id="L190">            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(&quot;Error deleting residence.&quot;).build();</span>
+<span class="nc" id="L190">            e.printStackTrace();</span>
+<span class="nc" id="L191">            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(&quot;Error deleting residence.&quot;).build();</span>
         } finally {
-<span class="fc" id="L192">            pm.close();</span>
+<span class="fc" id="L193">            pm.close();</span>
         }
     }
 
@@ -203,27 +204,27 @@ public class ResidenceService {
     @GET
     @Path(&quot;/searchByUserID&quot;)
     public Response searchResidencesID(@QueryParam(&quot;user_id&quot;) String user_id) {
-<span class="pc bpc" id="L206" title="1 of 4 branches missed.">        if (user_id == null || user_id.trim().isEmpty()) {</span>
-<span class="fc" id="L207">            return Response.status(Response.Status.BAD_REQUEST).entity(&quot;User ID query parameter is required&quot;).build();</span>
+<span class="pc bpc" id="L207" title="1 of 4 branches missed.">        if (user_id == null || user_id.trim().isEmpty()) {</span>
+<span class="fc" id="L208">            return Response.status(Response.Status.BAD_REQUEST).entity(&quot;User ID query parameter is required&quot;).build();</span>
         }
-<span class="fc" id="L209">        Query&lt;Residence&gt; query = pm.newQuery(Residence.class);</span>
-<span class="fc" id="L210">        query.setFilter(&quot;user_username == :user_id&quot;);</span>
+<span class="fc" id="L210">        Query&lt;Residence&gt; query = pm.newQuery(Residence.class);</span>
+<span class="fc" id="L211">        query.setFilter(&quot;user_username == :user_id&quot;);</span>
         try {
-<span class="fc" id="L212">            logger.info(user_id);</span>
+<span class="fc" id="L213">            logger.info(&quot;Searching for residences whose host is with user_id: {}&quot;, user_id);</span>
             @SuppressWarnings(&quot;unchecked&quot;)
-<span class="fc" id="L214">            List&lt;Residence&gt; residences = (List&lt;Residence&gt;) query.execute(user_id);</span>
-<span class="pc bpc" id="L215" title="1 of 2 branches missed.">            if (residences.isEmpty()) {</span>
-<span class="fc" id="L216">                return Response.status(Response.Status.NOT_FOUND)</span>
-<span class="fc" id="L217">                        .entity(&quot;No residences found for the specified user ID.&quot;).build();</span>
+<span class="fc" id="L215">            List&lt;Residence&gt; residences = (List&lt;Residence&gt;) query.execute(user_id);</span>
+<span class="pc bpc" id="L216" title="1 of 2 branches missed.">            if (residences.isEmpty()) {</span>
+<span class="fc" id="L217">                return Response.status(Response.Status.NOT_FOUND)</span>
+<span class="fc" id="L218">                        .entity(&quot;No residences found for the specified user ID.&quot;).build();</span>
             }
-<span class="nc" id="L219">            logger.info(residences);</span>
-<span class="nc" id="L220">            return Response.ok(residences).build();</span>
-<span class="nc" id="L221">        } catch (Exception e) {</span>
-<span class="nc" id="L222">            e.printStackTrace();</span>
-<span class="nc" id="L223">            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
-<span class="nc" id="L224">                    .entity(&quot;An error occurred while fetching the data.&quot;).build();</span>
+<span class="nc" id="L220">            logger.info(&quot;Found residences: {}&quot;, residences);</span>
+<span class="nc" id="L221">            return Response.ok(residences).build();</span>
+<span class="nc" id="L222">        } catch (Exception e) {</span>
+<span class="nc" id="L223">            e.printStackTrace();</span>
+<span class="nc" id="L224">            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
+<span class="nc" id="L225">                    .entity(&quot;An error occurred while fetching the data.&quot;).build();</span>
         } finally {
-<span class="fc" id="L226">            pm.close();</span>
+<span class="fc" id="L227">            pm.close();</span>
         }
     }
 
@@ -237,31 +238,31 @@ public class ResidenceService {
     @GET
     @Path(&quot;/searchByResidenceID&quot;)
     public Response getResidenceByID(@QueryParam(&quot;residence_id&quot;) Long residence_id) {
-<span class="fc bfc" id="L240" title="All 2 branches covered.">        if (residence_id == null) {</span>
-<span class="fc" id="L241">            return Response.status(Response.Status.BAD_REQUEST).entity(&quot;Residence ID query parameter is required&quot;)</span>
-<span class="fc" id="L242">                    .build();</span>
+<span class="fc bfc" id="L241" title="All 2 branches covered.">        if (residence_id == null) {</span>
+<span class="fc" id="L242">            return Response.status(Response.Status.BAD_REQUEST).entity(&quot;Residence ID query parameter is required&quot;)</span>
+<span class="fc" id="L243">                    .build();</span>
         }
-<span class="fc" id="L244">        Query&lt;Residence&gt; query = pm.newQuery(Residence.class);</span>
-<span class="fc" id="L245">        query.setFilter(&quot;id == :residence_id&quot;);</span>
+<span class="fc" id="L245">        Query&lt;Residence&gt; query = pm.newQuery(Residence.class);</span>
+<span class="fc" id="L246">        query.setFilter(&quot;id == :residence_id&quot;);</span>
         try {
-<span class="fc" id="L247">            logger.info(residence_id);</span>
+<span class="fc" id="L248">            logger.info(&quot;Searching for residence with id: {}&quot;, residence_id);</span>
             @SuppressWarnings(&quot;unchecked&quot;)
-<span class="fc" id="L249">            List&lt;Residence&gt; residences = (List&lt;Residence&gt;) query.execute(residence_id);</span>
-<span class="pc bpc" id="L250" title="1 of 2 branches missed.">            if (residences.isEmpty()) {</span>
-<span class="fc" id="L251">                return Response.status(Response.Status.NOT_FOUND)</span>
-<span class="fc" id="L252">                        .entity(&quot;No residences found for the specified residence ID.&quot;).build();</span>
-<span class="nc bnc" id="L253" title="All 2 branches missed.">            } else if (residences.size() &gt; 1) {</span>
-<span class="nc" id="L254">                return Response.status(Response.Status.CONFLICT)</span>
-<span class="nc" id="L255">                        .entity(&quot;Multiple residences found for the specified residence ID.&quot;).build();</span>
+<span class="fc" id="L250">            List&lt;Residence&gt; residences = (List&lt;Residence&gt;) query.execute(residence_id);</span>
+<span class="pc bpc" id="L251" title="1 of 2 branches missed.">            if (residences.isEmpty()) {</span>
+<span class="fc" id="L252">                return Response.status(Response.Status.NOT_FOUND)</span>
+<span class="fc" id="L253">                        .entity(&quot;No residences found for the specified residence ID.&quot;).build();</span>
+<span class="nc bnc" id="L254" title="All 2 branches missed.">            } else if (residences.size() &gt; 1) {</span>
+<span class="nc" id="L255">                return Response.status(Response.Status.CONFLICT)</span>
+<span class="nc" id="L256">                        .entity(&quot;Multiple residences found for the specified residence ID.&quot;).build();</span>
             }
-<span class="nc" id="L257">            logger.info(residences);</span>
-<span class="nc" id="L258">            return Response.ok(residences.get(0)).build();</span>
-<span class="nc" id="L259">        } catch (Exception e) {</span>
-<span class="nc" id="L260">            e.printStackTrace();</span>
-<span class="nc" id="L261">            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
-<span class="nc" id="L262">                    .entity(&quot;An error occurred while fetching the data.&quot;).build();</span>
+<span class="nc" id="L258">            logger.info(&quot;Found residences: {}&quot;, residences);</span>
+<span class="nc" id="L259">            return Response.ok(residences.get(0)).build();</span>
+<span class="nc" id="L260">        } catch (Exception e) {</span>
+<span class="nc" id="L261">            e.printStackTrace();</span>
+<span class="nc" id="L262">            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
+<span class="nc" id="L263">                    .entity(&quot;An error occurred while fetching the data.&quot;).build();</span>
         } finally {
-<span class="fc" id="L264">            pm.close();</span>
+<span class="fc" id="L265">            pm.close();</span>
         }
     }
 }
