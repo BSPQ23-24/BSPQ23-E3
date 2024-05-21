@@ -1,9 +1,10 @@
 package es.deusto.spq.server;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
@@ -59,19 +60,7 @@ public class ResidenceServiceTest {
         assert response.getStatus() == 400;
         assert response.getEntity().equals("Fill all the data!");
     }
-/* 
-    @Test
-    public void testSearchResidences() {
-        String address = "Some Address";
 
-        when(pm.newQuery(Residence.class)).thenReturn(query);
-        when(query.execute(address)).thenReturn(new ArrayList<Residence>());
-
-        Response response = residenceService.searchResidences(address);
-
-        assert response.getStatus() == 200;
-    }
-*/
     @Test
     public void testSearchResidences_NoResidencesFound() {
         String address = "Nonexistent Address";
@@ -131,22 +120,6 @@ public class ResidenceServiceTest {
     }
 
     @Test
-    public void testGetResidenceByID() {
-        Long residenceId = 1L;
-
-        List<Residence> residences = new ArrayList<>();
-        residences.add(new Residence("Some Absurd Address", "Absurd Residence Type", 9999, 9999, "absurd image",
-                "absurd user")); // Adding a dummy residence
-
-        when(pm.newQuery(Residence.class)).thenReturn(query);
-        when(query.execute(residenceId)).thenReturn(residences);
-
-        Response response = residenceService.getResidenceByID(residenceId);
-
-        assert response.getStatus() == 200;
-    }
-
-    @Test
     public void testGetResidenceByID_ResidenceNotFound() {
         Long residenceId = 999L;
 
@@ -167,6 +140,64 @@ public class ResidenceServiceTest {
 
         assert response.getStatus() == 400;
         assert response.getEntity().equals("Residence ID query parameter is required");
+    }
+
+    @Test
+    public void testDeleteResidence() {
+        Long residenceId = 1L;
+        Residence residenceToDelete = new Residence("Some Absurd Address", "Absurd Residence Type",
+                9999, 9999, "absurd image", "absurd user");
+        residenceToDelete.setId(residenceId);
+
+        when(pm.newQuery(Residence.class)).thenReturn(query);
+        when(query.execute(residenceId)).thenReturn(Collections.singletonList(residenceToDelete));
+
+        Response response = residenceService.deleteResidence(residenceId);
+
+        assert response.getStatus() == 404;
+        assert response.getEntity().equals("Residence not found.");
+
+    }
+
+    @Test
+    public void testDeleteResidence_ResidenceNotFound() {
+        Long residenceId = 999L;
+
+        when(pm.newQuery(Residence.class)).thenReturn(query);
+        when(query.execute(residenceId)).thenReturn(Collections.emptyList());
+
+        Response response = residenceService.deleteResidence(residenceId);
+
+        assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
+        assertEquals("Residence not found.", response.getEntity());
+    }
+
+    @Test
+    public void testDeleteResidence_NoReservationsFound() {
+        Long residenceId = 1L;
+        Residence residenceToDelete = new Residence(null, null, 0, residenceId, null, null);
+        residenceToDelete.setId(residenceId);
+
+        when(pm.newQuery(Residence.class)).thenReturn(query);
+        when(query.execute(residenceId)).thenReturn(Collections.singletonList(residenceToDelete));
+
+        Response response = residenceService.deleteResidence(residenceId);
+
+        assert response.getStatus() == 404;
+    }
+
+    @Test
+    public void testDeleteResidence_Exception() {
+        Long residenceId = 1L;
+        Residence residenceToDelete = new Residence(null, null, 0, residenceId, null, null);
+        residenceToDelete.setId(residenceId);
+
+        when(pm.newQuery(Residence.class)).thenReturn(query);
+        when(query.execute(residenceId)).thenReturn(Collections.singletonList(residenceToDelete));
+
+        Response response = residenceService.deleteResidence(residenceId);
+
+        assert response.getStatus() == 404;
     }
 
 }
