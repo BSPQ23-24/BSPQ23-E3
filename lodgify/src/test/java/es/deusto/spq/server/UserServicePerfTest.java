@@ -2,13 +2,20 @@ package es.deusto.spq.server;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Rule;
+import org.junit.Test;
 
 import com.github.noconnor.junitperf.JUnitPerfRule;
 import com.github.noconnor.junitperf.reporting.providers.HtmlReportGenerator;
+
+import es.deusto.spq.server.jdo.User;
 
 public class UserServicePerfTest {
 
@@ -22,7 +29,7 @@ public class UserServicePerfTest {
         Client client = ClientBuilder.newClient();
         target = client.target("http://localhost:8080/rest/");
     }
-/* 
+
     @Test
     @com.github.noconnor.junitperf.JUnitPerfTest(threads = 1, durationMs = 1000)
     public void testRegisterUserPerf() {
@@ -33,11 +40,11 @@ public class UserServicePerfTest {
                 .post(Entity.entity(user, MediaType.APPLICATION_JSON));
 
         // Check for successful response
-        assertEquals(Family.SUCCESSFUL, response.getStatusInfo().getFamily());
+        assertEquals(Response.Status.Family.SUCCESSFUL, response.getStatusInfo().getFamily());
     }
-*/
+
     /*@Test
-    @com.github.noconnor.junitperf.JUnitPerfTest(threads = 1, durationMs = 30000)
+    @com.github.noconnor.junitperf.JUnitPerfTest(threads = 1, durationMs = 1000, maxExecutionsPerSecond = 1)
     public void testLoginUserPerf() {
         // Simulate a login request with minimal data
         User user = new User("testUser", "password", "a", "a", "111111111", "iser@gmail.com", "user", "1", 0, 0, "as");
@@ -47,7 +54,7 @@ public class UserServicePerfTest {
                 .post(Entity.entity(user, MediaType.APPLICATION_JSON));
 
         // Check for successful response
-        assertEquals(Family.SUCCESSFUL, response.getStatusInfo().getFamily());
+        assertEquals(Response.Status.Family.SUCCESSFUL, response.getStatusInfo().getFamily());
     }*/
 
 }
