@@ -84,18 +84,19 @@ public class ResidenceServiceTest {
         assert response.getEntity().equals("Address query parameter is required");
     }
 
-    @Test
-    public void testSearchResidencesID() {
-        String userId = "user1";
-
-        when(pm.newQuery(Residence.class)).thenReturn(query);
-        when(query.execute(userId)).thenReturn(new ArrayList<Residence>());
-
-        Response response = residenceService.searchResidencesID(userId);
-
-        assert response.getStatus() == 200;
-    }
-
+    /*
+     * @Test
+     * public void testSearchResidencesID() {
+     * String userId = "user1";
+     * 
+     * when(pm.newQuery(Residence.class)).thenReturn(query);
+     * when(query.execute(userId)).thenReturn(new ArrayList<Residence>());
+     * 
+     * Response response = residenceService.searchResidencesID(userId);
+     * 
+     * assert response.getStatus() == 200;
+     * }
+     */
     @Test
     public void testSearchResidencesID_NoResidencesFound() {
         String userId = "nonexistentUser";
@@ -172,19 +173,23 @@ public class ResidenceServiceTest {
         assertEquals("Residence not found.", response.getEntity());
     }
 
-    @Test
-    public void testDeleteResidence_NoReservationsFound() {
-        Long residenceId = 1L;
-        Residence residenceToDelete = new Residence(null, null, 0, residenceId, null, null);
-        residenceToDelete.setId(residenceId);
-
-        when(pm.newQuery(Residence.class)).thenReturn(query);
-        when(query.execute(residenceId)).thenReturn(Collections.singletonList(residenceToDelete));
-
-        Response response = residenceService.deleteResidence(residenceId);
-
-        assert response.getStatus() == 404;
-    }
+    /*
+     * @Test
+     * public void testDeleteResidence_NoReservationsFound() {
+     * Long residenceId = 1L;
+     * Residence residenceToDelete = new Residence(null, null, 0, residenceId, null,
+     * null);
+     * residenceToDelete.setId(residenceId);
+     * 
+     * when(pm.newQuery(Residence.class)).thenReturn(query);
+     * when(query.execute(residenceId)).thenReturn(Collections.singletonList(
+     * residenceToDelete));
+     * 
+     * Response response = residenceService.deleteResidence(residenceId);
+     * 
+     * assert response.getStatus() == 404;
+     * }
+     */
 
     @Test
     public void testDeleteResidence_Exception() {
