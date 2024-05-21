@@ -4,6 +4,5 @@ var searchData=
   ['residence_59',['Residence',['../classes_1_1deusto_1_1spq_1_1server_1_1jdo_1_1Residence.html',1,'es.deusto.spq.server.jdo.Residence'],['../classes_1_1deusto_1_1spq_1_1server_1_1jdo_1_1Residence.html#ac58ea4fc357ab00b461ce608b28dd328',1,'es.deusto.spq.server.jdo.Residence.Residence()']]],
   ['residence_2ejava_60',['Residence.java',['../Residence_8java.html',1,'']]],
   ['residenceservice_61',['ResidenceService',['../classes_1_1deusto_1_1spq_1_1server_1_1ResidenceService.html',1,'es.deusto.spq.server.ResidenceService'],['../classes_1_1deusto_1_1spq_1_1server_1_1ResidenceService.html#a19273fc3f14bb17d866711f4e5152b6e',1,'es.deusto.spq.server.ResidenceService.ResidenceService()']]],
-  ['residenceservice_2ejava_62',['ResidenceService.java',['../ResidenceService_8java.html',1,'']]],
-  ['resource_2ejava_63',['Resource.java',['../Resource_8java.html',1,'']]]
+  ['residenceservice_2ejava_62',['ResidenceService.java',['../ResidenceService_8java.html',1,'']]]
 ];
