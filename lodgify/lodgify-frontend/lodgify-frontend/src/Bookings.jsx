@@ -205,6 +205,9 @@ function Bookings() {
             <p className="p-4">
               End date: {format(new Date(booking.endDate), 'yyyy-MM-dd')}
             </p>
+            <p className="text-red-500 font-bold mb-2">
+              NOT PAID
+            </p>
             <div className="p-10">
               {/* <button onClick={(e) => removeBooking(booking.id)}> */}
               <button onClick={() => handleShowConfirmation(booking.id)}>

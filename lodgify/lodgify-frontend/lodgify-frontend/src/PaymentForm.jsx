@@ -3,10 +3,12 @@ import { useLocale } from "./contexts/LocaleContext.jsx";
 import en from "./translations/en.json";
 import es from "./translations/es.json";
 import lt from "./translations/lt.json";
+import { useNavigate } from "react-router-dom";
 
 function PaymentForm() {
   const [name, setName] = useState("");
   const [cardNumber, setCardNumber] = useState("");
+  const navigate = useNavigate();
   const [cvv, setCvv] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const { locale } = useLocale();
@@ -75,7 +77,7 @@ function PaymentForm() {
             />
           </div>
           <div className="flex items-center justify-between">
-            <button
+            <button onClick={() => navigate("/bookings")}
               type="submit"
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             >
