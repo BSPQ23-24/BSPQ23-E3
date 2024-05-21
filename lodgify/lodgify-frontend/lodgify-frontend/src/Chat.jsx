@@ -1,38 +1,47 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useUser } from "./contexts/UserContext.jsx";
 import { io } from 'socket.io-client';
-
-
 
 const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState('');
+  const [recipient, setRecipient] = useState('');
+  const { user, setUser } = useUser();
+  const username = user.username;
   const socketRef = useRef();
 
   useEffect(() => {
     socketRef.current = io('http://localhost:3000');
-    
+
     socketRef.current.on('connect', () => {
       console.log('Connected with socket ID:', socketRef.current.id);
     });
 
     socketRef.current.on('chat message', (data) => {
-        setMessages((prevMessages) => [
-          ...prevMessages,
-          { ...data, side: data.socketId === socketRef.current.id ? 'right' : 'left' },
-        ]);
-      });
-  
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { ...data, side: data.socketId === socketRef.current.id ? 'right' : 'left' },
+      ]);
+    });
 
     return () => {
       socketRef.current.disconnect();
     };
   }, []);
 
+  const registerUser = () => {
+    if (username.trim() === '') return;
+    socketRef.current.emit('register', username);
+  };
+
   const sendMessage = () => {
-    if (message.trim() === '') return;
-    const data = { message, socketId: socketRef.current.id };
-    socketRef.current.emit('chat message', data);
-    setMessages((prevMessages) => [...prevMessages, { ...data, side: 'right' }]);
+    if (message.trim() === '' || recipient.trim() === '') return;
+    const data = { message, to: recipient };
+    socketRef.current.emit('private message', data);
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      { ...data, socketId: socketRef.current.id, side: 'right' }
+    ]);
     setMessage('');
   };
 
@@ -53,6 +62,23 @@ const Chat = () => {
           ))}
         </div>
         <div style={styles.inputContainer}>
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="Tu nombre de usuario"
+            style={styles.input}
+          />
+          <button onClick={registerUser} style={styles.button}>Registrar</button>
+        </div>
+        <div style={styles.inputContainer}>
+          <input
+            type="text"
+            value={recipient}
+            onChange={(e) => setRecipient(e.target.value)}
+            placeholder="Nombre del destinatario"
+            style={styles.input}
+          />
           <input
             type="text"
             value={message}
@@ -79,7 +105,7 @@ const styles = {
     backgroundColor: '#f0f0f0',
   },
   chatContainer: {
-    width: '400px',
+    width: '600px',
     height: '600px',
     backgroundColor: '#fff',
     borderRadius: '8px',
@@ -131,4 +157,3 @@ const styles = {
 };
 
 export default Chat;
-
