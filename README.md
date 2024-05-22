@@ -1,55 +1,170 @@
-# BSPQ23-E3
+# LODGIFY
+## BSPQ23-E3
+#### By Matas Gedziunas, Sara Hernandez, Unai Alonso, Jon Ander Gallastegui, Iker Ordoñez and Markel Retes
 
-BSPQ23-E3
+## Overview
+This project is an application which consists of renting residences, providing different services for both travelers and hosts.
 
-Run the following command to build everything and enhance the DB classes:
+## Getting started
 
-      mvn clean compile
+Access lodgify folder:
+```bash
+cd .\lodgify\
+```
 
-Make sure that the database was correctly configured. Use the contents of the file _create-db.sql_ to create the database and grant privileges. For example,
+Build everything and enhance the DB classes:
+```bash
+mvn clean compile
+```
 
-      mysql –u root -p
+### Setting Up the Database
 
-To launch the server run the command
+Use the contents of the file _create-db.sql_ to create the database and grant privileges.
 
-    mvn jetty:run
+Check access to database:
 
-Now, the client sample code can be executed in a new command window with
+```bash
+mysql –u root -p
+```
 
-    mvn exec:java -Pclient
+### Running the application
+There are two ways for running the application.
 
-# Docker
+#### 1.- Locally
+Set connection URL in datanucleus.properties to:
 
-To run the web application with docker you must set connection URL in datanucleus.properties:
+javax.jdo.option.ConnectionURL=jdbc:mysql://localhost/lodgifyDB
 
-      javax.jdo.option.ConnectionURL=jdbc:mysql://mysql/lodgifyDB
+Launch the server:
+```bash
+mvn jetty:run
+```
 
-To run docker compose:
+Execute client sample:
+Add new command window
+```bash
+cd .\lodgify\
+```
+```bash
+mvn exec:java -Pclient
+```
+Access link after lodgify is run locally:
 
-      docker compose up
+http://localhost:8080/
+
+#### 2.- Docker
+
+Set connection URL in datanucleus.properties to:
+
+javax.jdo.option.ConnectionURL=jdbc:mysql://mysql/lodgifyDB
+
+Create docker images and run application through docker compose:
+```bash
+docker compose up
+```
+
+Make sure you run the following commands to enable communication, chatting, between users.
+
+```bash
+cd .\lodgify\lodgify-frontend\lodgify-frontend\
+```
+```bash
+node server.js
+```
 
 Access link after lodgify is run on docker:
 
-      http://localhost:8080/
+http://localhost:8080/
 
-# Local
+### Testing
+The process for running the test will be described in this section.
 
-To run the web application locally with:
+#### 1.- Unit tests
+```bash
+cd .\lodgify\
+```
 
-      mvn clean compile
-      mvn jetty:run
+```bash
+mvn clean compile
+```
 
-You must change the following line in datanucleus.properties:
+```bash
+mvn jetty:run
+```
+Add new command window
+```bash
+cd .\lodgify\
+```
+```bash
+mvn test
+```
 
-      javax.jdo.option.ConnectionURL=jdbc:mysql://mysql/lodgifyDB
+Thanks to this process we will now have the jacoco generated document, _index.html_ showing the coverage of our code.
 
-Change to:
+Access to document:
+```bash
+cd .\lodgify\target\site\jacoco\
+```
 
-      javax.jdo.option.ConnectionURL=jdbc:mysql://localhost/lodgifyDB
+#### 2.- Performing and Integration tests
+```bash
+cd .\lodgify\
+```
 
+```bash
+mvn clean compile
+```
 
-# Socket
+```bash
+mvn jetty:run
+```
+Add new command window
+```bash
+cd .\lodgify\
+```
+```bash
+mvn datanucleus:enhance
+```
+```bash
+mvn datanucleus:schema-create 
+```
+```bash
+mvn verify -Pintegration-tests
+```
+```bash
+mvn verify -Pperformance-tests
+```
 
-Inside BSPQ23-E3\lodgify\lodgify-frontend\lodgify-frontend (where server.js is):
+Thanks to this process we will now have the junitperf generated document, _report.html_ showing the coverage of our code.
 
-      npm start
+Access to document:
+```bash
+cd .\lodgify\target\junitperf\
+```
+
+### AÑADE AQUI LOS COMANDOS PARA DOXYGEN
+#### {Seccion 1}
+```bash
+
+```
+
+#### {Seccion 2}
+```bash
+
+```
+
+Cambia el {por el nombre que quieras}
+Entre el bash en la linea del medio pon los comandos que se ejecutan en el cmd
+
+### AÑADE AQUI LOS COMANDOS PARA JAVADOC
+#### {Seccion 1}
+```bash
+
+```
+
+#### {Seccion 2}
+```bash
+
+```
+Cambia el {por el nombre que quieras}
+Entre el bash en la linea del medio pon los comandos que se ejecutan en el cmd
