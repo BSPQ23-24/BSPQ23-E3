@@ -61,6 +61,7 @@ const Profile = () => {
 
   const handleRemove = async () => {
     console.log("Removing residences");
+    setShowConfirmation(false);
     try {
       const response = await fetch(
         `http://localhost:8080/rest/residence/delete?residence_id=${residenceIdToDelete}`,
