@@ -25,6 +25,7 @@
           "host": "Šeimininkas"
         },
         "buttonText": "Registruotis",
+        "buttonTextEnviar": "Siųsti",
         "backButtonText": "< Grįžti",
         "errors": {
           "userExists": "Naudotojas jau egzistuoja!",
@@ -45,16 +46,16 @@
     "bankAccountLabel": "Banko sąskaitos numeris",
     "socialSNLabel": "Socialinio tinklo numeris",
     "addressLabel": "Adresas",
-    "name": "Parašykite savo vardą",
-    "surname": "Parašykite savo pavardę",
-    "username": "Parašykite savo vartotojo vardą",
-    "password": "Parašykite savo Slaptažodį",
-    "email": "Parašykite savo El. paštą",
-    "phoneNumber": "Parašykite savo telefono numerį",
-    "idCard": "Parašykite savo asmens dokumento numerį",
-    "bankAccount": "Parašykite savo banko sąskaitos numerį",
-    "socialSN": "Parašykite savo socialinio tinklo numerį",
-    "address": "Parašykite savo adresą"
+    "name": "Vardą",
+    "surname": "Pavardę",
+    "username": "Vartotojo vardą",
+    "password": "Slaptažodį",
+    "email": "El. paštą",
+    "phoneNumber": "Telefono numerį",
+    "idCard": "Asmens dokumento numerį",
+    "bankAccount": "Banko sąskaitos numerį",
+    "socialSN": "Socialinio tinklo numerį",
+    "address": "Adresą"
       },
     "profile": {
         "title": "Keisti savo duomenis",
@@ -69,6 +70,16 @@
         "noBookings": "Nepadarėte jokių užsakymų, eikite į pagrindinį puslapį ir ieškokite nakvynės!",
         "yourBookings": "Jūsų užsakymai",
         "noResidences": "Jūs nesukūrėte jokių rezidencijų, ko laukiate?!"
+    },
+    "reservationProcess": {
+      "reservationProcess": "Rezervacijos procesas",
+      "arrivalDate": "Atvykimo data",
+      "departureDate": "Išvykimo data",
+      "bookResidence": "Užsakyti rezidenciją"
+    },
+    "passwordRecovery": {
+      "passwordRecovery": "Slaptažodžio atkūrimas",
+      "recoverPassword": "Atkurti slaptažodį"
     },
     "residenceRegistration": {
         "title": "Būsto registracija",
@@ -85,6 +96,8 @@
         "errors": {
           "fillData": "Užpildykite visus duomenis!"
         },
+        "typeResidenceFlat": "Grindų",
+        "typeResidenceHouse": "Namai",
         "successMessage": "Būstas sėkmingai užregistruotas!"
     },
     "logout": "ATSIJUNGTI",

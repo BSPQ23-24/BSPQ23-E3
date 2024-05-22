@@ -144,8 +144,8 @@ const ResidenceRegistration = () => {
                                 onChange={(e) => setResidence_type(e.target.value)}
                               >
                                 <option value=""></option>
-                                <option value="Flat">Flat</option>
-                                <option value="House">House</option>
+                                <option value="Flat">{translations.residenceRegistration.typeResidenceFlat}</option>
+                                <option value="House">{translations.residenceRegistration.typeResidenceHouse}</option>
                               </select>
                             </div>
                             <div className="flex-col mt-4 justify-center items-center">

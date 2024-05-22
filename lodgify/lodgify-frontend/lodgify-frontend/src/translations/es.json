@@ -25,6 +25,7 @@
         "host": "Anfitrión"
       },
       "buttonText": "Registrar",
+      "buttonTextEnviar": "Enviar",
       "backButtonText": "< Volver",
       "errors": {
         "userExists": "¡El usuario ya existe!",
@@ -35,25 +36,25 @@
       "successMessage": "¡Usuario registrado correctamente!"
     },
     "placeholders": {
-      "name": "Escribe tu nombre",
+      "name": "Nombre",
       "nameLabel": "Nombre",
-      "surname": "Escribe tu apellido",
+      "surname": "Apellido",
       "surnameLabel": "Apellido",
-      "username": "Escribe tu nombre de usuario",
+      "username": "Nombre de usuario",
       "usernameLabel": "Nombre de usuario",
-      "password": "Escribe tu contraseña",
+      "password": "Contraseña",
       "passwordLabel": "Contraseña",
-      "email": "Escribe tu correo electrónico",
+      "email": "Correo electrónico",
       "emailLabel": "Correo electrónico",
-      "phoneNumber": "Escribe tu número de teléfono",
+      "phoneNumber": "Número de teléfono",
       "phoneNumberLabel": "Número de teléfono",
-      "idCard": "Escribe tu documento de identidad",
+      "idCard": "Documento de identidad",
       "idCardLabel": "Documento de identidad",
-      "bankAccount": "Escribe tu cuenta bancaria",
+      "bankAccount": "Cuenta bancaria",
       "bankAccountLabel": "Cuenta bancaria",
-      "socialSN": "Escribe tu número de seguridad social",
+      "socialSN": "Número de seguridad social",
       "socialSNLabel": "Nº seguridad social",
-      "address": "Escribe tu dirección",
+      "address": "Dirección",
       "addressLabel": "Dirección"
     },
     "profile": {
@@ -69,6 +70,16 @@
       "yourBookings": "Tus reservas",
       "noResidences": "No has creado ninguna residencia, ¡¿a qué estás esperando?!"
     },
+    "passwordRecovery": {
+      "passwordRecovery": "Recuperación de contraseña",
+      "recoverPassword": "Recuperar contraseña"
+    },
+    "reservationProcess": {
+      "reservationProcess": "Proceso de reserva",
+      "arrivalDate": "Fecha de llegada",
+      "departureDate": "Fecha de salida",
+      "bookResidence": "Reservar residencia"
+  },
     "residenceRegistration": {
       "title": "Registro de residencia",
       "welcome": "¡Hola ",
@@ -84,6 +95,8 @@
       "errors": {
         "fillData": "¡Complete todos los datos!"
       },
+      "typeResidenceFlat": "Flat",
+      "typeResidenceHouse": "House",
       "successMessage": "¡Residencia registrada con éxito!"
     },
     "logout": "CERRAR SESIÓN",

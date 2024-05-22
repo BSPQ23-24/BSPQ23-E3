@@ -139,7 +139,7 @@ const Chat = () => {
               placeholder="Tu nombre de usuario"
               style={styles.input}
             />
-            <button onClick={registerUser} style={styles.button}>Registrar</button>
+            <button onClick={registerUser} style={styles.button}>{translations.register.buttonText}</button>
           </div>
           <div style={styles.inputContainer}>
             <input
@@ -157,7 +157,7 @@ const Chat = () => {
               placeholder="Escribe un mensaje..."
               style={styles.input}
             />
-            <button onClick={sendMessage} style={styles.button}>Enviar</button>
+            <button onClick={sendMessage} style={styles.button}>{translations.register.buttonTextEnviar}</button>
           </div>
         </div>
       </div>

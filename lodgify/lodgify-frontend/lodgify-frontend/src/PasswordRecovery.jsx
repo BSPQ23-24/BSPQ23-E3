@@ -83,13 +83,13 @@ const PasswordRecoveryPage = () => {
           </ul>
         </div>
       </nav>
-      <h1 className="font-bold text-3xl mt-8">Password Recovery</h1>
+      <h1 className="font-bold text-3xl mt-8">{translations.passwordRecovery.passwordRecovery}</h1>
       <div className="bg-gray-100 m-8 mb-8 mx-auto p-8 rounded-lg shadow-top text-center w-2/5">
         <form onSubmit={handleSubmit}>
           <div className="flex mt-4 justify-center">
             <input
               type="email"
-              placeholder="Email address"
+              placeholder={translations.placeholders.email}
               className="mb-2 p-2 rounded-md border"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -102,7 +102,7 @@ const PasswordRecoveryPage = () => {
               type="submit"
               className="bg-blue-950 hover:bg-blue-950 text-white py-2 px-4 rounded-md"
             >
-              Recover Password
+              {translations.passwordRecovery.recoverPassword}
             </button>
           </div>
         </form>
