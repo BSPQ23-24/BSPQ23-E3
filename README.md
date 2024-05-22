@@ -142,29 +142,28 @@ Access to document:
 cd .\lodgify\target\junitperf\
 ```
 
-### AÑADE AQUI LOS COMANDOS PARA DOXYGEN
-#### {Seccion 1}
-```bash
+### Doxygen documentation
 
+This is the process that needs to be followed in order to generate the documentation of the code.
+
+Access lodgify folder:
+```bash
+cd .\lodgify\
 ```
 
-#### {Seccion 2}
+Create the report with the documentation:
 ```bash
-
+mvn doxygen:report
 ```
 
-Cambia el {por el nombre que quieras}
-Entre el bash en la linea del medio pon los comandos que se ejecutan en el cmd
+Thanks to this process we will now have the document that doxygen generated, _index.html_ showing the documentation of our code.
 
-### AÑADE AQUI LOS COMANDOS PARA JAVADOC
-#### {Seccion 1}
+Access to document:
 ```bash
-
+cd .\lodgify\target\doxygen\html
 ```
 
-#### {Seccion 2}
+Copy all the doxygen files into the docs folder located into the root directory of the project:
 ```bash
-
+mvn validate
 ```
-Cambia el {por el nombre que quieras}
-Entre el bash en la linea del medio pon los comandos que se ejecutan en el cmd
