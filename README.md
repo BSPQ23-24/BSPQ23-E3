@@ -2,6 +2,19 @@
 ## BSPQ23-E3
 #### By Matas Gedziunas, Sara Hernandez, Unai Alonso, Jon Ander Gallastegui, Iker Ordoñez and Markel Retes
 
+## References
+### Repository
+```bash
+https://github.com/BSPQ23-24/BSPQ23-E3
+```
+### GitHub Pages
+```bash
+https://bspq23-24.github.io/BSPQ23-E3/jacoco/
+```
+```bash
+https://bspq23-24.github.io/BSPQ23-E3/doxygen/
+```
+
 ## Overview
 This project is an application which consists of renting residences, providing different services for both travelers and hosts.
 
